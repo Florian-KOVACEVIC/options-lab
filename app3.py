@@ -403,7 +403,6 @@ def mat_widget(pfx, dy=1, dm=0, dd=0):
     with c2: m = st.number_input("Mois",  0,11,dm,1,key=f"{pfx}_m",help="Mois supplémentaires")
     with c3: d = st.number_input("Jours", 0,30,dd,1,key=f"{pfx}_d",help="Jours supplémentaires")
     T = mat_from_ymd(y,m,d)
-    st.markdown(f'<span class="mb">{fmt_mat(T)}  ·  {T:.4f} ans</span>', unsafe_allow_html=True)
     return T
 
 def mat_inline(pfx, dy=1, dm=0, dd=0):
@@ -412,7 +411,6 @@ def mat_inline(pfx, dy=1, dm=0, dd=0):
     with c2: m=st.number_input("M",0,11,dm,1,key=f"{pfx}_m",label_visibility="collapsed",help="Mois")
     with c3: d=st.number_input("J",0,30,dd,1,key=f"{pfx}_d",label_visibility="collapsed",help="Jours")
     T = mat_from_ymd(y,m,d)
-    st.markdown(f'<span class="mb" style="font-size:.68rem">{fmt_mat(T)} · {T:.3f}a</span>',unsafe_allow_html=True)
     return T
 
 def greek_card(sym,name,val,fmt,color,desc):
@@ -792,7 +790,7 @@ with st.sidebar:
     st.session_state["shared_K"] = K
 
     mr = S / K if K > 0 else 1
-    if abs(mr - 1) < 0.015:                                          pc, pt = "matm", "ATM"
+    if S == K:                                                        pc, pt = "matm", "ATM"
     elif (otype == "call" and S > K) or (otype == "put" and S < K):  pc, pt = "mitm", "ITM"
     else:                                                             pc, pt = "motm", "OTM"
     st.markdown(f'<span class="mpill {pc}">{pt} · {mr:.3f}</span>', unsafe_allow_html=True)
@@ -800,26 +798,31 @@ with st.sidebar:
     # ── Maturité ────────────────────────────────────────────
     st.markdown('<div class="sb-title">Maturité</div>', unsafe_allow_html=True)
     _mc1, _mc2, _mc3 = st.columns(3)
-    with _mc1: _ty = st.number_input("A", 0, 30, 1, 1, key="p1_y",
-                                      label_visibility="collapsed", help="Années")
-    with _mc2: _tm = st.number_input("M", 0, 11, 0, 1, key="p1_m",
-                                      label_visibility="collapsed", help="Mois")
-    with _mc3: _td = st.number_input("J", 0, 30, 0, 1, key="p1_d",
-                                      label_visibility="collapsed", help="Jours")
+    with _mc1:
+        fl("Année")
+        _ty = st.number_input("A", 0, 30, 1, 1, key="p1_y",
+                              label_visibility="collapsed", help="Années")
+    with _mc2:
+        fl("Mois")
+        _tm = st.number_input("M", 0, 11, 0, 1, key="p1_m",
+                              label_visibility="collapsed", help="Mois")
+    with _mc3:
+        fl("Jours")
+        _td = st.number_input("J", 0, 30, 0, 1, key="p1_d",
+                              label_visibility="collapsed", help="Jours")
     T = mat_from_ymd(_ty, _tm, _td)
-    st.markdown(f'<span class="mb">{fmt_mat(T)} · {T:.3f}a</span>', unsafe_allow_html=True)
 
     # ── Taux, Dividende, Volatilité ─────────────────────────
     st.markdown('<div class="sb-title">Paramètres de marché</div>', unsafe_allow_html=True)
     fl("Taux sans risque  r  (%)")
-    r = st.slider("r", 0.0, 15.0,
+    r = st.slider("r", 0.0, 10.0,
                   float(st.session_state.get("shared_r", 5.0)), 0.1,
                   label_visibility="collapsed",
                   help="Taux d'intérêt annuel (BCE ≈ 3–4% en 2024)", key="t1_r") / 100
     st.session_state["shared_r"] = r * 100
 
     fl("Dividende  q  (%)")
-    q_div = st.slider("q", 0.0, 10.0,
+    q_div = st.slider("q", 0.0, 20.0,
                       float(st.session_state.get("shared_q", 0.0)), 0.1,
                       label_visibility="collapsed",
                       help="Dividende annuel continu. 0 si pas de dividende.", key="t1_q") / 100
@@ -873,7 +876,7 @@ with tab1:
         <div class="ph">
           <div>
             <div class="ph-ey">Prix Black-Scholes</div>
-            <div class="ph-row"><span class="ph-cur">€</span><span class="ph-val">{price:.4f}</span></div>
+            <div class="ph-row"><span class="ph-val">{price:.4f}</span><span class="ph-val" style="margin-left:6px">€</span></div>
             <div class="ph-sub">
               <span>d₁ = {d1v:.4f}</span><span>d₂ = {d2v:.4f}</span>
               <span>N(d₁) = {norm.cdf(d1v):.4f}</span><span>N(d₂) = {norm.cdf(d2v):.4f}</span>
@@ -1079,7 +1082,7 @@ with tab3:
                 K_l=st.number_input("Strike K (€)",value=d["K"],step=0.5,key=f"lk_{i}",
                     help="Prix d'exercice de cette option")
                 mr2=S_l/K_l if K_l>0 else 1
-                if abs(mr2-1)<0.02: mc2,mt2="matm","ATM"
+                if S_l==K_l: mc2,mt2="matm","ATM"
                 elif (instrument=="call" and mr2>1) or (instrument=="put" and mr2<1): mc2,mt2="mitm","ITM"
                 else: mc2,mt2="motm","OTM"
                 st.markdown(f'<span class="mpill {mc2}">{mt2} ({mr2:.3f})</span>', unsafe_allow_html=True)
@@ -1094,8 +1097,6 @@ with tab3:
                 m_l=st.number_input("M",0,11,d["m"],1,key=f"lm_{i}",label_visibility="collapsed",help="Mois")
                 dj_l=st.number_input("J",0,30,d["d"],1,key=f"ld_{i}",label_visibility="collapsed",help="Jours")
                 T_l=mat_from_ymd(y_l,m_l,dj_l)
-                st.markdown(f'<span class="mb" style="font-size:.67rem">{fmt_mat(T_l)} · {T_l:.3f}a</span>',
-                            unsafe_allow_html=True)
                 prem=bs_price(S_l,K_l,T_l,r_l,sig_l,0,instrument)
                 cost=direction*prem*qty
                 cc="#ef4444" if direction==1 else "#22c55e"
