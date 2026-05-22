@@ -36,15 +36,16 @@ html,body,[class*="css"],.stApp{font-family:'Inter',sans-serif!important;backgro
 /* Header */
 .hdr{display:flex;align-items:center;justify-content:space-between;
   padding-bottom:18px;border-bottom:1px solid var(--b1);margin-bottom:20px;}
-.hdr-l{display:flex;align-items:center;gap:12px;}
-.hdr-ico{width:34px;height:34px;border-radius:8px;
-  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
-  display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700;}
-.hdr-t{font-size:1.05rem;font-weight:700;letter-spacing:-.3px;}
-.hdr-s{font-size:.68rem;color:var(--t3);margin-top:1px;}
-.live{font-size:.64rem;font-weight:600;padding:4px 10px;border-radius:20px;
-  background:rgba(34,197,94,.1);color:var(--g);border:1px solid rgba(34,197,94,.2);
-  font-family:'DM Mono',monospace;}
+.hdr-l{display:flex;align-items:center;gap:14px;}
+.hdr-ico{width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,#3b82f6 0%,#8b5cf6 50%,#a78bfa 100%);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;
+  box-shadow:0 4px 12px rgba(59,130,246,.25);}
+.hdr-t{font-size:1.1rem;font-weight:700;letter-spacing:-.3px;
+  background:linear-gradient(90deg,#e2e8f0,#f8fafc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hdr-s{font-size:.68rem;color:var(--t3);margin-top:2px;letter-spacing:.3px;}
+.hdr-v{font-size:.60rem;font-weight:500;color:var(--t3);font-family:'DM Mono',monospace;
+  padding:5px 12px;border-radius:6px;background:var(--s2);border:1px solid var(--b1);}
 /* Tabs */
 .stTabs [data-baseweb="tab-list"]{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:3px;gap:2px;}
 .stTabs [data-baseweb="tab"]{font-family:'Inter',sans-serif!important;font-size:.77rem;font-weight:500;
@@ -54,23 +55,32 @@ html,body,[class*="css"],.stApp{font-family:'Inter',sans-serif!important;backgro
 .card{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rad);padding:18px;}
 .ct{font-size:.60rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:12px;}
 /* Price hero */
-.ph{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rad);
-  padding:20px 24px;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;}
-.ph-ey{font-size:.60rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:6px;}
-.ph-row{display:flex;align-items:baseline;gap:5px;}
-.ph-cur{font-size:1.1rem;color:var(--t3);font-family:'DM Mono',monospace;}
-.ph-val{font-size:2.6rem;font-weight:700;letter-spacing:-2px;font-family:'DM Mono',monospace;line-height:1;}
-.ph-sub{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--t3);margin-top:8px;display:flex;gap:12px;flex-wrap:wrap;}
-.ph-badge{font-size:.70rem;font-weight:600;padding:5px 14px;border-radius:6px;align-self:flex-start;}
-.ph-c{background:rgba(34,197,94,.1);color:var(--g);border:1px solid rgba(34,197,94,.2);}
-.ph-p{background:rgba(167,139,250,.1);color:var(--p);border:1px solid rgba(167,139,250,.2);}
+.ph{background:linear-gradient(135deg,var(--s1) 0%,rgba(59,130,246,.04) 100%);
+  border:1px solid var(--b1);border-radius:12px;
+  padding:22px 26px;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;
+  position:relative;overflow:hidden;}
+.ph::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(59,130,246,.3),transparent);}
+.ph-ey{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--t3);margin-bottom:8px;}
+.ph-row{display:flex;align-items:baseline;gap:6px;}
+.ph-cur{font-size:.95rem;color:var(--t3);font-family:'DM Mono',monospace;}
+.ph-val{font-size:1.9rem;font-weight:600;letter-spacing:-1px;font-family:'DM Mono',monospace;line-height:1;
+  background:linear-gradient(180deg,#f8fafc,#a1a1aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ph-sub{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:10px;
+  display:flex;gap:10px;flex-wrap:wrap;padding-top:8px;border-top:1px solid rgba(255,255,255,.04);}
+.ph-badge{font-size:.62rem;font-weight:600;padding:4px 14px;border-radius:20px;align-self:flex-start;letter-spacing:.5px;}
+.ph-c{background:rgba(34,197,94,.08);color:var(--g);border:1px solid rgba(34,197,94,.15);}
+.ph-p{background:rgba(167,139,250,.08);color:var(--p);border:1px solid rgba(167,139,250,.15);}
 /* Greek card */
-.gc{background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:13px;position:relative;overflow:hidden;}
-.gc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--acc,#3b82f6);}
-.gc-sym{font-family:'DM Mono',monospace;font-size:1.35rem;font-weight:500;color:var(--acc,#3b82f6);line-height:1;}
-.gc-nm{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-top:2px;}
-.gc-v{font-family:'DM Mono',monospace;font-size:1.0rem;font-weight:600;margin-top:9px;}
-.gc-d{font-size:.64rem;color:var(--t3);margin-top:5px;line-height:1.5;}
+.gc{background:var(--s2);border:1px solid var(--b1);border-radius:10px;padding:14px;
+  position:relative;overflow:hidden;transition:border-color .2s;}
+.gc:hover{border-color:var(--acc,#3b82f6);}
+.gc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--acc,#3b82f6),transparent);opacity:.6;}
+.gc-sym{font-family:'DM Mono',monospace;font-size:1.15rem;font-weight:500;color:var(--acc,#3b82f6);line-height:1;}
+.gc-nm{font-size:.56rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-top:3px;}
+.gc-v{font-family:'DM Mono',monospace;font-size:.92rem;font-weight:600;margin-top:9px;}
+.gc-d{font-size:.62rem;color:var(--t3);margin-top:5px;line-height:1.5;}
 /* Signals */
 .sig{display:flex;align-items:flex-start;gap:9px;padding:10px 13px;
   border-radius:8px;border:1px solid;margin:4px 0;font-size:.73rem;line-height:1.65;}
@@ -709,7 +719,7 @@ st.markdown("""
     <div class="hdr-ico">◈</div>
     <div><div class="hdr-t">Options Lab</div><div class="hdr-s">Pricer Black-Scholes · Greeks · Stratégies</div></div>
   </div>
-  <div class="live">● Live</div>
+  <div class="hdr-v">v1.0</div>
 </div>""", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════
