@@ -61,7 +61,7 @@ html,body,[class*="css"],.stApp{font-family:'Inter',sans-serif!important;backgro
   position:relative;overflow:hidden;}
 .ph::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,rgba(59,130,246,.3),transparent);}
-.ph-ey{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--t3);margin-bottom:8px;}
+.ph-ey{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t2);margin-bottom:8px;}
 .ph-row{display:flex;align-items:baseline;gap:6px;}
 .ph-cur{font-size:.95rem;color:var(--t3);font-family:'DM Mono',monospace;}
 .ph-val{font-size:1.9rem;font-weight:600;letter-spacing:-1px;font-family:'DM Mono',monospace;line-height:1;
@@ -770,7 +770,7 @@ with st.sidebar:
     # ── Type d'option ───────────────────────────────────────
     st.markdown('<div class="sb-title">Type d\'option</div>', unsafe_allow_html=True)
     otype = st.radio("", ["call", "put"], horizontal=True, key="ot1",
-                     help="Call : droit d'acheter · Put : droit de vendre")
+                     label_visibility="collapsed")
     _badge_cls = "sb-call" if otype == "call" else "sb-put"
     _badge_lbl = "● CALL — droit d'acheter" if otype == "call" else "● PUT — droit de vendre"
     st.markdown(f'<div class="sb-badge {_badge_cls}">{_badge_lbl}</div>', unsafe_allow_html=True)
@@ -899,9 +899,9 @@ with tab1:
         gdata=[("Δ","Delta",G["delta"],".4f","#22c55e","Variation si le sous-jacent bouge de 1 €"),
                ("Γ","Gamma",G["gamma"],".5f","#a78bfa","Vitesse de changement du delta"),
                ("Θ","Theta",G["theta"],"+.4f","#f59e0b","€ gagnés ou perdus chaque jour"),
-               ("ν","Vega", G["vega"], ".4f","#3b82f6","€ gagnés si la volatilité monte de 1%"),
-               ("ρ","Rho",  G["rho"],  "+.4f","#ef4444","€ gagnés si les taux montent de 1%"),
-               ("Λ","Vanna",G["vanna"],"+.4f","#71717a","Sensibilité croisée prix × volatilité")]
+               ("ν","Vega", G["vega"], ".4f","#3b82f6","Sensibilité à la volatilité"),
+               ("ρ","Rho",  G["rho"],  "+.4f","#ef4444","Sensibilité aux taux"),
+               ("Λ","Vanna",G["vanna"],"+.4f","#71717a","Croisée prix × volatilité")]
         for col,(sym,nm,v,fmt,col_c,desc) in zip(cols,gdata):
             with col: greek_card(sym,nm,v,fmt,col_c,desc)
 
@@ -1059,7 +1059,7 @@ with tab3:
             if active:
                 dl=st.radio("",["Achat","Vente"],horizontal=True,
                             index=0 if d["dir"]==1 else 1,key=f"ldir_{i}",
-                            help="Achat = vous payez la prime · Vente = vous encaissez la prime")
+                            label_visibility="collapsed")
                 direction=1 if dl=="Achat" else -1
 
         if active:
