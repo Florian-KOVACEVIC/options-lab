@@ -203,7 +203,7 @@ def implied_vol(mkt, S, K, T, r, q=0.0, otype="call"):
         f = lambda s: bs_price(S,K,T,r,s,q,otype)-mkt
         if f(1e-4)*f(9.9)>=0: return np.nan
         return brentq(f,1e-4,9.9)
-    except: return np.nan
+    except Exception: return np.nan
 
 def mat_from_ymd(y,m,d): return max(y+m/12+d/365, 1/365)
 
