@@ -32,7 +32,8 @@ st.markdown("""
 *,*::before,*::after{box-sizing:border-box;}
 html,body,[class*="css"],.stApp{font-family:'Inter',sans-serif!important;background:var(--bg)!important;color:var(--t);}
 .main .block-container{padding:22px 30px 48px;max-width:1580px;}
-#MainMenu,footer,header{visibility:hidden;}
+#MainMenu,footer{visibility:hidden;}
+header[data-testid="stHeader"]{background:var(--bg)!important;}
 /* Header */
 .hdr{display:flex;align-items:center;justify-content:space-between;
   padding-bottom:18px;border-bottom:1px solid var(--b1);margin-bottom:20px;}
