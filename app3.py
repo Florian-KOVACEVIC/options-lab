@@ -899,9 +899,9 @@ with tab1:
         gdata=[("Δ","Delta",G["delta"],".4f","#22c55e","Variation si le sous-jacent bouge de 1 €"),
                ("Γ","Gamma",G["gamma"],".5f","#a78bfa","Vitesse de changement du delta"),
                ("Θ","Theta",G["theta"],"+.4f","#f59e0b","€ gagnés ou perdus chaque jour"),
-               ("ν","Vega", G["vega"], ".4f","#3b82f6","Sensibilité à la volatilité"),
-               ("ρ","Rho",  G["rho"],  "+.4f","#ef4444","Sensibilité aux taux"),
-               ("Λ","Vanna",G["vanna"],"+.4f","#71717a","Croisée prix × volatilité")]
+               ("ν","Vega", G["vega"], ".4f","#3b82f6","Impact d'une hausse de 1% de la volatilité"),
+               ("ρ","Rho",  G["rho"],  "+.4f","#ef4444","Impact d'une hausse de 1% des taux"),
+               ("Λ","Vanna",G["vanna"],"+.4f","#71717a","Sensibilité croisée prix × volatilité")]
         for col,(sym,nm,v,fmt,col_c,desc) in zip(cols,gdata):
             with col: greek_card(sym,nm,v,fmt,col_c,desc)
 
