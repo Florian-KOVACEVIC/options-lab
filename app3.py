@@ -560,6 +560,11 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, W=900, H=320):
         "Long Put":        mx(K-SR,0)-P0,
         "Covered Call":    (SR-S)-mx(SR-K_high_wing,0)+call_px(K_high_wing,Tc,sc),
         "Protective Put":  (SR-S)+mx(K_low_wing-SR,0)-put_px(K_low_wing,Tp,sp),
+        "Bull Put Spread":  -(mx(K-SR,0)-mx(K_low_wing-SR,0))+(P0-put_px(K_low_wing,Tp,sp)),
+        "Bear Call Spread": -(mx(SR-K,0)-mx(SR-K_high_wing,0))+(C0-C_high),
+        "Long Call Spread 1×2": mx(SR-K,0)-2*mx(SR-K_high_wing,0)-(C0-2*C_high),
+        "Short Call":       -mx(SR-K,0)+C0,
+        "Short Put":        -mx(K-SR,0)+P0,
     }
     pnl = pnls.get(name, np.zeros_like(SR))
     col = STRATEGIES[name]["color"]
@@ -587,7 +592,7 @@ PALETTE = ["#3b82f6","#22c55e","#f59e0b","#a78bfa","#ef4444","#06b6d4"]
 @st.cache_data(show_spinner=False)
 def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
     SR = np.linspace(S_ref*0.5, S_ref*1.5, 400)
-    total = np.zeros_like(SR); net_prem=0.0; series=[]
+    total = np.zeros_like(SR); net_prem=0.0; series=[]; legend_items=[]
     for i,leg in enumerate(legs):
         if not leg["active"]: continue
         pr   = bs_price(leg["S"],leg["K"],leg["T"],leg["r"],leg["sigma"],leg.get("q",0),leg["inst"])
@@ -596,13 +601,15 @@ def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
                 if leg["inst"]=="call"
                 else leg["dir"]*np.maximum(leg["K"]-SR,0)*leg["qty"]-cost)
         total += pnl
-        # Labels courts : "L1 · A Call K=100 ×1" au lieu du label complet
-        short_dir = "A" if leg["dir"] == 1 else "V"
+        short_dir = "Achat" if leg["dir"] == 1 else "Vente"
         short_label = f"L{i+1} · {short_dir} {leg['inst'].upper()} K={leg['K']:.0f}"
-        series.append({"x":list(SR),"y":list(pnl),"color":PALETTE[i%6],
-                       "width":1.5,"dash":True,"label":short_label})
+        color = PALETTE[i%6]
+        series.append({"x":list(SR),"y":list(pnl),"color":color,
+                       "width":1.5,"dash":True})
+        legend_items.append({"label":short_label,"color":color,"dash":True})
     series.append({"x":list(SR),"y":list(total),"color":"#ffffff","width":3,
-                   "fill_pos_neg":True,"label":"P&L total"})
+                   "fill_pos_neg":True})
+    legend_items.append({"label":"P&L total","color":"#ffffff","dash":False})
 
     vlines=[{"x":S_ref,"color":"#3b82f6","label":f"S₀={S_ref:.0f}","dash":True}]
     idxs=np.where(np.diff(np.sign(total)))[0]
@@ -615,9 +622,9 @@ def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
                     xlabel="Prix à l'expiration (€)", ylabel="P&L (€)",
                     hline_zero=True, vlines=vlines,
                     title=f"{name}  ·  Prime nette {nc} : €{abs(net_prem):.4f}",
-                    PAD_L=62, PAD_R=24, PAD_T=36, PAD_B=48,
+                    PAD_L=62, PAD_R=24, PAD_T=20, PAD_B=48,
                     responsive=True)
-    return svg, total, net_prem
+    return svg, total, net_prem, legend_items
 
 @st.cache_data(show_spinner=False)
 def build_custom_greeks(legs, S_ref, W=1100, H=260):
@@ -707,6 +714,26 @@ STRATEGIES={
      "legs":[("buy","stock","actions"),("buy","put","K")],"outlook":"Haussier avec protection",
      "max_gain":"Illimité","max_loss":"S−K+prime","be":"S + prime",
      "greeks":"Delta + · Gamma + · Theta − · Vega +","color":"#3b82f6"},
+    "Bull Put Spread":  {"desc":"Vendre un put ATM, acheter un put OTM. Crédit reçu, exposition haussière à risque limité.",
+     "legs":[("sell","put","K2"),("buy","put","K1<K2")],"outlook":"Haussier modéré",
+     "max_gain":"Prime nette","max_loss":"(K2−K1)−prime","be":"K2 − prime",
+     "greeks":"Delta + · Gamma faible · Theta + · Short Vega","color":"#22c55e"},
+    "Bear Call Spread":  {"desc":"Vendre un call ATM, acheter un call OTM. Crédit reçu, exposition baissière à risque limité.",
+     "legs":[("sell","call","K1"),("buy","call","K2>K1")],"outlook":"Baissier modéré",
+     "max_gain":"Prime nette","max_loss":"(K2−K1)−prime","be":"K1 + prime",
+     "greeks":"Delta − · Gamma faible · Theta + · Short Vega","color":"#a78bfa"},
+    "Long Call Spread 1×2": {"desc":"Acheter 1 call ATM, vendre 2 calls OTM. Financement partiel, risque à la hausse illimité.",
+     "legs":[("buy","call","K1"),("sell","call","K2>K1 ×2")],"outlook":"Haussier modéré",
+     "max_gain":"(K2−K1)−prime","max_loss":"Illimité au-dessus","be":"K1+prime · 2K2−K1−prime",
+     "greeks":"Delta + · Long puis Short Gamma · Theta mixte","color":"#06b6d4"},
+    "Short Call":       {"desc":"Vendre un call nu. Encaisse la prime, risque illimité à la hausse.",
+     "legs":[("sell","call","K")],"outlook":"Baissier ou neutre",
+     "max_gain":"Prime encaissée","max_loss":"Illimité","be":"K + prime",
+     "greeks":"Delta − · Gamma − · Theta + · Vega −","color":"#ef4444"},
+    "Short Put":        {"desc":"Vendre un put nu. Encaisse la prime, risque si le marché chute fortement.",
+     "legs":[("sell","put","K")],"outlook":"Haussier ou neutre",
+     "max_gain":"Prime encaissée","max_loss":"K − prime","be":"K − prime",
+     "greeks":"Delta + · Gamma − · Theta + · Vega −","color":"#f59e0b"},
 }
 LEG_A={"buy":("tby","Achat"),"sell":("tse","Vente")}
 LEG_I={"call":("tca","Call"),"put":("tpu","Put"),"stock":("tca","Action")}
@@ -1068,6 +1095,7 @@ with tab2:
         for gn in ["theta","vega"]: a,b,c_=interp(gn,Gm[gn]); signal_card(a,b,c_)
         a,b,c_=gamma_theta_msg(Gm["gamma"],Gm["theta"]); signal_card(a,b,c_)
 
+    st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
     with st.expander("Tableau comparatif — toutes les stratégies"):
         rows=[]
         for nm,inf in STRATEGIES.items():
@@ -1205,8 +1233,20 @@ with tab3:
             a,b,c_=gamma_theta_msg(PG,PT); signal_card(a,b,c_)
 
         section_header("Graphique P&L à l'expiration")
-        svg_c,total_pnl,_=build_custom_payoff(active_legs,S_ref,sname)
+        svg_c,total_pnl,_,legend_items=build_custom_payoff(active_legs,S_ref,sname)
         show_svg(svg_c, full_width=True)
+        # Légende externe centrée sous le graphique
+        legend_html = ''.join(
+            f'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px">'
+            f'<span style="width:18px;height:3px;border-radius:2px;background:{it["color"]};'
+            f'{"border-top:1px dashed " + it["color"] if it["dash"] else ""};display:inline-block"></span>'
+            f'<span style="font-size:.72rem;color:#a1a1aa">{it["label"]}</span></span>'
+            for it in legend_items
+        )
+        st.markdown(
+            f'<div style="text-align:center;padding:6px 0 14px;display:flex;flex-wrap:wrap;'
+            f'justify-content:center;gap:2px 6px">{legend_html}</div>',
+            unsafe_allow_html=True)
 
         section_header("Profils de Greeks vs Prix")
         greek_svgs=build_custom_greeks(active_legs,S_ref)
