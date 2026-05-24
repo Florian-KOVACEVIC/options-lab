@@ -1066,7 +1066,7 @@ with tab2:
 with tab3:
     st.markdown('<div class="card" style="margin-bottom:14px;font-size:.77rem;color:#a1a1aa;line-height:1.7">'
                 'Construisez librement une stratégie en combinant jusqu\'à <b>6 jambes</b> indépendantes.<br>'
-                'Chaque jambe a ses propres paramètres. Le graphique final agrège tous les P&L.</div>',
+                'Chaque jambe a ses propres paramètres. Le graphique final agrège tous les P&L à maturité.</div>',
                 unsafe_allow_html=True)
 
     hc1,hc2=st.columns([3,1])
@@ -1206,6 +1206,7 @@ with tab3:
           <div class="tbi"><div class="tbl">Jambes actives</div><div class="tbv" style="color:#3b82f6">{len(active_legs)}</div></div>
         </div>""", unsafe_allow_html=True)
 
+        st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
         with st.expander("Détail par jambe"):
             rows_l=[]
             for i,leg in enumerate(active_legs):
