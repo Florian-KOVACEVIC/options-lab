@@ -307,7 +307,7 @@ def svg_chart(
             svg.append(f'<line x1="{xp:.1f}" y1="{PAD_T}" x2="{xp:.1f}" y2="{PAD_T+ph}" '
                        f'stroke="{vl["color"]}" stroke-width="1.2" opacity=".7" {dash}/>')
             if vl.get("label"):
-                svg.append(f'<text x="{xp+3:.1f}" y="{PAD_T+10}" font-family="DM Mono,monospace" '
+                svg.append(f'<text x="{xp+3:.1f}" y="{PAD_T+ph-6:.1f}" font-family="DM Mono,monospace" '
                            f'font-size="8.5" fill="{vl["color"]}" opacity=".8">{vl["label"]}</text>')
 
     # Series
@@ -618,7 +618,7 @@ def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
     return svg, total, net_prem
 
 @st.cache_data(show_spinner=False)
-def build_custom_greeks(legs, S_ref, W=920, H=200):
+def build_custom_greeks(legs, S_ref, W=1100, H=260):
     SR=np.linspace(S_ref*0.5,S_ref*1.5,150)
     PD=np.zeros_like(SR); PG=np.zeros_like(SR)
     PT=np.zeros_like(SR); PV=np.zeros_like(SR)
