@@ -262,8 +262,14 @@ def svg_chart(
     def tx(v): return PAD_L + (v-xmin)/(xmax-xmin)*pw
     def ty(v): return PAD_T + ph - (v-ymin)/span*ph
 
-    svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
-           f'style="background:{BG_SVG};border-radius:10px;display:block">']
+    responsive = W >= 1000
+    if responsive:
+        svg = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
+               f'preserveAspectRatio="xMidYMid meet" '
+               f'style="background:{BG_SVG};border-radius:10px;display:block;width:100%;height:auto">']
+    else:
+        svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
+               f'style="background:{BG_SVG};border-radius:10px;display:block">']
 
     # Grid lines y
     n_yticks = 5
@@ -347,14 +353,19 @@ def svg_chart(
             svg.append(f'<text x="{xp+8:.1f}" y="{yp+4:.1f}" font-family="DM Mono,monospace" '
                        f'font-size="9" fill="{col}">{label}</text>')
 
-    # Legend
+    # Legend — multi-line wrap
     lx, ly = PAD_L+4, PAD_T+6
+    max_lx = W - PAD_R - 10
     for s in series_list:
         if not s.get("label"): continue
-        svg.append(f'<rect x="{lx}" y="{ly-6}" width="16" height="3" rx="1.5" fill="{s["color"]}"/>')
-        svg.append(f'<text x="{lx+20}" y="{ly+1}" font-family="Inter,sans-serif" '
-                   f'font-size="9" fill="{T2_SVG}">{s["label"]}</text>')
-        lx += len(s["label"])*6 + 36
+        item_w = len(s["label"])*5.5 + 30
+        if lx + item_w > max_lx:
+            lx = PAD_L+4
+            ly += 14
+        svg.append(f'<rect x="{lx}" y="{ly-6}" width="14" height="3" rx="1.5" fill="{s["color"]}"/>')
+        svg.append(f'<text x="{lx+18}" y="{ly+1}" font-family="Inter,sans-serif" '
+                   f'font-size="8.5" fill="{T2_SVG}">{html.escape(s["label"])}</text>')
+        lx += item_w
 
     # Axes borders
     svg.append(f'<line x1="{PAD_L}" y1="{PAD_T}" x2="{PAD_L}" y2="{PAD_T+ph}" stroke="{GR_SVG}" stroke-width="1"/>')
@@ -374,9 +385,10 @@ def svg_chart(
     svg.append('</svg>')
     return "\n".join(svg)
 
-def show_svg(svg_str, height=None):
-    h = height or 280
-    st.markdown(f'<div style="border-radius:10px;overflow:hidden;margin:4px 0">{svg_str}</div>',
+def show_svg(svg_str, height=None, full_width=False):
+    fw = "width:100%;" if full_width else ""
+    st.markdown(f'<div style="border-radius:10px;overflow:hidden;margin:4px 0;{fw}">'
+                f'<div style="{fw}{"" if not full_width else "max-width:100%;overflow-x:auto;"}">{svg_str}</div></div>',
                 unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────────
@@ -572,7 +584,7 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, W=900, H=320):
 PALETTE = ["#3b82f6","#22c55e","#f59e0b","#a78bfa","#ef4444","#06b6d4"]
 
 @st.cache_data(show_spinner=False)
-def build_custom_payoff(legs, S_ref, name, W=920, H=340):
+def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
     SR = np.linspace(S_ref*0.5, S_ref*1.5, 400)
     total = np.zeros_like(SR); net_prem=0.0; series=[]
     for i,leg in enumerate(legs):
@@ -583,8 +595,11 @@ def build_custom_payoff(legs, S_ref, name, W=920, H=340):
                 if leg["inst"]=="call"
                 else leg["dir"]*np.maximum(leg["K"]-SR,0)*leg["qty"]-cost)
         total += pnl
+        # Labels courts : "L1 · A Call K=100 ×1" au lieu du label complet
+        short_dir = "A" if leg["dir"] == 1 else "V"
+        short_label = f"L{i+1} · {short_dir} {leg['inst'].upper()} K={leg['K']:.0f}"
         series.append({"x":list(SR),"y":list(pnl),"color":PALETTE[i%6],
-                       "width":1.2,"dash":True,"label":leg["label"]})
+                       "width":1.5,"dash":True,"label":short_label})
     series.append({"x":list(SR),"y":list(total),"color":"#ffffff","width":3,
                    "fill_pos_neg":True,"label":"P&L total"})
 
@@ -599,7 +614,7 @@ def build_custom_payoff(legs, S_ref, name, W=920, H=340):
                     xlabel="Prix à l'expiration (€)", ylabel="P&L (€)",
                     hline_zero=True, vlines=vlines,
                     title=f"{name}  ·  Prime nette {nc} : €{abs(net_prem):.4f}",
-                    PAD_L=60, PAD_R=20, PAD_T=32, PAD_B=44)
+                    PAD_L=62, PAD_R=24, PAD_T=36, PAD_B=48)
     return svg, total, net_prem
 
 @st.cache_data(show_spinner=False)
@@ -1188,7 +1203,7 @@ with tab3:
 
         section_header("Graphique P&L à l'expiration")
         svg_c,total_pnl,_=build_custom_payoff(active_legs,S_ref,sname)
-        show_svg(svg_c, height=355)
+        show_svg(svg_c, full_width=True)
 
         section_header("Profils de Greeks vs Prix")
         greek_svgs=build_custom_greeks(active_legs,S_ref)
