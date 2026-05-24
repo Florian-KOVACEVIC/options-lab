@@ -38,9 +38,9 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 .hdr{display:flex;align-items:center;justify-content:space-between;
   padding-bottom:18px;border-bottom:1px solid var(--b1);margin-bottom:20px;}
 .hdr-l{display:flex;align-items:center;gap:14px;}
-.hdr-ico{width:46px;height:46px;border-radius:12px;
+.hdr-ico{width:52px;height:52px;border-radius:13px;
   background:linear-gradient(135deg,#3b82f6 0%,#7c3aed 40%,#c084fc 75%,#f472b6 100%);
-  display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;
   box-shadow:0 6px 20px rgba(124,58,237,.35),0 2px 8px rgba(59,130,246,.2);}
 .hdr-t{font-size:1.55rem;font-weight:800;letter-spacing:-.5px;
   background:linear-gradient(135deg,#60a5fa 0%,#a78bfa 35%,#c084fc 60%,#f0abfc 85%,#fafafa 100%);
@@ -91,8 +91,8 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 .so{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.2);color:#fcd34d;}
 .dg{background:#22c55e;}.dr{background:#ef4444;}.db{background:#3b82f6;}.do{background:#f59e0b;}
 /* Sec header */
-.sh{font-size:.60rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;
-  color:var(--t3);padding:14px 0 8px;border-bottom:1px solid var(--b1);margin-bottom:11px;}
+.sh{font-size:.70rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--t2);padding:14px 0 8px;border-bottom:1px solid var(--b1);margin-bottom:11px;}
 /* Field label */
 .fl{font-size:.69rem;font-weight:500;color:var(--t3);margin-bottom:4px;margin-top:10px;}
 /* Mat badge */
@@ -801,15 +801,15 @@ with st.sidebar:
     _mc1, _mc2, _mc3 = st.columns(3)
     with _mc1:
         field_label("Année")
-        _ty = st.number_input("A", 0, 30, 1, 1, key="p1_y",
+        _ty = st.number_input("A", 0, 30, 0, 1, key="p1_y",
                               label_visibility="collapsed", help="Années")
     with _mc2:
         field_label("Mois")
-        _tm = st.number_input("M", 0, 11, 0, 1, key="p1_m",
+        _tm = st.number_input("M", 0, 11, 1, 1, key="p1_m",
                               label_visibility="collapsed", help="Mois")
     with _mc3:
         field_label("Jours")
-        _td = st.number_input("J", 0, 30, 0, 1, key="p1_d",
+        _td = st.number_input("J", 0, 30, 15, 1, key="p1_d",
                               label_visibility="collapsed", help="Jours")
     T = mat_from_ymd(_ty, _tm, _td)
 
@@ -817,9 +817,9 @@ with st.sidebar:
     st.markdown('<div class="sb-title">Paramètres de marché</div>', unsafe_allow_html=True)
     field_label("Taux sans risque  r  (%)")
     r = st.slider("r", 0.0, 10.0,
-                  float(st.session_state.get("shared_r", 5.0)), 0.1,
+                  float(st.session_state.get("shared_r", 2.5)), 0.1,
                   label_visibility="collapsed",
-                  help="Taux d'intérêt annuel (BCE ≈ 3–4% en 2024)", key="t1_r") / 100
+                  help="Taux d'intérêt annuel sans risque (taux BCE ≈ 2,5% mi-2026)", key="t1_r") / 100
     st.session_state["shared_r"] = r * 100
 
     field_label("Dividende  q  (%)")
@@ -1222,4 +1222,14 @@ with tab3:
                     "ν":f"{leg['dir']*Gl['vega']*leg['qty']:+.4f}"})
             st.dataframe(pd.DataFrame(rows_l).set_index("Jambe"),use_container_width=True)
 
-st.markdown('<div style="text-align:center;padding:32px 0 8px;font-size:.58rem;color:#1c1c1e;letter-spacing:1px">OPTIONS LAB · BLACK-SCHOLES · USAGE PÉDAGOGIQUE</div>', unsafe_allow_html=True)
+st.markdown("""
+<div style="text-align:center;padding:32px 0 8px;font-size:.58rem;color:#27272a;letter-spacing:1px">OPTIONS LAB · BLACK-SCHOLES</div>
+<div style="text-align:center;padding:0 40px 24px;font-size:.58rem;color:#3f3f46;line-height:1.7;max-width:800px;margin:0 auto">
+  Les résultats fournis par cette application reposent sur le modèle théorique de Black-Scholes
+  et sont présentés à titre purement informatif et pédagogique. Ils ne constituent en aucun cas
+  un conseil en investissement, une recommandation d'achat ou de vente, ni une garantie de résultat.
+  Les marchés d'options comportent des risques significatifs, y compris la perte totale du capital investi.
+  Les calculs peuvent contenir des approximations inhérentes au modèle (volatilité constante, marchés sans friction, etc.).
+  Consultez un professionnel agréé avant toute décision d'investissement.
+</div>
+""", unsafe_allow_html=True)
