@@ -531,7 +531,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
 #  PAYOFF CHART
 # ─────────────────────────────────────────────────────────────
 @st.cache_data(show_spinner=False)
-def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, W=900, H=320):
+def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, W=1100, H=380):
     SR = np.linspace(S*0.50, S*1.50, 400)
     strike_offset = S * 0.07
     call_px = lambda k, T, sg: bs_price(S, k, T, r, sg, q, "call")
@@ -565,6 +565,8 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, W=900, H=320):
         "Long Call Spread 1×2": mx(SR-K,0)-2*mx(SR-K_high_wing,0)-(C0-2*C_high),
         "Short Call":       -mx(SR-K,0)+C0,
         "Short Put":        -mx(K-SR,0)+P0,
+        "Synthetic Long Forward":  mx(SR-K,0)-mx(K-SR,0)-(C0-P0),
+        "Synthetic Short Forward": -mx(SR-K,0)+mx(K-SR,0)+(C0-P0),
     }
     pnl = pnls.get(name, np.zeros_like(SR))
     col = STRATEGIES[name]["color"]
@@ -582,7 +584,8 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, W=900, H=320):
     ], W=W, H=H, xlabel="Prix à l'expiration (€)", ylabel="P&L (€)",
        hline_zero=True, vlines=vlines,
        title=f"{name} — Profit / Perte à l'expiration",
-       PAD_L=58, PAD_R=20, PAD_T=30, PAD_B=42)
+       PAD_L=60, PAD_R=24, PAD_T=30, PAD_B=46,
+       responsive=True)
 
 # ─────────────────────────────────────────────────────────────
 #  CUSTOM PAYOFF + GREEKS CHART
@@ -612,10 +615,12 @@ def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
     legend_items.append({"label":"P&L total","color":"#ffffff","dash":False})
 
     vlines=[{"x":S_ref,"color":"#3b82f6","label":f"S₀={S_ref:.0f}","dash":True}]
+    legend_items.append({"label":f"S₀ = {S_ref:.0f}","color":"#3b82f6","dash":True})
     idxs=np.where(np.diff(np.sign(total)))[0]
     for idx in idxs:
         be=(SR[idx]+SR[idx+1])/2
         vlines.append({"x":be,"color":"#f59e0b","label":f"BE {be:.1f}","dash":True})
+        legend_items.append({"label":f"BE {be:.1f}","color":"#f59e0b","dash":True})
 
     nc="encaissée" if net_prem<0 else "payée"
     svg = svg_chart(series, W=W, H=H,
@@ -734,6 +739,14 @@ STRATEGIES={
      "legs":[("sell","put","K")],"outlook":"Haussier ou neutre",
      "max_gain":"Prime encaissée","max_loss":"K − prime","be":"K − prime",
      "greeks":"Delta + · Gamma − · Theta + · Vega −","color":"#f59e0b"},
+    "Synthetic Long Forward":  {"desc":"Acheter call + vendre put au même strike. Reproduit un contrat forward long via la parité put-call (C − P = S − K·e⁻ʳᵀ). Aucune prime nette en théorie si K = forward.",
+     "legs":[("buy","call","K ATM"),("sell","put","K ATM")],"outlook":"Haussier · Réplication forward",
+     "max_gain":"Illimité","max_loss":"K − prime nette","be":"K + prime nette",
+     "greeks":"Delta ≈ +1 · Gamma ≈ 0 · Theta ≈ 0 · Vega ≈ 0","color":"#22c55e"},
+    "Synthetic Short Forward": {"desc":"Vendre call + acheter put au même strike. Reproduit un forward short via la parité put-call. Équivalent économique d'une vente à découvert du sous-jacent.",
+     "legs":[("sell","call","K ATM"),("buy","put","K ATM")],"outlook":"Baissier · Réplication forward",
+     "max_gain":"K − prime nette","max_loss":"Illimité","be":"K − prime nette",
+     "greeks":"Delta ≈ −1 · Gamma ≈ 0 · Theta ≈ 0 · Vega ≈ 0","color":"#ef4444"},
 }
 LEG_A={"buy":("tby","Achat"),"sell":("tse","Vente")}
 LEG_I={"call":("tca","Call"),"put":("tpu","Put"),"stock":("tca","Action")}
@@ -1077,7 +1090,7 @@ with tab2:
     st.markdown(f'<div style="font-size:.68rem;color:#52525b;margin-bottom:6px">'
                 f'Calls T={fmt_mat(Tc2)} σ={sig_c2*100:.1f}%  ·  Puts T={fmt_mat(Tp2)} σ={sig_p2*100:.1f}%</div>',
                 unsafe_allow_html=True)
-    show_svg(build_payoff(strat,S2,K2,Tc2,Tp2,r2,sig_c2,sig_p2,q2), height=330)
+    show_svg(build_payoff(strat,S2,K2,Tc2,Tp2,r2,sig_c2,sig_p2,q2), full_width=True)
 
     section_header("Greeks indicatifs — leg ATM")
     G2c=bs_greeks(S2,K2,Tc2,r2,sig_c2,q2,"call"); G2p=bs_greeks(S2,K2,Tp2,r2,sig_p2,q2,"put")
