@@ -38,15 +38,14 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 .hdr{display:flex;align-items:center;justify-content:space-between;
   padding-bottom:18px;border-bottom:1px solid var(--b1);margin-bottom:20px;}
 .hdr-l{display:flex;align-items:center;gap:14px;}
-.hdr-ico{width:38px;height:38px;border-radius:10px;
-  background:linear-gradient(135deg,#3b82f6 0%,#8b5cf6 50%,#a78bfa 100%);
-  display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;
-  box-shadow:0 4px 12px rgba(59,130,246,.25);}
-.hdr-t{font-size:1.1rem;font-weight:700;letter-spacing:-.3px;
-  background:linear-gradient(90deg,#e2e8f0,#f8fafc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hdr-s{font-size:.68rem;color:var(--t3);margin-top:2px;letter-spacing:.3px;}
-.hdr-v{font-size:.60rem;font-weight:500;color:var(--t3);font-family:'DM Mono',monospace;
-  padding:5px 12px;border-radius:6px;background:var(--s2);border:1px solid var(--b1);}
+.hdr-ico{width:46px;height:46px;border-radius:12px;
+  background:linear-gradient(135deg,#3b82f6 0%,#7c3aed 40%,#c084fc 75%,#f472b6 100%);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;
+  box-shadow:0 6px 20px rgba(124,58,237,.35),0 2px 8px rgba(59,130,246,.2);}
+.hdr-t{font-size:1.55rem;font-weight:800;letter-spacing:-.5px;
+  background:linear-gradient(135deg,#60a5fa 0%,#a78bfa 35%,#c084fc 60%,#f0abfc 85%,#fafafa 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hdr-s{font-size:.72rem;color:var(--t3);margin-top:3px;letter-spacing:.4px;}
 /* Tabs */
 .stTabs [data-baseweb="tab-list"]{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:3px;gap:2px;}
 .stTabs [data-baseweb="tab"]{font-family:'Inter',sans-serif!important;font-size:.77rem;font-weight:500;
@@ -172,8 +171,9 @@ section[data-testid="stSidebar"] label,
 section[data-testid="stSidebar"] .stMarkdown p{color:var(--t2)!important;font-size:.76rem!important;}
 section[data-testid="stSidebar"] [data-testid="stSlider"] label{color:var(--t3)!important;font-size:.73rem!important;}
 section[data-testid="stSidebar"] hr{border-color:var(--b1);margin:10px 0;}
-.sb-title{font-size:.60rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;
-  color:var(--t3);padding:10px 0 6px;border-bottom:1px solid var(--b1);margin-bottom:8px;}
+.sb-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
+  background:linear-gradient(90deg,#60a5fa,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  padding:10px 0 6px;border-bottom:1px solid var(--b1);margin-bottom:8px;}
 .sb-badge{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;font-weight:600;
   padding:4px 10px;border-radius:6px;margin-bottom:10px;}
 .sb-call{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
@@ -235,18 +235,6 @@ GR_SVG  = "#27272a"
 TC_SVG  = "#52525b"
 T2_SVG  = "#71717a"
 
-def _norm_series(xs, ys, W, H, PAD_L=52, PAD_R=16, PAD_T=16, PAD_B=36):
-    """Normalise data → SVG pixel coords"""
-    xmin,xmax = min(xs),max(xs)
-    ymin,ymax = min(ys),max(ys)
-    if xmax==xmin: xmax=xmin+1
-    if ymax==ymin: ymin,ymax=ymin-1,ymax+1
-    pw = W - PAD_L - PAD_R
-    ph = H - PAD_T - PAD_B
-    px = [PAD_L + (x-xmin)/(xmax-xmin)*pw for x in xs]
-    py = [PAD_T + ph - (y-ymin)/(ymax-ymin)*ph for y in ys]
-    return px, py, xmin, xmax, ymin, ymax, PAD_L, PAD_R, PAD_T, PAD_B, pw, ph
-
 def svg_chart(
     series_list,           # [{"x":[], "y":[], "color":"#hex", "label":"", "width":2, "dash":False, "fill":False, "fill_pos_neg":False}]
     W=700, H=260,
@@ -273,7 +261,6 @@ def svg_chart(
 
     def tx(v): return PAD_L + (v-xmin)/(xmax-xmin)*pw
     def ty(v): return PAD_T + ph - (v-ymin)/span*ph
-    def ty_zero(): return ty(0)
 
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
            f'style="background:{BG_SVG};border-radius:10px;display:block">']
@@ -395,8 +382,8 @@ def show_svg(svg_str, height=None):
 # ─────────────────────────────────────────────────────────────
 #  UI HELPERS
 # ─────────────────────────────────────────────────────────────
-def sh(t): st.markdown(f'<div class="sh">{t}</div>', unsafe_allow_html=True)
-def fl(t): st.markdown(f'<div class="fl">{t}</div>', unsafe_allow_html=True)
+def section_header(t): st.markdown(f'<div class="sh">{t}</div>', unsafe_allow_html=True)
+def field_label(t): st.markdown(f'<div class="fl">{t}</div>', unsafe_allow_html=True)
 
 def mat_widget(pfx, dy=1, dm=0, dd=0):
     c1,c2,c3 = st.columns(3)
@@ -420,7 +407,7 @@ def greek_card(sym,name,val,fmt,color,desc):
                 f'<div class="gc-v">{val:{fmt}}</div><div class="gc-d">{desc}</div></div>',
                 unsafe_allow_html=True)
 
-def sig(sc,dc,content):
+def signal_card(sc,dc,content):
     st.markdown(f'<div class="sig {sc}"><div class="dot {dc}"></div><div>{content}</div></div>',
                 unsafe_allow_html=True)
 
@@ -460,21 +447,22 @@ def gamma_theta_msg(g,t):
 # ─────────────────────────────────────────────────────────────
 #  DASHBOARD — 5 SVG charts
 # ─────────────────────────────────────────────────────────────
-def build_dashboard(S, K, T, r, sigma, q, otype):
+@st.cache_data(show_spinner=False)
+def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     N = 200
     SR   = np.linspace(max(S*0.45,1), S*1.55, N)
     sigR = np.linspace(0.02, 1.0, N)
     TR   = np.linspace(0.005, max(T*2.5,0.5), N)
 
-    prices = np.array([bs_price(s,K,T,r,sigma,q,otype) for s in SR])
+    prices = np.array([bs_price(s,K,T,r,sigma,q,otype) for s in SR]) * pos_sign
     gs_all = [bs_greeks(s,K,T,r,sigma,q,otype) for s in SR]
-    deltas = np.array([g["delta"] for g in gs_all])
-    gammas = np.array([g["gamma"] for g in gs_all])
-    intr   = np.array([max(s-K,0) if otype=="call" else max(K-s,0) for s in SR])
-    p_sig  = np.array([bs_price(S,K,T,r,s,q,otype) for s in sigR])
-    p_T    = np.array([bs_price(S,K,t,r,sigma,q,otype) for t in TR])
-    cur    = bs_price(S,K,T,r,sigma,q,otype)
-    G      = bs_greeks(S,K,T,r,sigma,q,otype)
+    deltas = np.array([g["delta"] for g in gs_all]) * pos_sign
+    gammas = np.array([g["gamma"] for g in gs_all]) * pos_sign
+    intr   = np.array([max(s-K,0) if otype=="call" else max(K-s,0) for s in SR]) * pos_sign
+    p_sig  = np.array([bs_price(S,K,T,r,s,q,otype) for s in sigR]) * pos_sign
+    p_T    = np.array([bs_price(S,K,t,r,sigma,q,otype) for t in TR]) * pos_sign
+    cur    = bs_price(S,K,T,r,sigma,q,otype) * pos_sign
+    G      = {k: v * pos_sign for k, v in bs_greeks(S,K,T,r,sigma,q,otype).items()}
 
     W, H = 680, 250
 
@@ -529,34 +517,36 @@ def build_dashboard(S, K, T, r, sigma, q, otype):
 # ─────────────────────────────────────────────────────────────
 #  PAYOFF CHART
 # ─────────────────────────────────────────────────────────────
-def build_payoff(name, S, K, Tc, Tp, r, sc, sp, W=900, H=320):
+@st.cache_data(show_spinner=False)
+def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, W=900, H=320):
     SR = np.linspace(S*0.50, S*1.50, 400)
-    dk = S*0.07
-    c  = lambda k,T,sg: bs_price(S,k,T,r,sg,0,"call")
-    p  = lambda k,T,sg: bs_price(S,k,T,r,sg,0,"put")
-    mx = np.maximum
-    C0=c(K,Tc,sc); P0=p(K,Tp,sp)
-    Kc,Kp=K+dk,K-dk
-    K1,K3=K-dk,K+dk
-    CK1=c(K1,Tc,sc); CK3=c(K3,Tc,sc)
-    Ka,Kb,Kcc,Kd=K-2*dk,K-dk,K+dk,K+2*dk
-    Pa=p(Ka,Tp,sp); Pb=p(Kb,Tp,sp); Pc=c(Kcc,Tc,sc); Pd=c(Kd,Tc,sc)
+    strike_offset = S * 0.07
+    call_px = lambda k, T, sg: bs_price(S, k, T, r, sg, q, "call")
+    put_px  = lambda k, T, sg: bs_price(S, k, T, r, sg, q, "put")
+    C0 = call_px(K, Tc, sc);  P0 = put_px(K, Tp, sp)
+    K_call_otm, K_put_otm = K + strike_offset, K - strike_offset
+    K_low_wing, K_high_wing = K - strike_offset, K + strike_offset
+    C_low = call_px(K_low_wing, Tc, sc);  C_high = call_px(K_high_wing, Tc, sc)
+    K_ic_low, K_ic_mid_low, K_ic_mid_high, K_ic_high = K - 2*strike_offset, K - strike_offset, K + strike_offset, K + 2*strike_offset
+    P_ic_low = put_px(K_ic_low, Tp, sp);  P_ic_mid = put_px(K_ic_mid_low, Tp, sp)
+    C_ic_mid = call_px(K_ic_mid_high, Tc, sc);  C_ic_high = call_px(K_ic_high, Tc, sc)
 
+    mx = np.maximum
     pnls = {
         "Long Straddle":   mx(SR-K,0)+mx(K-SR,0)-C0-P0,
         "Short Straddle":  -(mx(SR-K,0)+mx(K-SR,0))+C0+P0,
-        "Long Strangle":   mx(SR-Kc,0)+mx(Kp-SR,0)-c(Kc,Tc,sc)-p(Kp,Tp,sp),
-        "Short Strangle":  -(mx(SR-Kc,0)+mx(Kp-SR,0))+c(Kc,Tc,sc)+p(Kp,Tp,sp),
-        "Bull Call Spread": mx(SR-K,0)-mx(SR-K3,0)-(C0-CK3),
-        "Bear Put Spread":  mx(K3-SR,0)-mx(K-SR,0)-(p(K3,Tp,sp)-P0),
-        "Long Butterfly":   mx(SR-K1,0)-2*mx(SR-K,0)+mx(SR-K3,0)-(CK1-2*C0+CK3),
-        "Short Butterfly":  -(mx(SR-K1,0)-2*mx(SR-K,0)+mx(SR-K3,0))+(CK1-2*C0+CK3),
-        "Iron Condor":     mx(Kb-SR,0)-mx(Ka-SR,0)+mx(SR-Kcc,0)-mx(SR-Kd,0)+(-Pb+Pa-Pc+Pd),
-        "Iron Butterfly":  -mx(SR-K,0)-mx(K-SR,0)+mx(SR-K3,0)+mx(K1-SR,0)+(-C0-P0+CK3+CK1),
+        "Long Strangle":   mx(SR-K_call_otm,0)+mx(K_put_otm-SR,0)-call_px(K_call_otm,Tc,sc)-put_px(K_put_otm,Tp,sp),
+        "Short Strangle":  -(mx(SR-K_call_otm,0)+mx(K_put_otm-SR,0))+call_px(K_call_otm,Tc,sc)+put_px(K_put_otm,Tp,sp),
+        "Bull Call Spread": mx(SR-K,0)-mx(SR-K_high_wing,0)-(C0-C_high),
+        "Bear Put Spread":  mx(K_high_wing-SR,0)-mx(K-SR,0)-(put_px(K_high_wing,Tp,sp)-P0),
+        "Long Butterfly":   mx(SR-K_low_wing,0)-2*mx(SR-K,0)+mx(SR-K_high_wing,0)-(C_low-2*C0+C_high),
+        "Short Butterfly":  -(mx(SR-K_low_wing,0)-2*mx(SR-K,0)+mx(SR-K_high_wing,0))+(C_low-2*C0+C_high),
+        "Iron Condor":     -mx(K_ic_mid_low-SR,0)+mx(K_ic_low-SR,0)-mx(SR-K_ic_mid_high,0)+mx(SR-K_ic_high,0)+(P_ic_mid-P_ic_low+C_ic_mid-C_ic_high),
+        "Iron Butterfly":  -mx(SR-K,0)-mx(K-SR,0)+mx(SR-K_high_wing,0)+mx(K_low_wing-SR,0)+(-C0-P0+C_high+put_px(K_low_wing,Tp,sp)),
         "Long Call":       mx(SR-K,0)-C0,
         "Long Put":        mx(K-SR,0)-P0,
-        "Covered Call":    (SR-S)-mx(SR-K3,0)+c(K3,Tc,sc),
-        "Protective Put":  (SR-S)+mx(K1-SR,0)-p(K1,Tp,sp),
+        "Covered Call":    (SR-S)-mx(SR-K_high_wing,0)+call_px(K_high_wing,Tc,sc),
+        "Protective Put":  (SR-S)+mx(K_low_wing-SR,0)-put_px(K_low_wing,Tp,sp),
     }
     pnl = pnls.get(name, np.zeros_like(SR))
     col = STRATEGIES[name]["color"]
@@ -581,12 +571,13 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, W=900, H=320):
 # ─────────────────────────────────────────────────────────────
 PALETTE = ["#3b82f6","#22c55e","#f59e0b","#a78bfa","#ef4444","#06b6d4"]
 
+@st.cache_data(show_spinner=False)
 def build_custom_payoff(legs, S_ref, name, W=920, H=340):
     SR = np.linspace(S_ref*0.5, S_ref*1.5, 400)
     total = np.zeros_like(SR); net_prem=0.0; series=[]
     for i,leg in enumerate(legs):
         if not leg["active"]: continue
-        pr   = bs_price(leg["S"],leg["K"],leg["T"],leg["r"],leg["sigma"],0,leg["inst"])
+        pr   = bs_price(leg["S"],leg["K"],leg["T"],leg["r"],leg["sigma"],leg.get("q",0),leg["inst"])
         cost = leg["dir"]*pr*leg["qty"]; net_prem+=cost
         pnl  = (leg["dir"]*np.maximum(SR-leg["K"],0)*leg["qty"]-cost
                 if leg["inst"]=="call"
@@ -611,6 +602,7 @@ def build_custom_payoff(legs, S_ref, name, W=920, H=340):
                     PAD_L=60, PAD_R=20, PAD_T=32, PAD_B=44)
     return svg, total, net_prem
 
+@st.cache_data(show_spinner=False)
 def build_custom_greeks(legs, S_ref, W=920, H=200):
     SR=np.linspace(S_ref*0.5,S_ref*1.5,150)
     PD=np.zeros_like(SR); PG=np.zeros_like(SR)
@@ -618,7 +610,7 @@ def build_custom_greeks(legs, S_ref, W=920, H=200):
     for leg in legs:
         if not leg["active"]: continue
         for i,s in enumerate(SR):
-            G=bs_greeks(s,leg["K"],leg["T"],leg["r"],leg["sigma"],0,leg["inst"])
+            G=bs_greeks(s,leg["K"],leg["T"],leg["r"],leg["sigma"],leg.get("q",0),leg["inst"])
             PD[i]+=leg["dir"]*leg["qty"]*G["delta"]
             PG[i]+=leg["dir"]*leg["qty"]*G["gamma"]
             PT[i]+=leg["dir"]*leg["qty"]*G["theta"]
@@ -718,7 +710,6 @@ st.markdown("""
     <div class="hdr-ico">◈</div>
     <div><div class="hdr-t">Options Lab</div><div class="hdr-s">Pricer Black-Scholes · Greeks · Stratégies</div></div>
   </div>
-  <div class="hdr-v">v1.0</div>
 </div>""", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════
@@ -776,15 +767,24 @@ with st.sidebar:
     _badge_lbl = "● CALL — droit d'acheter" if otype == "call" else "● PUT — droit de vendre"
     st.markdown(f'<div class="sb-badge {_badge_cls}">{_badge_lbl}</div>', unsafe_allow_html=True)
 
+    # ── Position (Achat / Vente) ───────────────────────────
+    st.markdown('<div class="sb-title">Position</div>', unsafe_allow_html=True)
+    position = st.radio("", ["Achat (Long)", "Vente (Short)"], horizontal=True, key="pos1",
+                        label_visibility="collapsed")
+    pos_sign = 1 if position == "Achat (Long)" else -1
+    _pos_cls = "sb-call" if pos_sign == 1 else "sb-put"
+    _pos_lbl = "● LONG — acheteur de l'option" if pos_sign == 1 else "● SHORT — vendeur de l'option"
+    st.markdown(f'<div class="sb-badge {_pos_cls}">{_pos_lbl}</div>', unsafe_allow_html=True)
+
     # ── Sous-jacent & Strike ────────────────────────────────
     st.markdown('<div class="sb-title">Sous-jacent & Strike</div>', unsafe_allow_html=True)
-    fl("Spot S₀  (€)")
+    field_label("Spot S₀  (€)")
     S = st.number_input("S0", value=st.session_state.get("shared_S", 100.0),
                         step=1.0, label_visibility="collapsed",
                         help="Prix actuel de l'actif sur le marché", key="t1_S")
     st.session_state["shared_S"] = S
 
-    fl("Strike K  (€)")
+    field_label("Strike K  (€)")
     K = st.number_input("K", value=st.session_state.get("shared_K", 100.0),
                         step=1.0, label_visibility="collapsed",
                         help="Prix d'exercice de l'option", key="t1_K")
@@ -800,36 +800,36 @@ with st.sidebar:
     st.markdown('<div class="sb-title">Maturité</div>', unsafe_allow_html=True)
     _mc1, _mc2, _mc3 = st.columns(3)
     with _mc1:
-        fl("Année")
+        field_label("Année")
         _ty = st.number_input("A", 0, 30, 1, 1, key="p1_y",
                               label_visibility="collapsed", help="Années")
     with _mc2:
-        fl("Mois")
+        field_label("Mois")
         _tm = st.number_input("M", 0, 11, 0, 1, key="p1_m",
                               label_visibility="collapsed", help="Mois")
     with _mc3:
-        fl("Jours")
+        field_label("Jours")
         _td = st.number_input("J", 0, 30, 0, 1, key="p1_d",
                               label_visibility="collapsed", help="Jours")
     T = mat_from_ymd(_ty, _tm, _td)
 
     # ── Taux, Dividende, Volatilité ─────────────────────────
     st.markdown('<div class="sb-title">Paramètres de marché</div>', unsafe_allow_html=True)
-    fl("Taux sans risque  r  (%)")
+    field_label("Taux sans risque  r  (%)")
     r = st.slider("r", 0.0, 10.0,
                   float(st.session_state.get("shared_r", 5.0)), 0.1,
                   label_visibility="collapsed",
                   help="Taux d'intérêt annuel (BCE ≈ 3–4% en 2024)", key="t1_r") / 100
     st.session_state["shared_r"] = r * 100
 
-    fl("Dividende  q  (%)")
+    field_label("Dividende  q  (%)")
     q_div = st.slider("q", 0.0, 20.0,
                       float(st.session_state.get("shared_q", 0.0)), 0.1,
                       label_visibility="collapsed",
                       help="Dividende annuel continu. 0 si pas de dividende.", key="t1_q") / 100
     st.session_state["shared_q"] = q_div * 100
 
-    fl("Volatilité  σ  (%)")
+    field_label("Volatilité  σ  (%)")
     sigma = st.slider("sg", 1.0, 150.0,
                       float(st.session_state.get("shared_sigma", 20.0)), 0.5,
                       label_visibility="collapsed",
@@ -839,7 +839,7 @@ with st.sidebar:
     # ── Volatilité implicite ────────────────────────────────
     st.markdown("---")
     st.markdown('<div class="sb-title">Volatilité implicite</div>', unsafe_allow_html=True)
-    fl("Prix de marché observé (€)")
+    field_label("Prix de marché observé (€)")
     mkt = st.number_input("Prix observé (€)", value=0.0, step=0.01, min_value=0.0,
                           label_visibility="collapsed",
                           help="Prix affiché chez votre courtier → retrouve la vol. implicite",
@@ -863,16 +863,20 @@ tab1, tab2, tab3 = st.tabs(["Pricer & Greeks", "Stratégies", "Strategy Builder"
 #  TAB 1 — Zone principale pleine largeur
 # ═══════════════════════════════════════════════════════════
 with tab1:
-    price=bs_price(S,K,T,r,sigma,q_div,otype)
-    G=bs_greeks(S,K,T,r,sigma,q_div,otype)
+    price_raw = bs_price(S,K,T,r,sigma,q_div,otype)
+    G_raw = bs_greeks(S,K,T,r,sigma,q_div,otype)
+    # Appliquer le signe de la position (Long = +1, Short = -1)
+    price = price_raw * pos_sign
+    G = {k: v * pos_sign for k, v in G_raw.items()}
     d1v=(np.log(S/K)+(r-q_div+0.5*sigma**2)*T)/(sigma*np.sqrt(T)) if T>1e-9 and sigma>1e-9 else 0
     d2v=d1v-sigma*np.sqrt(T) if T>1e-9 else 0
-    bc="ph-c" if otype=="call" else "ph-p"
-    bt="CALL" if otype=="call" else "PUT"
+    badge_class="ph-c" if otype=="call" else "ph-p"
+    pos_label = "LONG" if pos_sign == 1 else "SHORT"
+    badge_text = f"{pos_label} {'CALL' if otype=='call' else 'PUT'}"
 
     # ── Prix hero + Greeks côte à côte ──────────────────────
-    _hero_c, _grk_c = st.columns([5, 7], gap="large")
-    with _hero_c:
+    hero_col, greeks_col = st.columns([5, 7], gap="large")
+    with hero_col:
         st.markdown(f"""
         <div class="ph">
           <div>
@@ -883,19 +887,45 @@ with tab1:
               <span>N(d₁) = {norm.cdf(d1v):.4f}</span><span>N(d₂) = {norm.cdf(d2v):.4f}</span>
             </div>
           </div>
-          <span class="ph-badge {bc}">{bt}</span>
+          <span class="ph-badge {badge_class}">{badge_text}</span>
         </div>""", unsafe_allow_html=True)
 
-        sh("Exposition — lecture de vos risques")
-        ic1,ic2=st.columns(2)
-        with ic1:
-            for gn in ["delta","gamma","theta"]: a,b,c_=interp(gn,G[gn]); sig(a,b,c_)
-        with ic2:
-            for gn in ["vega","rho"]: a,b,c_=interp(gn,G[gn]); sig(a,b,c_)
-            a,b,c_=gamma_theta_msg(G["gamma"],G["theta"]); sig(a,b,c_)
+        with st.expander("📐 Formule de Black-Scholes"):
+            st.markdown(r"""
+<div style="font-size:.78rem;line-height:2.0;color:#a1a1aa;font-family:'DM Mono',monospace">
 
-    with _grk_c:
-        sh("Grecs")
+**Prix d'un Call :**
+$$C = S \, e^{-qT} \, N(d_1) \;-\; K \, e^{-rT} \, N(d_2)$$
+
+**Prix d'un Put :**
+$$P = K \, e^{-rT} \, N(-d_2) \;-\; S \, e^{-qT} \, N(-d_1)$$
+
+**avec :**
+$$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d_1 - \sigma\sqrt{T}$$
+
+| Paramètre | Description |
+|-----------|-------------|
+| S | Prix du sous-jacent (spot) |
+| K | Prix d'exercice (strike) |
+| T | Temps jusqu'à l'expiration (en années) |
+| r | Taux sans risque annuel |
+| σ | Volatilité implicite annualisée |
+| q | Rendement du dividende continu |
+| N(·) | Fonction de répartition de la loi normale |
+
+</div>
+""", unsafe_allow_html=True)
+
+        section_header("Exposition — lecture de vos risques")
+        interp_col1, interp_col2 = st.columns(2)
+        with interp_col1:
+            for gn in ["delta","gamma","theta"]: a,b,c_=interp(gn,G[gn]); signal_card(a,b,c_)
+        with interp_col2:
+            for gn in ["vega","rho"]: a,b,c_=interp(gn,G[gn]); signal_card(a,b,c_)
+            a,b,c_=gamma_theta_msg(G["gamma"],G["theta"]); signal_card(a,b,c_)
+
+    with greeks_col:
+        section_header("Grecs")
         cols=st.columns(6)
         gdata=[("Δ","Delta",G["delta"],".4f","#22c55e","Variation si le sous-jacent bouge de 1 €"),
                ("Γ","Gamma",G["gamma"],".5f","#a78bfa","Vitesse de changement du delta"),
@@ -906,6 +936,7 @@ with tab1:
         for col,(sym,nm,v,fmt,col_c,desc) in zip(cols,gdata):
             with col: greek_card(sym,nm,v,fmt,col_c,desc)
 
+        st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
         with st.expander("Tableau détaillé des grecs"):
             df_g=pd.DataFrame([
                 {"Grec":"Δ Delta","Valeur":f"{G['delta']:+.6f}","Unité":"€/€","Sens":"+ si haussier"},
@@ -918,19 +949,19 @@ with tab1:
             st.dataframe(df_g.set_index("Grec"),use_container_width=True)
 
     # ── Visualisations pleine largeur ────────────────────────
-    sh("Visualisations")
-    svg1,svg2,svg3,svg4,svg5 = build_dashboard(S,K,T,r,sigma,q_div,otype)
+    section_header("Visualisations")
+    svg1,svg2,svg3,svg4,svg5 = build_dashboard(S,K,T,r,sigma,q_div,otype,pos_sign)
 
     # Ligne 1 : 3 colonnes égales
-    r1c1,r1c2,r1c3 = st.columns(3)
-    with r1c1: show_svg(svg1)
-    with r1c2: show_svg(svg2)
-    with r1c3: show_svg(svg3)
+    chart_col1, chart_col2, chart_col3 = st.columns(3)
+    with chart_col1: show_svg(svg1)
+    with chart_col2: show_svg(svg2)
+    with chart_col3: show_svg(svg3)
 
     # Ligne 2 : 2 colonnes larges
-    r2c1,r2c2 = st.columns(2)
-    with r2c1: show_svg(svg4)
-    with r2c2: show_svg(svg5)
+    chart_col4, chart_col5 = st.columns(2)
+    with chart_col4: show_svg(svg4)
+    with chart_col5: show_svg(svg5)
 
 # ═══════════════════════════════════════════════════════════
 #  TAB 2
@@ -942,17 +973,19 @@ with tab2:
         K2=st.number_input("Strike K central",value=100.0,step=1.0,key="k2",
                            help="Strike ATM. Les strikes OTM sont calculés à ±7% automatiquement")
         r2=st.number_input("Taux r (%)",value=5.0,step=0.1,key="r2",help="Taux sans risque (%)") / 100
+        q2=st.number_input("Dividende q (%)",value=0.0,step=0.1,min_value=0.0,max_value=20.0,
+                           key="q2",help="Rendement du dividende annuel continu (%)") / 100
     with p2:
-        fl("Maturité Calls  (A / M / J)"); Tc2=mat_inline("s2c",1,0,0)
+        field_label("Maturité Calls  (A / M / J)"); Tc2=mat_inline("s2c",1,0,0)
         sig_c2=st.slider("Vol. Calls σ (%)",1.0,100.0,20.0,0.5,key="sc2",
                          help="Volatilité implicite utilisée pour pricer les calls") / 100
     with p3:
-        fl("Maturité Puts  (A / M / J)"); Tp2=mat_inline("s2p",1,0,0)
+        field_label("Maturité Puts  (A / M / J)"); Tp2=mat_inline("s2p",1,0,0)
         sig_p2=st.slider("Vol. Puts σ (%)",1.0,100.0,20.0,0.5,key="sp2",
                          help="Volatilité implicite utilisée pour pricer les puts") / 100
 
     st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
-    sh("Choisir une stratégie")
+    section_header("Choisir une stratégie")
 
     if "sel" not in st.session_state: st.session_state.sel="Long Straddle"
     snames=list(STRATEGIES.keys())
@@ -970,37 +1003,39 @@ with tab2:
     st.markdown("---")
     strat=st.session_state.sel; info=STRATEGIES[strat]
 
-    d1c,d2c,d3c=st.columns([2,1,1])
-    with d1c:
-        st.markdown(f'<div class="card" style="border-left:3px solid {info["color"]}">'
+    detail_col1, detail_col2, detail_col3 = st.columns([2, 1, 1])
+    with detail_col1:
+        st.markdown(f'<div class="card" style="border-left:3px solid {info["color"]};height:100%">'
                     f'<div style="font-size:.96rem;font-weight:700;color:{info["color"]};margin-bottom:7px">{strat}</div>'
                     f'<div style="font-size:.76rem;color:#a1a1aa;line-height:1.7;margin-bottom:10px">{info["desc"]}</div>'
                     f'{legs_html(info["legs"])}</div>', unsafe_allow_html=True)
-    with d2c:
+    with detail_col2:
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Payoff</div>'
-                    f'<div style="font-size:.73rem;line-height:2.1;color:#d4d4d8">'
-                    f'📈 <b>Gain max</b><br>{info["max_gain"]}<br>'
-                    f'📉 <b>Perte max</b><br>{info["max_loss"]}<br>'
-                    f'⚖️ <b>Seuil rentabilité</b><br>{info["be"]}</div></div>', unsafe_allow_html=True)
-    with d3c:
-        tips=[]
-        if "Long Gamma" in info["greeks"]:  tips.append("⚡ <b>Long Gamma</b> — profite des grands mouvements, perd le temps")
-        if "Short Gamma" in info["greeks"]: tips.append("💰 <b>Short Gamma</b> — encaisse le temps, perd sur les grands mouvements")
-        if "Long Vega" in info["greeks"]:   tips.append("📈 <b>Long Vega</b> — profite si la volatilité monte")
-        if "Short Vega" in info["greeks"]:  tips.append("📉 <b>Short Vega</b> — profite si la volatilité reste basse")
+                    f'<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 10px;'
+                    f'font-size:.73rem;line-height:1.8;color:#d4d4d8;align-items:baseline">'
+                    f'<span>📈 <b>Gain max</b></span><span>{info["max_gain"]}</span>'
+                    f'<span>📉 <b>Perte max</b></span><span>{info["max_loss"]}</span>'
+                    f'<span>⚖️ <b>Seuil</b></span><span>{info["be"]}</span>'
+                    f'</div></div>', unsafe_allow_html=True)
+    with detail_col3:
+        tips = []
+        if "Long Gamma" in info["greeks"]:  tips.append("⚡ <b>Long Gamma</b> — profite des grands mouvements")
+        if "Short Gamma" in info["greeks"]: tips.append("💰 <b>Short Gamma</b> — encaisse le temps")
+        if "Long Vega" in info["greeks"]:   tips.append("📈 <b>Long Vega</b> — profite si la vol. monte")
+        if "Short Vega" in info["greeks"]:  tips.append("📉 <b>Short Vega</b> — profite si la vol. reste basse")
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Greeks</div>'
                     f'<div style="font-size:.72rem;color:#a1a1aa;margin-bottom:8px">{info["greeks"]}</div>'
-                    f'<div style="font-size:.70rem;color:#52525b;line-height:2.0">{"<br>".join(tips)}</div></div>',
+                    f'<div style="font-size:.70rem;color:#52525b;line-height:1.9">{"<br>".join(tips)}</div></div>',
                     unsafe_allow_html=True)
 
-    sh("Profil de gain/perte à l'expiration")
+    section_header("Profil de gain/perte à l'expiration")
     st.markdown(f'<div style="font-size:.68rem;color:#52525b;margin-bottom:6px">'
                 f'Calls T={fmt_mat(Tc2)} σ={sig_c2*100:.1f}%  ·  Puts T={fmt_mat(Tp2)} σ={sig_p2*100:.1f}%</div>',
                 unsafe_allow_html=True)
-    show_svg(build_payoff(strat,S2,K2,Tc2,Tp2,r2,sig_c2,sig_p2), height=330)
+    show_svg(build_payoff(strat,S2,K2,Tc2,Tp2,r2,sig_c2,sig_p2,q2), height=330)
 
-    sh("Greeks indicatifs — leg ATM")
-    G2c=bs_greeks(S2,K2,Tc2,r2,sig_c2,0,"call"); G2p=bs_greeks(S2,K2,Tp2,r2,sig_p2,0,"put")
+    section_header("Greeks indicatifs — leg ATM")
+    G2c=bs_greeks(S2,K2,Tc2,r2,sig_c2,q2,"call"); G2p=bs_greeks(S2,K2,Tp2,r2,sig_p2,q2,"put")
     adj=-1 if strat in ["Short Straddle","Short Strangle","Short Butterfly"] else 1
     Gm={k:(G2c[k]+G2p[k])*adj/2 for k in G2c}
     gcols=st.columns(4)
@@ -1008,18 +1043,18 @@ with tab2:
         ("Γ","Gamma","gamma",".5f","#a78bfa"),("Θ","Theta","theta","+.5f","#f59e0b"),("ν","Vega","vega",".4f","#3b82f6")]):
         with col: greek_card(sym,nm,Gm[key],fmt,color,"")
 
-    gi1,gi2=st.columns(2)
-    with gi1:
-        for gn in ["delta","gamma"]: a,b,c_=interp(gn,Gm[gn]); sig(a,b,c_)
-    with gi2:
-        for gn in ["theta","vega"]: a,b,c_=interp(gn,Gm[gn]); sig(a,b,c_)
-        a,b,c_=gamma_theta_msg(Gm["gamma"],Gm["theta"]); sig(a,b,c_)
+    greek_interp1, greek_interp2 = st.columns(2)
+    with greek_interp1:
+        for gn in ["delta","gamma"]: a,b,c_=interp(gn,Gm[gn]); signal_card(a,b,c_)
+    with greek_interp2:
+        for gn in ["theta","vega"]: a,b,c_=interp(gn,Gm[gn]); signal_card(a,b,c_)
+        a,b,c_=gamma_theta_msg(Gm["gamma"],Gm["theta"]); signal_card(a,b,c_)
 
     with st.expander("Tableau comparatif — toutes les stratégies"):
         rows=[]
         for nm,inf in STRATEGIES.items():
             a=-1 if nm in ["Short Straddle","Short Strangle","Short Butterfly"] else 1
-            Gi=bs_greeks(S2,K2,Tc2,r2,sig_c2,0,"call")
+            Gi=bs_greeks(S2,K2,Tc2,r2,sig_c2,q2,"call")
             rows.append({"Stratégie":nm,"Delta":f"{Gi['delta']*a:+.4f}","Gamma":f"{Gi['gamma']*a:+.5f}",
                 "Theta":f"{Gi['theta']*a:+.5f}","Vega":f"{Gi['vega']*a:.4f}",
                 "Vue":inf["outlook"],"Gain max":inf["max_gain"],"Perte max":inf["max_loss"]})
@@ -1036,7 +1071,10 @@ with tab3:
 
     hc1,hc2=st.columns([3,1])
     with hc1: sname=st.text_input("Nom de la stratégie",value="Ma stratégie",help="Affiché sur le graphique")
-    with hc2: S_ref=st.number_input("Spot référence (€)",value=100.0,step=1.0,help="Centre de l'axe X du graphique")
+    with hc2:
+        S_ref=st.number_input("Spot référence (€)",value=100.0,step=1.0,help="Centre de l'axe X du graphique")
+        q3=st.number_input("Dividende q (%)",value=0.0,step=0.1,min_value=0.0,max_value=20.0,
+                           key="q3",help="Rendement du dividende annuel continu (%)") / 100
     n_legs=st.slider("Nombre de jambes",1,6,2,1,help="Chaque jambe est une option indépendante")
     st.markdown("---")
 
@@ -1093,12 +1131,12 @@ with tab3:
                 sig_l=st.slider(f"Vol. σ (%)",1.0,150.0,d["sigma"]*100,0.5,key=f"lsig_{i}",
                     help="Volatilité implicite annualisée") / 100
             with lc4_:
-                fl("Maturité  (A / M / J)")
+                field_label("Maturité  (A / M / J)")
                 y_l=st.number_input("A",0,30,d["y"],1,key=f"ly_{i}",label_visibility="collapsed",help="Années")
                 m_l=st.number_input("M",0,11,d["m"],1,key=f"lm_{i}",label_visibility="collapsed",help="Mois")
                 dj_l=st.number_input("J",0,30,d["d"],1,key=f"ld_{i}",label_visibility="collapsed",help="Jours")
                 T_l=mat_from_ymd(y_l,m_l,dj_l)
-                prem=bs_price(S_l,K_l,T_l,r_l,sig_l,0,instrument)
+                prem=bs_price(S_l,K_l,T_l,r_l,sig_l,q3,instrument)
                 cost=direction*prem*qty
                 cc="#ef4444" if direction==1 else "#22c55e"
                 st.markdown(f'<div style="font-size:.69rem;color:#52525b">Unité : €{prem:.4f} × {qty}</div>'
@@ -1107,7 +1145,7 @@ with tab3:
                             unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
             legs_cfg.append(dict(active=True,dir=direction,inst=instrument,
-                S=S_l,K=K_l,T=T_l,r=r_l,sigma=sig_l,qty=qty,
+                S=S_l,K=K_l,T=T_l,r=r_l,sigma=sig_l,q=q3,qty=qty,
                 label=f'{"Achat" if direction==1 else "Vente"} {instrument.upper()} K={K_l:.0f} ×{qty}'))
         else:
             st.markdown(f'<div class="lc lo"><span class="ln" style="color:#3f3f46">{ln} — désactivée</span></div>',
@@ -1119,40 +1157,43 @@ with tab3:
     if not active_legs:
         st.info("Activez au moins une jambe pour afficher le graphique.")
     else:
-        net=sum(l["dir"]*bs_price(l["S"],l["K"],l["T"],l["r"],l["sigma"],0,l["inst"])*l["qty"] for l in active_legs)
-        def pg(k): return sum(l["dir"]*l["qty"]*bs_greeks(l["S"],l["K"],l["T"],l["r"],l["sigma"],0,l["inst"])[k] for l in active_legs)
-        PD,PG,PT,PV=pg("delta"),pg("gamma"),pg("theta"),pg("vega")
-        nc="encaissée" if net<0 else "payée"; nc_col="#22c55e" if net<0 else "#ef4444"
-        dc_col="#22c55e" if PD>0.05 else ("#ef4444" if PD<-0.05 else "#3b82f6")
-        gc2="#22c55e" if PG>0 else "#ef4444"; tc2="#22c55e" if PT>0 else "#ef4444"; vc2="#22c55e" if PV>0 else "#ef4444"
+        net_premium = sum(l["dir"]*bs_price(l["S"],l["K"],l["T"],l["r"],l["sigma"],l.get("q",0),l["inst"])*l["qty"] for l in active_legs)
+        def portfolio_greek(k): return sum(l["dir"]*l["qty"]*bs_greeks(l["S"],l["K"],l["T"],l["r"],l["sigma"],l.get("q",0),l["inst"])[k] for l in active_legs)
+        PD, PG, PT, PV = portfolio_greek("delta"), portfolio_greek("gamma"), portfolio_greek("theta"), portfolio_greek("vega")
+        premium_label = "encaissée" if net_premium < 0 else "payée"
+        premium_color = "#22c55e" if net_premium < 0 else "#ef4444"
+        delta_color = "#22c55e" if PD > 0.05 else ("#ef4444" if PD < -0.05 else "#3b82f6")
+        gamma_color = "#22c55e" if PG > 0 else "#ef4444"
+        theta_color = "#22c55e" if PT > 0 else "#ef4444"
+        vega_color  = "#22c55e" if PV > 0 else "#ef4444"
 
         st.markdown(f"""
         <div class="tbar">
           <div class="tbi"><div class="tbl">Prime nette</div>
-            <div class="tbv" style="color:{nc_col}">€{abs(net):.4f}</div>
-            <div style="font-size:.58rem;color:#52525b">{nc}</div></div>
-          <div class="tbi"><div class="tbl">Δ Delta</div><div class="tbv" style="color:{dc_col}">{PD:+.4f}</div></div>
-          <div class="tbi"><div class="tbl">Γ Gamma</div><div class="tbv" style="color:{gc2}">{PG:+.5f}</div></div>
-          <div class="tbi"><div class="tbl">Θ Theta €/j</div><div class="tbv" style="color:{tc2}">{PT:+.5f}</div></div>
-          <div class="tbi"><div class="tbl">ν Vega €/%</div><div class="tbv" style="color:{vc2}">{PV:+.4f}</div></div>
+            <div class="tbv" style="color:{premium_color}">€{abs(net_premium):.4f}</div>
+            <div style="font-size:.58rem;color:#52525b">{premium_label}</div></div>
+          <div class="tbi"><div class="tbl">Δ Delta</div><div class="tbv" style="color:{delta_color}">{PD:+.4f}</div></div>
+          <div class="tbi"><div class="tbl">Γ Gamma</div><div class="tbv" style="color:{gamma_color}">{PG:+.5f}</div></div>
+          <div class="tbi"><div class="tbl">Θ Theta €/j</div><div class="tbv" style="color:{theta_color}">{PT:+.5f}</div></div>
+          <div class="tbi"><div class="tbl">ν Vega €/%</div><div class="tbv" style="color:{vega_color}">{PV:+.4f}</div></div>
         </div>""", unsafe_allow_html=True)
 
-        sh("Exposition du portefeuille")
-        bi1,bi2=st.columns(2)
-        with bi1:
-            for gn,gv in [("delta",PD),("gamma",PG)]: a,b,c_=interp(gn,gv); sig(a,b,c_)
-        with bi2:
-            for gn,gv in [("theta",PT),("vega",PV)]: a,b,c_=interp(gn,gv); sig(a,b,c_)
-            a,b,c_=gamma_theta_msg(PG,PT); sig(a,b,c_)
+        section_header("Exposition du portefeuille")
+        builder_interp1, builder_interp2 = st.columns(2)
+        with builder_interp1:
+            for gn,gv in [("delta",PD),("gamma",PG)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
+        with builder_interp2:
+            for gn,gv in [("theta",PT),("vega",PV)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
+            a,b,c_=gamma_theta_msg(PG,PT); signal_card(a,b,c_)
 
-        sh("Graphique P&L à l'expiration")
+        section_header("Graphique P&L à l'expiration")
         svg_c,total_pnl,_=build_custom_payoff(active_legs,S_ref,sname)
         show_svg(svg_c, height=355)
 
-        sh("Profils de Greeks vs Prix")
+        section_header("Profils de Greeks vs Prix")
         greek_svgs=build_custom_greeks(active_legs,S_ref)
-        gc1_,gc2_,gc3_,gc4_=st.columns(4)
-        for col,svg in zip([gc1_,gc2_,gc3_,gc4_],greek_svgs):
+        greek_chart_cols = st.columns(4)
+        for col,svg in zip(greek_chart_cols, greek_svgs):
             with col: show_svg(svg, height=215)
 
         mx_v=np.max(total_pnl); mn_v=np.min(total_pnl)
@@ -1168,8 +1209,8 @@ with tab3:
         with st.expander("Détail par jambe"):
             rows_l=[]
             for i,leg in enumerate(active_legs):
-                pr=bs_price(leg["S"],leg["K"],leg["T"],leg["r"],leg["sigma"],0,leg["inst"])
-                Gl=bs_greeks(leg["S"],leg["K"],leg["T"],leg["r"],leg["sigma"],0,leg["inst"])
+                pr=bs_price(leg["S"],leg["K"],leg["T"],leg["r"],leg["sigma"],leg.get("q",0),leg["inst"])
+                Gl=bs_greeks(leg["S"],leg["K"],leg["T"],leg["r"],leg["sigma"],leg.get("q",0),leg["inst"])
                 rows_l.append({"Jambe":LNAMES[i],"Sens":"Achat" if leg["dir"]==1 else "Vente",
                     "Type":leg["inst"].upper(),"S₀":f"{leg['S']:.1f}","Strike":f"{leg['K']:.1f}",
                     "Maturité":fmt_mat(leg["T"]),"σ%":f"{leg['sigma']*100:.1f}","Qté":leg["qty"],
