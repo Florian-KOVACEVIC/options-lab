@@ -614,12 +614,12 @@ def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
                    "fill_pos_neg":True})
     legend_items.append({"label":"P&L total","color":"#ffffff","dash":False})
 
-    vlines=[{"x":S_ref,"color":"#3b82f6","label":f"S₀={S_ref:.0f}","dash":True}]
+    vlines=[{"x":S_ref,"color":"#3b82f6","dash":True}]
     legend_items.append({"label":f"S₀ = {S_ref:.0f}","color":"#3b82f6","dash":True})
     idxs=np.where(np.diff(np.sign(total)))[0]
     for idx in idxs:
         be=(SR[idx]+SR[idx+1])/2
-        vlines.append({"x":be,"color":"#f59e0b","label":f"BE {be:.1f}","dash":True})
+        vlines.append({"x":be,"color":"#f59e0b","dash":True})
         legend_items.append({"label":f"BE {be:.1f}","color":"#f59e0b","dash":True})
 
     nc="encaissée" if net_prem<0 else "payée"
