@@ -244,6 +244,7 @@ def svg_chart(
     hline_zero=False,
     show_dot=None,         # {"x":val,"y":val,"color":"#hex"}
     PAD_L=54, PAD_R=18, PAD_T=28, PAD_B=40,
+    responsive=False,
 ):
     pw = W - PAD_L - PAD_R
     ph = H - PAD_T - PAD_B
@@ -262,7 +263,6 @@ def svg_chart(
     def tx(v): return PAD_L + (v-xmin)/(xmax-xmin)*pw
     def ty(v): return PAD_T + ph - (v-ymin)/span*ph
 
-    responsive = W >= 1000
     if responsive:
         svg = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
                f'preserveAspectRatio="xMidYMid meet" '
@@ -307,8 +307,9 @@ def svg_chart(
             svg.append(f'<line x1="{xp:.1f}" y1="{PAD_T}" x2="{xp:.1f}" y2="{PAD_T+ph}" '
                        f'stroke="{vl["color"]}" stroke-width="1.2" opacity=".7" {dash}/>')
             if vl.get("label"):
-                svg.append(f'<text x="{xp+3:.1f}" y="{PAD_T+ph+26:.1f}" font-family="DM Mono,monospace" '
-                           f'font-size="8.5" fill="{vl["color"]}" opacity=".8">{vl["label"]}</text>')
+                lbl_y = PAD_T + ph + (PAD_B * 0.55)
+                svg.append(f'<text x="{xp+3:.1f}" y="{lbl_y:.1f}" font-family="DM Mono,monospace" '
+                           f'font-size="8" fill="{vl["color"]}" opacity=".9">{vl["label"]}</text>')
 
     # Series
     for s in series_list:
@@ -614,7 +615,8 @@ def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
                     xlabel="Prix à l'expiration (€)", ylabel="P&L (€)",
                     hline_zero=True, vlines=vlines,
                     title=f"{name}  ·  Prime nette {nc} : €{abs(net_prem):.4f}",
-                    PAD_L=62, PAD_R=24, PAD_T=36, PAD_B=48)
+                    PAD_L=62, PAD_R=24, PAD_T=36, PAD_B=48,
+                    responsive=True)
     return svg, total, net_prem
 
 @st.cache_data(show_spinner=False)
@@ -633,7 +635,8 @@ def build_custom_greeks(legs, S_ref, W=1100, H=260):
 
     vl=[{"x":S_ref,"color":"#3b82f6","dash":True}]
     kwargs=dict(W=W//4, H=H, hline_zero=True, vlines=vl,
-                xlabel="Spot (€)", PAD_L=48,PAD_R=12,PAD_T=26,PAD_B=36)
+                xlabel="Spot (€)", PAD_L=48,PAD_R=12,PAD_T=26,PAD_B=36,
+                responsive=True)
 
     svgs=[]
     for data,col,title in [(PD,"#22c55e","Delta"),(PG,"#a78bfa","Gamma"),
