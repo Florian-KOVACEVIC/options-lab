@@ -307,7 +307,7 @@ def svg_chart(
             svg.append(f'<line x1="{xp:.1f}" y1="{PAD_T}" x2="{xp:.1f}" y2="{PAD_T+ph}" '
                        f'stroke="{vl["color"]}" stroke-width="1.2" opacity=".7" {dash}/>')
             if vl.get("label"):
-                svg.append(f'<text x="{xp+3:.1f}" y="{PAD_T+ph-6:.1f}" font-family="DM Mono,monospace" '
+                svg.append(f'<text x="{xp+3:.1f}" y="{PAD_T+ph+26:.1f}" font-family="DM Mono,monospace" '
                            f'font-size="8.5" fill="{vl["color"]}" opacity=".8">{vl["label"]}</text>')
 
     # Series
@@ -1207,9 +1207,11 @@ with tab3:
 
         section_header("Profils de Greeks vs Prix")
         greek_svgs=build_custom_greeks(active_legs,S_ref)
-        greek_chart_cols = st.columns(4)
-        for col,svg in zip(greek_chart_cols, greek_svgs):
-            with col: show_svg(svg, height=215)
+        st.markdown(
+            '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'
+            + ''.join(f'<div style="border-radius:10px;overflow:hidden">{svg}</div>' for svg in greek_svgs)
+            + '</div>',
+            unsafe_allow_html=True)
 
         mx_v=np.max(total_pnl); mn_v=np.min(total_pnl)
         be_n=len(np.where(np.diff(np.sign(total_pnl)))[0])
