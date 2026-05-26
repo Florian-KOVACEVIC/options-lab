@@ -26,7 +26,7 @@ st.markdown("""
   --g:#22c55e;--g2:#16a34a;
   --b:#3b82f6;--b2c:#2563eb;
   --o:#f59e0b;--r:#ef4444;--p:#a78bfa;
-  --t:#fafafa;--t2:#a1a1aa;--t3:#52525b;--t4:#27272a;
+  --t:#fafafa;--t2:#d4d4d8;--t3:#a1a1aa;--t4:#27272a;
   --rad:10px;
 }
 *,*::before,*::after{box-sizing:border-box;}
@@ -45,15 +45,19 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 .hdr-t{font-size:1.55rem;font-weight:800;letter-spacing:-.5px;
   background:linear-gradient(135deg,#60a5fa 0%,#a78bfa 35%,#c084fc 60%,#f0abfc 85%,#fafafa 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hdr-s{font-size:.72rem;color:var(--t3);margin-top:3px;letter-spacing:.4px;}
+.hdr-s{font-size:.72rem;color:var(--t2);margin-top:3px;letter-spacing:.4px;}
 /* Tabs */
 .stTabs [data-baseweb="tab-list"]{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:3px;gap:2px;}
-.stTabs [data-baseweb="tab"]{font-family:'Inter',sans-serif!important;font-size:.77rem;font-weight:500;
-  color:var(--t3);border-radius:7px;padding:7px 18px;}
-.stTabs [aria-selected="true"]{background:var(--s3)!important;color:var(--t)!important;box-shadow:0 1px 4px rgba(0,0,0,.4);}
+.stTabs [data-baseweb="tab"]{font-family:'Inter',sans-serif!important;font-size:.8rem;font-weight:600;
+  color:var(--t3);border-radius:7px;padding:8px 22px;transition:all .2s;}
+.stTabs [aria-selected="true"]{background:linear-gradient(135deg,var(--s3) 0%,rgba(59,130,246,.06) 100%)!important;
+  box-shadow:0 1px 6px rgba(0,0,0,.4)!important;border:1px solid rgba(59,130,246,.15)!important;}
+.stTabs [aria-selected="true"] p{background:linear-gradient(135deg,#60a5fa 0%,#a78bfa 40%,#c084fc 70%,#f0abfc 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;font-weight:700!important;}
+.stTabs [data-baseweb="tab"]:hover:not([aria-selected="true"]){color:var(--t2);}
 /* Cards */
 .card{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rad);padding:18px;}
-.ct{font-size:.60rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:12px;}
+.ct{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t2);margin-bottom:12px;}
 /* Price hero */
 .ph{background:linear-gradient(135deg,var(--s1) 0%,rgba(59,130,246,.04) 100%);
   border:1px solid var(--b1);border-radius:12px;
@@ -61,26 +65,30 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
   position:relative;overflow:hidden;}
 .ph::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,rgba(59,130,246,.3),transparent);}
-.ph-ey{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t2);margin-bottom:8px;}
+.ph-ey{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t);margin-bottom:8px;}
 .ph-row{display:flex;align-items:baseline;gap:6px;}
 .ph-cur{font-size:.95rem;color:var(--t3);font-family:'DM Mono',monospace;}
 .ph-val{font-size:1.9rem;font-weight:600;letter-spacing:-1px;font-family:'DM Mono',monospace;line-height:1;
   background:linear-gradient(180deg,#f8fafc,#a1a1aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.ph-sub{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:10px;
+.ph-sub{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--t2);margin-top:10px;
   display:flex;gap:10px;flex-wrap:wrap;padding-top:8px;border-top:1px solid rgba(255,255,255,.04);}
 .ph-badge{font-size:.62rem;font-weight:600;padding:4px 14px;border-radius:20px;align-self:flex-start;letter-spacing:.5px;}
 .ph-c{background:rgba(34,197,94,.08);color:var(--g);border:1px solid rgba(34,197,94,.15);}
 .ph-p{background:rgba(167,139,250,.08);color:var(--p);border:1px solid rgba(167,139,250,.15);}
 /* Greek card */
-.gc{background:var(--s2);border:1px solid var(--b1);border-radius:10px;padding:14px;
-  position:relative;overflow:hidden;transition:border-color .2s;}
+.gc{background:var(--s2);border:1px solid var(--b1);border-radius:10px;padding:14px 12px;
+  position:relative;overflow:hidden;transition:border-color .2s;height:100%;
+  display:flex;flex-direction:column;}
 .gc:hover{border-color:var(--acc,#3b82f6);}
 .gc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,var(--acc,#3b82f6),transparent);opacity:.6;}
-.gc-sym{font-family:'DM Mono',monospace;font-size:1.15rem;font-weight:500;color:var(--acc,#3b82f6);line-height:1;}
-.gc-nm{font-size:.56rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-top:3px;}
-.gc-v{font-family:'DM Mono',monospace;font-size:.92rem;font-weight:600;margin-top:9px;}
-.gc-d{font-size:.62rem;color:var(--t3);margin-top:5px;line-height:1.5;}
+.gc-sym{font-family:'DM Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--acc,#3b82f6);line-height:1;}
+.gc-nm{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t2);margin-top:3px;}
+.gc-v{font-family:'DM Mono',monospace;font-size:1.0rem;font-weight:700;margin-top:auto;padding-top:9px;}
+.gc-d{font-size:.63rem;color:var(--t2);margin-top:5px;line-height:1.45;}
+/* Greek grid — equal columns */
+.greeks-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.greeks-grid>div{min-width:0;}
 /* Signals */
 .sig{display:flex;align-items:flex-start;gap:9px;padding:10px 13px;
   border-radius:8px;border:1px solid;margin:4px 0;font-size:.73rem;line-height:1.65;}
@@ -91,10 +99,10 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 .so{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.2);color:#fcd34d;}
 .dg{background:#22c55e;}.dr{background:#ef4444;}.db{background:#3b82f6;}.do{background:#f59e0b;}
 /* Sec header */
-.sh{font-size:.70rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
-  color:var(--t2);padding:14px 0 8px;border-bottom:1px solid var(--b1);margin-bottom:11px;}
+.sh{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;
+  color:var(--t);padding:16px 0 10px;border-bottom:1px solid var(--b1);margin-bottom:13px;}
 /* Field label */
-.fl{font-size:.69rem;font-weight:500;color:var(--t3);margin-bottom:4px;margin-top:10px;}
+.fl{font-size:.69rem;font-weight:600;color:var(--t2);margin-bottom:4px;margin-top:10px;}
 /* Mat badge */
 .mb{font-family:'DM Mono',monospace;font-size:.73rem;color:var(--b);
   background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.18);
@@ -112,8 +120,8 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 /* Strat card */
 .sc{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:13px 14px;margin-bottom:7px;}
 .sc-sel{border-color:#3b82f6!important;background:var(--s2)!important;}
-.sc-nm{font-size:.82rem;font-weight:600;margin-bottom:5px;}
-.sc-s{font-size:.66rem;color:var(--t3);line-height:1.5;}
+.sc-nm{font-size:.86rem;font-weight:700;margin-bottom:5px;}
+.sc-s{font-size:.70rem;color:var(--t2);line-height:1.6;}
 .tag{display:inline-block;font-size:.58rem;font-weight:600;padding:2px 6px;border-radius:4px;margin:1px 2px;}
 .tby{background:rgba(34,197,94,.12);color:#22c55e;}
 .tse{background:rgba(239,68,68,.12);color:#ef4444;}
@@ -122,19 +130,29 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 /* Total bar */
 .tbar{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0;}
 .tbi{background:var(--s1);border:1px solid var(--b1);border-radius:8px;padding:12px 14px;text-align:center;}
-.tbl{font-size:.58rem;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:1px;}
+.tbl{font-size:.64rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;}
 .tbv{font-family:'DM Mono',monospace;font-size:1.05rem;font-weight:700;margin-top:4px;}
 /* Leg card */
-.lc{border-radius:9px;padding:15px 18px;margin-bottom:10px;border:1px solid;}
-.lb{background:rgba(34,197,94,.04);border-color:rgba(34,197,94,.18);}
-.ls{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.18);}
-.lo{background:var(--s1);border-color:var(--b1);opacity:.5;}
-.lh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.ln{font-size:.80rem;font-weight:700;}
+.lc{border-radius:10px;padding:0;margin-bottom:14px;border:1px solid;overflow:hidden;}
+.lb{background:var(--s1);border-color:rgba(34,197,94,.22);}
+.ls{background:var(--s1);border-color:rgba(239,68,68,.22);}
+.lo{background:var(--s1);border-color:var(--b1);opacity:.5;padding:14px 18px;}
+.lc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;
+  border-bottom:1px solid var(--b1);}
+.lc-head-buy{background:linear-gradient(135deg,rgba(34,197,94,.06) 0%,rgba(34,197,94,.02) 100%);}
+.lc-head-sell{background:linear-gradient(135deg,rgba(239,68,68,.06) 0%,rgba(239,68,68,.02) 100%);}
+.lc-head-left{display:flex;align-items:center;gap:10px;}
+.lc-name{font-size:.88rem;font-weight:800;}
+.lc-dir-badge{font-size:.66rem;font-weight:700;padding:4px 12px;border-radius:6px;letter-spacing:.5px;}
+.lc-dir-buy{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.lc-dir-sell{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.2);}
+.ln{font-size:.86rem;font-weight:800;}
+/* Leg direction toggle buttons */
+.leg-toggle .stButton>button{padding:6px 12px!important;font-size:.72rem!important;}
 /* Pinfo row */
 .prow{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;}
 .pi{flex:1;min-width:105px;background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:10px 12px;}
-.pil{font-size:.57rem;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:1px;}
+.pil{font-size:.62rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;}
 .piv{font-size:.80rem;font-weight:600;margin-top:3px;}
 /* Inputs */
 div[data-testid="stNumberInput"] input{background:var(--s2)!important;border:1px solid var(--b1)!important;
@@ -144,18 +162,23 @@ div[data-testid="stSelectbox"]>div>div{background:var(--s2)!important;border:1px
 div[data-testid="stTextInput"] input{background:var(--s2)!important;border:1px solid var(--b1)!important;
   border-radius:7px!important;color:var(--t)!important;}
 .stSlider [data-baseweb="slider"]{padding:4px 0;}
-[data-testid="stSlider"] label{color:var(--t3)!important;font-size:.75rem!important;}
-.stRadio>label{color:var(--t2)!important;font-size:.75rem!important;}
-.stRadio [data-testid="stMarkdownContainer"] p{font-size:.75rem!important;}
-.stButton>button{background:var(--s2)!important;border:1px solid var(--b1)!important;color:var(--t2)!important;
-  font-family:'Inter',sans-serif!important;font-size:.73rem!important;font-weight:500!important;
-  border-radius:7px!important;padding:6px 14px!important;width:100%!important;transition:all .15s!important;}
-.stButton>button:hover{border-color:#3b82f6!important;color:var(--t)!important;}
-.stCheckbox [data-testid="stMarkdownContainer"] p{font-size:.75rem!important;color:var(--t2)!important;}
+[data-testid="stSlider"] label{color:var(--t)!important;font-size:.75rem!important;}
+.stRadio>label{color:var(--t)!important;font-size:.75rem!important;}
+.stRadio [data-testid="stMarkdownContainer"] p{font-size:.75rem!important;color:var(--t)!important;}
+.stButton>button{background:linear-gradient(135deg,var(--s2) 0%,var(--s3) 100%)!important;
+  border:1px solid var(--b2)!important;color:var(--t2)!important;
+  font-family:'Inter',sans-serif!important;font-size:.76rem!important;font-weight:600!important;
+  border-radius:8px!important;padding:8px 16px!important;width:100%!important;transition:all .2s!important;
+  letter-spacing:.3px!important;}
+.stButton>button:hover{border-color:#3b82f6!important;color:var(--t)!important;
+  background:linear-gradient(135deg,rgba(59,130,246,.08) 0%,rgba(124,58,237,.06) 100%)!important;
+  box-shadow:0 2px 8px rgba(59,130,246,.15)!important;}
+.stButton>button:active{transform:scale(.98)!important;}
+.stCheckbox [data-testid="stMarkdownContainer"] p{font-size:.75rem!important;color:var(--t)!important;}
 .streamlit-expanderHeader{font-family:'Inter',sans-serif!important;font-size:.73rem!important;
-  color:var(--t3)!important;background:var(--s1)!important;border:1px solid var(--b1)!important;border-radius:8px!important;}
+  color:var(--t2)!important;background:var(--s1)!important;border:1px solid var(--b1)!important;border-radius:8px!important;}
 .streamlit-expanderContent{background:var(--s1)!important;border:1px solid var(--b1)!important;border-top:none!important;}
-label,.stMarkdown p{color:var(--t2)!important;font-size:.78rem!important;}
+label,.stMarkdown p{color:var(--t)!important;font-size:.78rem!important;}
 hr{border-color:var(--b1);margin:14px 0;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:#3f3f46;border-radius:4px;}
@@ -168,8 +191,8 @@ section[data-testid="stSidebar"]{
 }
 section[data-testid="stSidebar"] .block-container{padding:18px 16px 32px!important;}
 section[data-testid="stSidebar"] label,
-section[data-testid="stSidebar"] .stMarkdown p{color:var(--t2)!important;font-size:.76rem!important;}
-section[data-testid="stSidebar"] [data-testid="stSlider"] label{color:var(--t3)!important;font-size:.73rem!important;}
+section[data-testid="stSidebar"] .stMarkdown p{color:var(--t)!important;font-size:.76rem!important;}
+section[data-testid="stSidebar"] [data-testid="stSlider"] label{color:var(--t2)!important;font-size:.73rem!important;}
 section[data-testid="stSidebar"] hr{border-color:var(--b1);margin:10px 0;}
 .sb-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
   background:linear-gradient(90deg,#60a5fa,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
@@ -232,8 +255,8 @@ def fmt_mat(T):
 BG_SVG  = "#09090b"
 S1_SVG  = "#111113"
 GR_SVG  = "#27272a"
-TC_SVG  = "#52525b"
-T2_SVG  = "#71717a"
+TC_SVG  = "#d4d4d8"
+T2_SVG  = "#e4e4e7"
 
 def svg_chart(
     series_list,           # [{"x":[], "y":[], "color":"#hex", "label":"", "width":2, "dash":False, "fill":False, "fill_pos_neg":False}]
@@ -375,13 +398,13 @@ def svg_chart(
     # Labels
     if xlabel:
         svg.append(f'<text x="{PAD_L+pw/2:.0f}" y="{H-4}" text-anchor="middle" '
-                   f'font-family="Inter,sans-serif" font-size="9.5" fill="{TC_SVG}">{xlabel}</text>')
+                   f'font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#fafafa">{xlabel}</text>')
     if ylabel:
         svg.append(f'<text transform="rotate(-90)" x="-{PAD_T+ph/2:.0f}" y="12" '
-                   f'text-anchor="middle" font-family="Inter,sans-serif" font-size="9.5" fill="{TC_SVG}">{ylabel}</text>')
+                   f'text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#fafafa">{ylabel}</text>')
     if title:
         svg.append(f'<text x="{W/2:.0f}" y="{PAD_T-8}" text-anchor="middle" '
-                   f'font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="{T2_SVG}">{title}</text>')
+                   f'font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#d4d4d8">{title}</text>')
 
     svg.append('</svg>')
     return "\n".join(svg)
@@ -419,6 +442,11 @@ def greek_card(sym,name,val,fmt,color,desc):
                 f'<span class="gc-sym">{sym}</span><span class="gc-nm">{name}</span></div>'
                 f'<div class="gc-v">{val:{fmt}}</div><div class="gc-d">{desc}</div></div>',
                 unsafe_allow_html=True)
+
+def greek_card_html(sym,name,val,fmt,color,desc):
+    return (f'<div class="gc" style="--acc:{color}"><div style="display:flex;align-items:flex-start;justify-content:space-between">'
+            f'<span class="gc-sym">{sym}</span><span class="gc-nm">{name}</span></div>'
+            f'<div class="gc-v">{val:{fmt}}</div><div class="gc-d">{desc}</div></div>')
 
 def signal_card(sc,dc,content):
     st.markdown(f'<div class="sig {sc}"><div class="dot {dc}"></div><div>{content}</div></div>',
@@ -477,10 +505,12 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     cur    = bs_price(S,K,T,r,sigma,q,otype) * pos_sign
     G      = {k: v * pos_sign for k, v in bs_greeks(S,K,T,r,sigma,q,otype).items()}
 
-    W, H = 680, 250
+    W, H = 680, 260
 
     def vl(xv, col, lbl="", dash=True):
         return {"x":xv,"color":col,"label":lbl,"dash":dash}
+
+    _rsp = True  # responsive SVGs
 
     # ① Prix
     svg1 = svg_chart([
@@ -489,7 +519,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     ], W=W, H=H, xlabel="Spot (€)", ylabel="Prix (€)",
        vlines=[vl(S,"#3b82f6",f"S={S:.0f}"), vl(K,"#52525b",f"K={K:.0f}")],
        show_dot={"x":S,"y":cur,"color":"#f59e0b","label":f"€{cur:.3f}"},
-       title="Prix de l'option selon le spot")
+       title="Prix de l'option selon le spot", responsive=_rsp)
 
     # ② Delta
     svg2 = svg_chart([
@@ -498,7 +528,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
        vlines=[vl(S,"#3b82f6",f"S={S:.0f}"), vl(K,"#52525b")],
        hline_zero=True,
        show_dot={"x":S,"y":G["delta"],"color":"#22c55e","label":f"{G['delta']:.4f}"},
-       title="Delta — sensibilité au prix")
+       title="Δ Delta — Sensibilité au prix du sous-jacent", responsive=_rsp)
 
     # ③ Gamma
     svg3 = svg_chart([
@@ -507,7 +537,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
        vlines=[vl(S,"#3b82f6",f"S={S:.0f}"), vl(K,"#52525b")],
        hline_zero=True,
        show_dot={"x":S,"y":G["gamma"],"color":"#a78bfa","label":f"{G['gamma']:.5f}"},
-       title="Gamma — convexité")
+       title="Γ Gamma — Convexité (accélération du Delta)", responsive=_rsp)
 
     # ④ Prix vs Vol
     svg4 = svg_chart([
@@ -515,7 +545,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     ], W=W, H=H, xlabel="Volatilité implicite (%)", ylabel="Prix (€)",
        vlines=[vl(sigma*100,"#f59e0b",f"σ={sigma*100:.1f}%")],
        show_dot={"x":sigma*100,"y":cur,"color":"#f59e0b","label":f"€{cur:.3f}"},
-       title="Sensibilité à la volatilité")
+       title="ν Vega — Sensibilité à la volatilité implicite", responsive=_rsp)
 
     # ⑤ Time Decay
     svg5 = svg_chart([
@@ -523,7 +553,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     ], W=W, H=H, xlabel="Maturité (ans)", ylabel="Prix (€)",
        vlines=[vl(T,"#f59e0b",fmt_mat(T))],
        show_dot={"x":T,"y":cur,"color":"#f59e0b","label":f"€{cur:.3f}"},
-       title="Érosion temporelle (Time Decay)")
+       title="Θ Theta — Érosion temporelle (Time Decay)", responsive=_rsp)
 
     return svg1,svg2,svg3,svg4,svg5
 
@@ -614,13 +644,13 @@ def build_custom_payoff(legs, S_ref, name, W=1100, H=420):
                    "fill_pos_neg":True})
     legend_items.append({"label":"P&L total","color":"#ffffff","dash":False})
 
-    vlines=[{"x":S_ref,"color":"#3b82f6","dash":True}]
-    legend_items.append({"label":f"S₀ = {S_ref:.0f}","color":"#3b82f6","dash":True})
+    vlines=[{"x":S_ref,"color":"#f472b6","dash":True}]
+    legend_items.append({"label":f"S₀ = {S_ref:.0f}","color":"#f472b6","dash":True})
     idxs=np.where(np.diff(np.sign(total)))[0]
     for idx in idxs:
         be=(SR[idx]+SR[idx+1])/2
-        vlines.append({"x":be,"color":"#f59e0b","dash":True})
-        legend_items.append({"label":f"BE {be:.1f}","color":"#f59e0b","dash":True})
+        vlines.append({"x":be,"color":"#e2e8f0","dash":True})
+        legend_items.append({"label":f"BE {be:.1f}","color":"#e2e8f0","dash":True})
 
     nc="encaissée" if net_prem<0 else "payée"
     svg = svg_chart(series, W=W, H=H,
@@ -647,12 +677,12 @@ def build_custom_greeks(legs, S_ref, W=1100, H=260):
 
     vl=[{"x":S_ref,"color":"#3b82f6","dash":True}]
     kwargs=dict(W=W//4, H=H, hline_zero=True, vlines=vl,
-                xlabel="Spot (€)", PAD_L=48,PAD_R=12,PAD_T=26,PAD_B=36,
+                xlabel="Spot (€)", PAD_L=48,PAD_R=12,PAD_T=30,PAD_B=36,
                 responsive=True)
 
     svgs=[]
-    for data,col,title in [(PD,"#22c55e","Delta"),(PG,"#a78bfa","Gamma"),
-                            (PT,"#f59e0b","Theta"),(PV,"#3b82f6","Vega")]:
+    for data,col,title in [(PD,"#22c55e","Δ Delta — Sensibilité prix"),(PG,"#a78bfa","Γ Gamma — Convexité"),
+                            (PT,"#f59e0b","Θ Theta — Effet temps"),(PV,"#3b82f6","ν Vega — Effet volatilité")]:
         s=svg_chart([{"x":list(SR),"y":list(data),"color":col,"width":2,
                       "fill":True,"fill_color":col}],
                     title=title,**kwargs)
@@ -756,7 +786,7 @@ def legs_html(legs):
     for a,ins,strike in legs:
         ac,at=LEG_A.get(a,("tby",a)); ic,it=LEG_I.get(ins,("tca",ins))
         h+=f'<span class="tag {ac}">{at}</span><span class="tag {ic}">{it}</span>'
-        h+=f'<span style="font-size:.58rem;color:#3f3f46;margin:0 3px">{strike}</span>'
+        h+=f'<span style="font-size:.58rem;color:#a1a1aa;margin:0 3px">{strike}</span>'
     return h
 
 # ─────────────────────────────────────────────────────────────
@@ -950,7 +980,7 @@ with tab1:
 
         with st.expander("📐 Formule de Black-Scholes"):
             st.markdown(r"""
-<div style="font-size:.78rem;line-height:2.0;color:#a1a1aa;font-family:'DM Mono',monospace">
+<div style="font-size:.78rem;line-height:2.0;color:#d4d4d8;font-family:'DM Mono',monospace">
 
 **Prix d'un Call :**
 $$C = S \, e^{-qT} \, N(d_1) \;-\; K \, e^{-rT} \, N(d_2)$$
@@ -983,16 +1013,15 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
             a,b,c_=gamma_theta_msg(G["gamma"],G["theta"]); signal_card(a,b,c_)
 
     with greeks_col:
-        section_header("Grecs")
-        cols=st.columns(6)
-        gdata=[("Δ","Delta",G["delta"],".4f","#22c55e","Variation si le sous-jacent bouge de 1 €"),
-               ("Γ","Gamma",G["gamma"],".5f","#a78bfa","Vitesse de changement du delta"),
-               ("Θ","Theta",G["theta"],"+.4f","#f59e0b","€ gagnés ou perdus chaque jour"),
-               ("ν","Vega", G["vega"], ".4f","#3b82f6","Impact d'une hausse de 1% de la volatilité"),
-               ("ρ","Rho",  G["rho"],  "+.4f","#ef4444","Impact d'une hausse de 1% des taux"),
-               ("Λ","Vanna",G["vanna"],"+.4f","#71717a","Sensibilité croisée prix × volatilité")]
-        for col,(sym,nm,v,fmt,col_c,desc) in zip(cols,gdata):
-            with col: greek_card(sym,nm,v,fmt,col_c,desc)
+        section_header("Les Grecs — Sensibilités de l'option")
+        gdata=[("Δ","Delta",G["delta"],".4f","#22c55e","Sensibilité au prix du sous-jacent (±1 €)"),
+               ("Γ","Gamma",G["gamma"],".5f","#a78bfa","Accélération du Delta (convexité)"),
+               ("Θ","Theta",G["theta"],"+.4f","#f59e0b","Perte ou gain quotidien lié au temps (€/jour)"),
+               ("ν","Vega", G["vega"], ".4f","#3b82f6","Sensibilité à la volatilité implicite (€/%)"),
+               ("ρ","Rho",  G["rho"],  "+.4f","#ef4444","Sensibilité aux taux d'intérêt (€/%)"),
+               ("Λ","Vanna",G["vanna"],"+.4f","#71717a","Variation du Delta quand la volatilité bouge")]
+        cards_html = ''.join(f'<div>{greek_card_html(sym,nm,v,fmt,col_c,desc)}</div>' for sym,nm,v,fmt,col_c,desc in gdata)
+        st.markdown(f'<div class="greeks-grid">{cards_html}</div>', unsafe_allow_html=True)
 
         st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
         with st.expander("Tableau détaillé des grecs"):
@@ -1010,16 +1039,19 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     section_header("Visualisations")
     svg1,svg2,svg3,svg4,svg5 = build_dashboard(S,K,T,r,sigma,q_div,otype,pos_sign)
 
-    # Ligne 1 : 3 colonnes égales
-    chart_col1, chart_col2, chart_col3 = st.columns(3)
-    with chart_col1: show_svg(svg1)
-    with chart_col2: show_svg(svg2)
-    with chart_col3: show_svg(svg3)
+    # Ligne 1
+    chart_r1c1, chart_r1c2 = st.columns(2)
+    with chart_r1c1: show_svg(svg1, full_width=True)
+    with chart_r1c2: show_svg(svg2, full_width=True)
 
-    # Ligne 2 : 2 colonnes larges
-    chart_col4, chart_col5 = st.columns(2)
-    with chart_col4: show_svg(svg4)
-    with chart_col5: show_svg(svg5)
+    # Ligne 2
+    chart_r2c1, chart_r2c2 = st.columns(2)
+    with chart_r2c1: show_svg(svg3, full_width=True)
+    with chart_r2c2: show_svg(svg4, full_width=True)
+
+    # Ligne 3 : centré
+    chart_r3_pad1, chart_r3c1, chart_r3_pad2 = st.columns([1,2,1])
+    with chart_r3c1: show_svg(svg5, full_width=True)
 
 # ═══════════════════════════════════════════════════════════
 #  TAB 2
@@ -1065,7 +1097,7 @@ with tab2:
     with detail_col1:
         st.markdown(f'<div class="card" style="border-left:3px solid {info["color"]};height:100%">'
                     f'<div style="font-size:.96rem;font-weight:700;color:{info["color"]};margin-bottom:7px">{strat}</div>'
-                    f'<div style="font-size:.76rem;color:#a1a1aa;line-height:1.7;margin-bottom:10px">{info["desc"]}</div>'
+                    f'<div style="font-size:.76rem;color:#d4d4d8;line-height:1.7;margin-bottom:10px">{info["desc"]}</div>'
                     f'{legs_html(info["legs"])}</div>', unsafe_allow_html=True)
     with detail_col2:
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Payoff</div>'
@@ -1082,12 +1114,12 @@ with tab2:
         if "Long Vega" in info["greeks"]:   tips.append("📈 <b>Long Vega</b> — profite si la vol. monte")
         if "Short Vega" in info["greeks"]:  tips.append("📉 <b>Short Vega</b> — profite si la vol. reste basse")
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Greeks</div>'
-                    f'<div style="font-size:.72rem;color:#a1a1aa;margin-bottom:8px">{info["greeks"]}</div>'
-                    f'<div style="font-size:.70rem;color:#52525b;line-height:1.9">{"<br>".join(tips)}</div></div>',
+                    f'<div style="font-size:.72rem;color:#d4d4d8;margin-bottom:8px">{info["greeks"]}</div>'
+                    f'<div style="font-size:.70rem;color:#d4d4d8;line-height:1.9">{"<br>".join(tips)}</div></div>',
                     unsafe_allow_html=True)
 
     section_header("Profil de gain/perte à l'expiration")
-    st.markdown(f'<div style="font-size:.68rem;color:#52525b;margin-bottom:6px">'
+    st.markdown(f'<div style="font-size:.68rem;color:#d4d4d8;margin-bottom:6px">'
                 f'Calls T={fmt_mat(Tc2)} σ={sig_c2*100:.1f}%  ·  Puts T={fmt_mat(Tp2)} σ={sig_p2*100:.1f}%</div>',
                 unsafe_allow_html=True)
     show_svg(build_payoff(strat,S2,K2,Tc2,Tp2,r2,sig_c2,sig_p2,q2), full_width=True)
@@ -1096,10 +1128,12 @@ with tab2:
     G2c=bs_greeks(S2,K2,Tc2,r2,sig_c2,q2,"call"); G2p=bs_greeks(S2,K2,Tp2,r2,sig_p2,q2,"put")
     adj=-1 if strat in ["Short Straddle","Short Strangle","Short Butterfly"] else 1
     Gm={k:(G2c[k]+G2p[k])*adj/2 for k in G2c}
-    gcols=st.columns(4)
-    for col,(sym,nm,key,fmt,color) in zip(gcols,[("Δ","Delta","delta",".4f","#22c55e"),
-        ("Γ","Gamma","gamma",".5f","#a78bfa"),("Θ","Theta","theta","+.5f","#f59e0b"),("ν","Vega","vega",".4f","#3b82f6")]):
-        with col: greek_card(sym,nm,Gm[key],fmt,color,"")
+    _g2data=[("Δ","Delta","delta",".4f","#22c55e","Sensibilité au prix"),
+             ("Γ","Gamma","gamma",".5f","#a78bfa","Convexité"),
+             ("Θ","Theta","theta","+.5f","#f59e0b","Effet du temps (€/j)"),
+             ("ν","Vega","vega",".4f","#3b82f6","Effet volatilité (€/%)")]
+    _g2html = ''.join(f'<div>{greek_card_html(sym,nm,Gm[key],fmt,color,desc)}</div>' for sym,nm,key,fmt,color,desc in _g2data)
+    st.markdown(f'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">{_g2html}</div>', unsafe_allow_html=True)
 
     greek_interp1, greek_interp2 = st.columns(2)
     with greek_interp1:
@@ -1123,17 +1157,14 @@ with tab2:
 #  TAB 3
 # ═══════════════════════════════════════════════════════════
 with tab3:
-    st.markdown('<div class="card" style="margin-bottom:14px;font-size:.77rem;color:#a1a1aa;line-height:1.7">'
+    st.markdown('<div class="card" style="margin-bottom:14px;font-size:.77rem;color:#d4d4d8;line-height:1.7">'
                 'Construisez librement une stratégie en combinant jusqu\'à <b>6 jambes</b> indépendantes.<br>'
                 'Chaque jambe a ses propres paramètres. Le graphique final agrège tous les P&L à maturité.</div>',
                 unsafe_allow_html=True)
 
-    hc1,hc2=st.columns([3,1])
-    with hc1: sname=st.text_input("Nom de la stratégie",value="Ma stratégie",help="Affiché sur le graphique")
-    with hc2:
-        S_ref=st.number_input("Spot référence (€)",value=100.0,step=1.0,help="Centre de l'axe X du graphique")
-        q3=st.number_input("Dividende q (%)",value=0.0,step=0.1,min_value=0.0,max_value=20.0,
-                           key="q3",help="Rendement du dividende annuel continu (%)") / 100
+    sname=st.text_input("Nom de la stratégie",value="",placeholder="Road To Million",
+                        help="Donnez un nom à votre stratégie — affiché sur le graphique")
+    if not sname: sname="Road To Million"
     n_legs=st.slider("Nombre de jambes",1,6,2,1,help="Chaque jambe est une option indépendante")
     st.markdown("---")
 
@@ -1150,68 +1181,103 @@ with tab3:
     legs_cfg=[]
     for i in range(n_legs):
         d=DFLTS[i]; lc2=PALETTE[i]; ln=LNAMES[i]
-        h1,h2=st.columns([4,1])
-        with h1: active=st.checkbox(f"**{ln}**",value=d["active"],key=f"la_{i}")
-        with h2:
-            direction=d["dir"]
-            if active:
-                dl=st.radio("",["Achat","Vente"],horizontal=True,
-                            index=0 if d["dir"]==1 else 1,key=f"ldir_{i}",
-                            label_visibility="collapsed")
-                direction=1 if dl=="Achat" else -1
+
+        # ── Separator between legs ──
+        if i > 0:
+            st.markdown(f'<div style="height:1px;margin:20px 0;'
+                        f'background:linear-gradient(90deg,transparent,{lc2}33,transparent)"></div>',
+                        unsafe_allow_html=True)
+
+        # ── Activation checkbox ──
+        st.markdown(f'<div style="font-size:1.05rem;font-weight:800;color:{lc2};margin:4px 0 6px;letter-spacing:-.3px">{ln}</div>',
+                    unsafe_allow_html=True)
+        active=st.checkbox("Activer",value=d["active"],key=f"la_{i}")
 
         if active:
-            dc="#22c55e" if direction==1 else "#ef4444"
-            dt="● ACHAT" if direction==1 else "● VENTE"
+            # ── Direction toggle ──
+            direction=d["dir"]
+            _dir_cols = st.columns([1,1,4])
+            with _dir_cols[0]:
+                if st.button("Achat", key=f"lbuy_{i}", use_container_width=True):
+                    st.session_state[f"ldir_state_{i}"] = 1
+                    st.rerun()
+            with _dir_cols[1]:
+                if st.button("Vente", key=f"lsell_{i}", use_container_width=True):
+                    st.session_state[f"ldir_state_{i}"] = -1
+                    st.rerun()
+            direction = st.session_state.get(f"ldir_state_{i}", d["dir"])
+
+            dir_cls = "buy" if direction==1 else "sell"
+            dir_label = "ACHAT" if direction==1 else "VENTE"
             cls="lb" if direction==1 else "ls"
-            st.markdown(f'<div class="lc {cls}" style="border-color:{lc2}">'
-                        f'<div class="lh"><span class="ln" style="color:{lc2}">{ln}</span>'
-                        f'<span style="font-size:.70rem;font-weight:600;color:{dc}">{dt}</span></div>',
-                        unsafe_allow_html=True)
-            lc1_,lc2_,lc3_,lc4_=st.columns(4)
+
+            # Card header
+            st.markdown(
+                f'<div class="lc {cls}" style="border-color:{lc2}">'
+                f'<div class="lc-head lc-head-{dir_cls}">'
+                f'<span class="lc-name" style="color:{lc2}">{ln}</span>'
+                f'<span class="lc-dir-badge lc-dir-{dir_cls}">{dir_label}</span>'
+                f'</div>', unsafe_allow_html=True)
+
+            # Row 1: Instrument, Spot, Strike, Qty, Taux, Dividende
+            lc1_,lc2_,lc3_,lc4_,lc5_,lc6_=st.columns(6)
             with lc1_:
                 instrument=st.selectbox("Instrument",["call","put"],
                     index=0 if d["inst"]=="call" else 1,key=f"li_{i}",
                     help="Call : option d'achat · Put : option de vente")
-                qty=st.number_input("Quantité",1,100,d["qty"],1,key=f"lq_{i}",help="Nombre de contrats")
             with lc2_:
                 S_l=st.number_input("Spot S₀ (€)",value=d["S"],step=1.0,key=f"ls_{i}",
-                    help="Prix actuel du sous-jacent pour cette jambe")
-                K_l=st.number_input("Strike K (€)",value=d["K"],step=0.5,key=f"lk_{i}",
-                    help="Prix d'exercice de cette option")
-                mr2=S_l/K_l if K_l>0 else 1
-                if S_l==K_l: mc2,mt2="matm","ATM"
-                elif (instrument=="call" and mr2>1) or (instrument=="put" and mr2<1): mc2,mt2="mitm","ITM"
-                else: mc2,mt2="motm","OTM"
-                st.markdown(f'<span class="mpill {mc2}">{mt2} ({mr2:.3f})</span>', unsafe_allow_html=True)
+                    help="Prix actuel du sous-jacent")
             with lc3_:
+                K_l=st.number_input("Strike K (€)",value=d["K"],step=0.5,key=f"lk_{i}",
+                    help="Prix d'exercice")
+            with lc4_:
+                qty=st.number_input("Quantité",1,100,d["qty"],1,key=f"lq_{i}",help="Nombre de contrats")
+            with lc5_:
                 r_l=st.number_input("Taux r (%)",value=d["r"]*100,step=0.1,key=f"lr_{i}",
                     help="Taux sans risque (%)") / 100
+            with lc6_:
+                q_l=st.number_input("Dividende q (%)",value=0.0,step=0.1,min_value=0.0,max_value=20.0,
+                    key=f"lq_div_{i}",help="Rendement du dividende annuel continu") / 100
+
+            # Row 2: Vol, Maturité (A/M/J)
+            lc7_,lc8_,lc9_,lc10_=st.columns(4)
+            with lc7_:
                 sig_l=st.slider(f"Vol. σ (%)",1.0,150.0,d["sigma"]*100,0.5,key=f"lsig_{i}",
                     help="Volatilité implicite annualisée") / 100
-            with lc4_:
-                field_label("Maturité  (A / M / J)")
-                y_l=st.number_input("A",0,30,d["y"],1,key=f"ly_{i}",label_visibility="collapsed",help="Années")
-                m_l=st.number_input("M",0,11,d["m"],1,key=f"lm_{i}",label_visibility="collapsed",help="Mois")
-                dj_l=st.number_input("J",0,30,d["d"],1,key=f"ld_{i}",label_visibility="collapsed",help="Jours")
-                T_l=mat_from_ymd(y_l,m_l,dj_l)
-                prem=bs_price(S_l,K_l,T_l,r_l,sig_l,q3,instrument)
-                cost=direction*prem*qty
-                cc="#ef4444" if direction==1 else "#22c55e"
-                st.markdown(f'<div style="font-size:.69rem;color:#52525b">Unité : €{prem:.4f} × {qty}</div>'
-                            f'<div style="font-size:.77rem;font-weight:700;color:{cc}">'
-                            f'{"−" if direction==1 else "+"}€{abs(cost):.4f}</div>',
-                            unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with lc8_:
+                y_l=st.number_input("Maturité (Années)",0,30,d["y"],1,key=f"ly_{i}",help="Années")
+            with lc9_:
+                m_l=st.number_input("Maturité (Mois)",0,11,d["m"],1,key=f"lm_{i}",help="Mois")
+            with lc10_:
+                dj_l=st.number_input("Maturité (Jours)",0,30,d["d"],1,key=f"ld_{i}",help="Jours")
+
+            # Computed values
+            T_l=mat_from_ymd(y_l,m_l,dj_l)
+            prem=bs_price(S_l,K_l,T_l,r_l,sig_l,q_l,instrument)
+
+            # Prime box with gradient
+            st.markdown(
+                f'<div style="margin:4px 0 0;padding:12px 18px;border-radius:0 0 9px 9px;'
+                f'background:linear-gradient(135deg,rgba(59,130,246,.08) 0%,rgba(124,58,237,.08) 100%);'
+                f'border-top:1px solid rgba(124,58,237,.15);display:flex;align-items:center;justify-content:flex-end;gap:10px">'
+                f'<span style="font-size:.72rem;font-weight:600;color:#d4d4d8">Prime unitaire</span>'
+                f'<span style="font-family:\'DM Mono\',monospace;font-size:1.05rem;font-weight:700;'
+                f'background:linear-gradient(135deg,#60a5fa 0%,#a78bfa 50%,#c084fc 100%);'
+                f'-webkit-background-clip:text;-webkit-text-fill-color:transparent">'
+                f'€{prem:.4f}</span>'
+                f'</div></div>', unsafe_allow_html=True)
+
             legs_cfg.append(dict(active=True,dir=direction,inst=instrument,
-                S=S_l,K=K_l,T=T_l,r=r_l,sigma=sig_l,q=q3,qty=qty,
+                S=S_l,K=K_l,T=T_l,r=r_l,sigma=sig_l,q=q_l,qty=qty,
                 label=f'{"Achat" if direction==1 else "Vente"} {instrument.upper()} K={K_l:.0f} ×{qty}'))
         else:
-            st.markdown(f'<div class="lc lo"><span class="ln" style="color:#3f3f46">{ln} — désactivée</span></div>',
+            st.markdown(f'<div class="lc lo"><span class="ln" style="color:var(--t3)">{ln} — désactivée</span></div>',
                         unsafe_allow_html=True)
 
     st.markdown("---")
     active_legs=[l for l in legs_cfg if l["active"]]
+    S_ref = active_legs[0]["S"] if active_legs else 100.0
 
     if not active_legs:
         st.info("Activez au moins une jambe pour afficher le graphique.")
@@ -1230,7 +1296,7 @@ with tab3:
         <div class="tbar">
           <div class="tbi"><div class="tbl">Prime nette</div>
             <div class="tbv" style="color:{premium_color}">€{abs(net_premium):.4f}</div>
-            <div style="font-size:.58rem;color:#52525b">{premium_label}</div></div>
+            <div style="font-size:.58rem;color:#a1a1aa">{premium_label}</div></div>
           <div class="tbi"><div class="tbl">Δ Delta</div><div class="tbv" style="color:{delta_color}">{PD:+.4f}</div></div>
           <div class="tbi"><div class="tbl">Γ Gamma</div><div class="tbv" style="color:{gamma_color}">{PG:+.5f}</div></div>
           <div class="tbi"><div class="tbl">Θ Theta €/j</div><div class="tbv" style="color:{theta_color}">{PT:+.5f}</div></div>
@@ -1253,7 +1319,7 @@ with tab3:
             f'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px">'
             f'<span style="width:18px;height:3px;border-radius:2px;background:{it["color"]};'
             f'{"border-top:1px dashed " + it["color"] if it["dash"] else ""};display:inline-block"></span>'
-            f'<span style="font-size:.72rem;color:#a1a1aa">{it["label"]}</span></span>'
+            f'<span style="font-size:.72rem;color:#d4d4d8">{it["label"]}</span></span>'
             for it in legend_items
         )
         st.markdown(
