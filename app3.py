@@ -1114,26 +1114,24 @@ with st.sidebar:
         _YF_OK = False
 
     if _YF_OK:
-        st.markdown('<div class="sb-title">\U0001f4e1 Donn\u00e9es march\u00e9</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sb-title">Donn\u00e9es march\u00e9</div>', unsafe_allow_html=True)
         _ticker = st.text_input("Ticker Yahoo Finance",
                                 value=st.session_state.get("last_ticker", "AAPL"),
                                 placeholder="AAPL \u00b7 MC.PA \u00b7 ^FCHI",
                                 key="sb_ticker",
                                 help="Exemples : AAPL, TSLA, MC.PA, SAN.PA, ^FCHI")
-        if st.button("\u2b07 Charger spot & vol", key="sb_load_mkt", use_container_width=True):
+        if st.button("Charger spot & vol", key="sb_load_mkt", use_container_width=True):
             try:
-                with st.spinner("Yahoo Finance\u2026"):
-                    tk   = _yf.Ticker(_ticker.upper().strip())
-                    info = tk.fast_info
-                    spot = float(info.get("last_price") or info.get("regularMarketPrice") or 0)
-                    if spot <= 0:
-                        raise ValueError(f"Ticker '{_ticker}' introuvable.")
+                with st.spinner("Yahoo Finance..."):
+                    tk = _yf.Ticker(_ticker.upper().strip())
                     hist = tk.history(period="1y")
-                    if len(hist) > 5:
-                        log_ret    = np.log(hist["Close"] / hist["Close"].shift(1)).dropna()
-                        hist_sigma = float(log_ret.std() * np.sqrt(252))
-                    else:
-                        hist_sigma = 0.20
+                    if hist.empty or len(hist) < 2:
+                        raise ValueError(f"Ticker '{_ticker}' introuvable ou sans donn\u00e9es.")
+                    spot = float(hist["Close"].iloc[-1])
+                    if spot <= 0:
+                        raise ValueError(f"Ticker '{_ticker}' : prix invalide.")
+                    log_ret = np.log(hist["Close"] / hist["Close"].shift(1)).dropna()
+                    hist_sigma = float(log_ret.std() * np.sqrt(252)) if len(log_ret) > 5 else 0.20
                     st.session_state.shared_S     = round(spot, 2)
                     st.session_state.shared_K     = round(spot, 2)
                     st.session_state.shared_sigma = round(hist_sigma * 100, 1)
