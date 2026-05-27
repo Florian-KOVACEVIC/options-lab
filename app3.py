@@ -1106,45 +1106,6 @@ st.markdown("""
 with st.sidebar:
     st.markdown('<div class="sb-title">\u25c8 Options Lab \u2014 Param\u00e8tres</div>', unsafe_allow_html=True)
 
-    # ── Ticker marche reel ──────────────────────────────────
-    try:
-        import yfinance as _yf
-        _YF_OK = True
-    except ImportError:
-        _YF_OK = False
-
-    if _YF_OK:
-        st.markdown('<div class="sb-title">Donn\u00e9es march\u00e9</div>', unsafe_allow_html=True)
-        _ticker = st.text_input("Ticker Yahoo Finance",
-                                value=st.session_state.get("last_ticker", "AAPL"),
-                                placeholder="AAPL \u00b7 MC.PA \u00b7 ^FCHI",
-                                key="sb_ticker",
-                                help="Exemples : AAPL, TSLA, MC.PA, SAN.PA, ^FCHI")
-        if st.button("Charger spot & vol", key="sb_load_mkt", use_container_width=True):
-            try:
-                with st.spinner("Yahoo Finance..."):
-                    tk = _yf.Ticker(_ticker.upper().strip())
-                    hist = tk.history(period="1y")
-                    if hist.empty or len(hist) < 2:
-                        raise ValueError(f"Ticker '{_ticker}' introuvable ou sans donn\u00e9es.")
-                    spot = float(hist["Close"].iloc[-1])
-                    if spot <= 0:
-                        raise ValueError(f"Ticker '{_ticker}' : prix invalide.")
-                    log_ret = np.log(hist["Close"] / hist["Close"].shift(1)).dropna()
-                    hist_sigma = float(log_ret.std() * np.sqrt(252)) if len(log_ret) > 5 else 0.20
-                    st.session_state.shared_S     = round(spot, 2)
-                    st.session_state.shared_K     = round(spot, 2)
-                    st.session_state.shared_sigma = round(hist_sigma * 100, 1)
-                    st.session_state.last_ticker  = _ticker
-                    st.success(f"{_ticker.upper()} \u2014 {spot:.2f} \u00b7 vol {hist_sigma*100:.1f}%")
-                    st.rerun()
-            except Exception as _e:
-                st.error(str(_e))
-    else:
-        st.caption("`pip install yfinance` pour les donn\u00e9es r\u00e9elles")
-
-    st.markdown("---")
-
     # ── Type d'option ───────────────────────────────────────
     st.markdown('<div class="sb-title">Type d\'option</div>', unsafe_allow_html=True)
     otype = st.radio("", ["call", "put"], horizontal=True, key="ot1",
