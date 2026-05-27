@@ -233,8 +233,8 @@ section[data-testid="stSidebar"] hr{border-color:var(--b1);margin:10px 0;}
   display:flex;flex-direction:column;justify-content:space-between;}
 .prob-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;}
 .prob-label{font-size:.72rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;}
-.prob-val{font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:800;}
-.prob-bar{height:6px;border-radius:3px;background:var(--s3);overflow:hidden;}
+.prob-val{font-family:'DM Mono',monospace;font-size:1.3rem;font-weight:800;}
+.prob-bar{height:8px;border-radius:4px;background:var(--s3);overflow:hidden;margin-bottom:8px;}
 .prob-fill{height:100%;border-radius:3px;transition:width .3s;}
 /* Chart explanation */
 .chart-exp{font-size:.72rem;color:var(--t3);line-height:1.7;padding:4px 0;}
@@ -713,9 +713,12 @@ def prob_bar_html(p_profit, label="Probabilit\u00e9 de profit"):
     """Probability bar visualization."""
     pct = p_profit * 100
     col = "#22c55e" if pct >= 55 else ("#f59e0b" if pct >= 45 else "#ef4444")
+    sentiment = "Favorable" if pct >= 55 else ("Neutre" if pct >= 45 else "D\u00e9favorable")
     return (f'<div class="prob"><div class="prob-top"><span class="prob-label">{label}</span>'
             f'<span class="prob-val" style="color:{col}">{pct:.1f}%</span></div>'
-            f'<div class="prob-bar"><div class="prob-fill" style="width:{pct:.1f}%;background:{col}"></div></div></div>')
+            f'<div class="prob-bar"><div class="prob-fill" style="width:{pct:.1f}%;background:{col}"></div></div>'
+            f'<div class="rr-vals"><span style="color:{col}">{sentiment}</span>'
+            f'<span style="color:var(--t3)">{100-pct:.1f}% de perte</span></div></div>')
 
 # ─────────────────────────────────────────────────────────────
 #  DASHBOARD — 5 SVG charts
