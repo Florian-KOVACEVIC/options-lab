@@ -799,7 +799,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
 #  PAYOFF CHART
 # ─────────────────────────────────────────────────────────────
 @st.cache_data(show_spinner=False)
-def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, T_pct=0.8, W=1100, H=380):
+def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, T_pct=0.5, W=1100, H=380):
     SR = np.linspace(S*0.50, S*1.50, 400)
     strike_offset = S * 0.07
     call_px = lambda k, T, sg: bs_price(S, k, T, r, sg, q, "call")
