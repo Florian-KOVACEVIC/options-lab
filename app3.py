@@ -96,7 +96,7 @@ header[data-testid="stHeader"]{background:var(--bg)!important;}
 /* Signals */
 .sig{display:flex;align-items:flex-start;gap:9px;padding:10px 13px;
   border-radius:8px;border:1px solid;margin:4px 0;font-size:.73rem;line-height:1.65;}
-.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.dot{width:5px;height:5px;border-radius:100%;flex-shrink:0;margin-top:6px;}
 .sg{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2);color:#86efac;}
 .sr{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2);color:#fca5a5;}
 .sb{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2);color:#93c5fd;}
@@ -752,7 +752,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
 
     # 1 Prix
     svg1 = svg_chart([
-        {"x":list(SR),"y":list(intr),"color":"#52525b","width":1,"dash":True,"label":"Valeur intrinseque"},
+        {"x":list(SR),"y":list(intr),"color":"#52525b","width":1,"dash":True,"label":"Valeur intrinsèque"},
         {"x":list(SR),"y":list(prices),"color":"#f59e0b","width":2.2,"fill":True,"label":f"Prix {otype.upper()}"},
     ], W=W, H=H, xlabel="Spot (\u20ac)", ylabel="Prix (\u20ac)",
        vlines=[vl(S,"#3b82f6",f"S={S:.0f}"), vl(K,"#52525b",f"K={K:.0f}")],
@@ -1102,7 +1102,7 @@ st.markdown("""
 <div class="hdr">
   <div class="hdr-l">
     <div class="hdr-ico">\u25c8</div>
-    <div><div class="hdr-t">Options Lab</div><div class="hdr-s">Pricer Black-Scholes \u00b7 Greeks \u00b7 Strat\u00e9gies</div></div>
+    <div><div class="hdr-t">Options Lab</div><div class="hdr-s">Pricer Black-Scholes \u00b7 Grecques \u00b7 Strat\u00e9gies</div></div>
   </div>
 </div>""", unsafe_allow_html=True)
 
@@ -1204,7 +1204,7 @@ with st.sidebar:
         else:
             st.markdown('<div class="ivf">Prix hors bornes BS</div>', unsafe_allow_html=True)
 
-tab1, tab2, tab3, tab4 = st.tabs(["Pricer & Grecques", "Strat\u00e9gies", "Labo Strat\u00e9gies", "Glossaire"])
+tab1, tab2, tab3, tab4 = st.tabs(["Pricer & Grecques", "Strat\u00e9gies", " Strat\u00e9gies Customs", "Glossaire"])
 
 # ═══════════════════════════════════════════════════════════
 #  TAB 1 — Zone principale pleine largeur
@@ -1330,7 +1330,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
                     '\u00e0 mesure que le temps passe. La d\u00e9croissance s\'acc\u00e9l\u00e8re en approchant de l\'expiration '
                     '(courbe concave). La ligne verticale orange marque votre maturit\u00e9 actuelle.</div>', unsafe_allow_html=True)
 
-    # ── Scenario Analysis ──
+    # ── Analyse de scénarios ──
     section_header("Analyse de sc\u00e9narios \u2014 Stress Test")
     st.markdown('<div style="font-size:.78rem;color:var(--t2);line-height:1.7;padding:6px 0 10px">'
                 'Matrice montrant le prix de votre option pour diff\u00e9rentes '
@@ -1620,7 +1620,7 @@ with tab3:
                 f'border-top:1px solid rgba(124,58,237,.15);display:flex;align-items:center;justify-content:flex-end;gap:10px">'
                 f'<span style="font-size:.72rem;font-weight:600;color:#d4d4d8">Prime unitaire</span>'
                 f'<span style="font-family:\'DM Mono\',monospace;font-size:1.05rem;font-weight:700;'
-                f'background:linear-gradient(135deg,#60a5fa 0%,#a78bfa 50%,#c084fc 100%);'
+                f'background:linear-gradient(135deg,#60a5fa 0%,#a78bfa 100%,#c084fc 100%);'
                 f'-webkit-background-clip:text;-webkit-text-fill-color:transparent">'
                 f'\u20ac{prem:.4f}</span>'
                 f'</div></div>', unsafe_allow_html=True)
