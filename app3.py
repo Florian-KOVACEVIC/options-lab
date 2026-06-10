@@ -1303,7 +1303,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     with chart_r1c2: show_svg(svg2, full_width=True)
 
     with st.expander(" Comment lire ces graphiques"):
-        st.markdown('<div class="chart-exp"><b>Prix de l\'option (gauche)</b> \u2014 La courbe orange montre comment le prix de votre option '
+        st.markdown('<div class="chart-exp"><b>Prix de l\'option (gauche)</b> \u2014 La courbe orange montre comment le prix de option '
                     '\u00e9volue selon le spot. La ligne grise pointill\u00e9e est la valeur intrins\u00e8que (plancher). '
                     'L\'\u00e9cart entre les deux est la valeur temps.<br>'
                     '<b>Delta (droite)</b> \u2014 Montre la pente de la courbe de prix. Un delta de 0.5 signifie que '
@@ -1446,7 +1446,7 @@ with tab2:
     with _pp_col:
         st.markdown(prob_bar_html(_pp_t2), unsafe_allow_html=True)
 
-    section_header("Greeks indicatifs \u2014 leg ATM")
+    section_header("Grecques indicatifs \u2014 leg ATM")
     G2c=bs_greeks(S2,K2,Tc2,r2,sig_c2,q2,"call"); G2p=bs_greeks(S2,K2,Tp2,r2,sig_p2,q2,"put")
     adj=-1 if strat in ["Short Straddle","Short Strangle","Short Butterfly"] else 1
     Gm={k:(G2c[k]+G2p[k])*adj/2 for k in G2c}
@@ -1794,8 +1794,8 @@ with tab4:
         "#ef4444", "239,68,68")
     st.markdown(f'<div class="gls-grid">{cards}</div>', unsafe_allow_html=True)
 
-    # ── Section : Les Grecs ──
-    st.markdown('<div class="gls-divider">Les Grecs \u2014 Sensibilit\u00e9s</div>', unsafe_allow_html=True)
+    # ── Section : Les Grecques ──
+    st.markdown('<div class="gls-divider">Les Grecques \u2014 Sensibilit\u00e9s</div>', unsafe_allow_html=True)
     cards2 = ""
     cards2 += gls_card("\u0394", "Delta", "Sensibilit\u00e9 au prix",
         "Variation du prix de l'option pour <b>1\u20ac de mouvement</b> du sous-jacent. "
