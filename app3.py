@@ -1302,7 +1302,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     with chart_r1c1: show_svg(svg1, full_width=True)
     with chart_r1c2: show_svg(svg2, full_width=True)
 
-    with st.expander("\U0001f4a1 Comment lire ces graphiques"):
+    with st.markdown("\U0001f4a1 Comment lire ces graphiques"):
         st.markdown('<div class="chart-exp"><b>Prix de l\'option (gauche)</b> \u2014 La courbe orange montre comment le prix de votre option '
                     '\u00e9volue selon le spot. La ligne grise pointill\u00e9e est la valeur intrins\u00e8que (plancher). '
                     'L\'\u00e9cart entre les deux est la valeur temps.<br>'
