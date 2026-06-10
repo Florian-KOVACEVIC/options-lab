@@ -1411,7 +1411,7 @@ with tab2:
     st.markdown(f'<div style="font-size:.72rem;color:#d4d4d8;margin-bottom:6px">'
                 f'Calls T={fmt_mat(Tc2)} \u03c3={sig_c2*100:.1f}%  \u00b7  Puts T={fmt_mat(Tp2)} \u03c3={sig_p2*100:.1f}%</div>',
                 unsafe_allow_html=True)
-    T_pct_2 = st.slider("Temps écoulé (%)", 1, 100, 50, 1, key="t_pct_2",
+    T_pct_2 = st.slider("Temps écoulé (%)", 1, 100, 100, 1, key="t_pct_2",
                          help="Positionnez le curseur pour voir le P&L à différents moments avant l'expiration") / 100
     T_avg_2 = (Tc2 + Tp2) / 2
     T_rem_2 = T_avg_2 * (1 - T_pct_2)
