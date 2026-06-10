@@ -1153,9 +1153,9 @@ with st.sidebar:
     st.markdown('<div class="sb-title">Maturité</div>', unsafe_allow_html=True)
     _mc1, _mc2, _mc3 = st.columns(3)
     with _mc1:
-        field_label("Anné")
+        field_label("Années")
         _ty = st.number_input("A", 0, 30, 0, 1, key="p1_y",
-                              label_visibility="collapsed", help="Annés")
+                              label_visibility="collapsed", help="Années")
     with _mc2:
         field_label("Mois")
         _tm = st.number_input("M", 0, 11, 1, 1, key="p1_m",
@@ -1603,7 +1603,7 @@ with tab3:
                 sig_l=st.slider(f"Vol. \u03c3 (%)",1.0,150.0,d["sigma"]*100,0.5,key=f"lsig_{i}",
                     help="Volatilité implicite annualisé") / 100
             with lc8_:
-                y_l=st.number_input("Maturité (Annés)",0,30,d["y"],1,key=f"ly_{i}",help="Annés")
+                y_l=st.number_input("Maturité (Années)",0,30,d["y"],1,key=f"ly_{i}",help="Années")
             with lc9_:
                 m_l=st.number_input("Maturité (Mois)",0,11,d["m"],1,key=f"lm_{i}",help="Mois")
             with lc10_:
