@@ -1302,7 +1302,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     with chart_r1c1: show_svg(svg1, full_width=True)
     with chart_r1c2: show_svg(svg2, full_width=True)
 
-    with st.markdown("\U0001f4a1 Comment lire ces graphiques"):
+    with st.expander(" Comment lire ces graphiques"):
         st.markdown('<div class="chart-exp"><b>Prix de l\'option (gauche)</b> \u2014 La courbe orange montre comment le prix de votre option '
                     '\u00e9volue selon le spot. La ligne grise pointill\u00e9e est la valeur intrins\u00e8que (plancher). '
                     'L\'\u00e9cart entre les deux est la valeur temps.<br>'
@@ -1314,7 +1314,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     with chart_r2c1: show_svg(svg3, full_width=True)
     with chart_r2c2: show_svg(svg4, full_width=True)
 
-    with st.expander("\U0001f4a1 Comment lire ces graphiques"):
+    with st.expander("Comment lire ces graphiques"):
         st.markdown('<div class="chart-exp"><b>Gamma (gauche)</b> \u2014 Pic maximal au strike (ATM). '
                     'Plus le gamma est \u00e9lev\u00e9, plus votre delta acc\u00e9l\u00e8re vite \u2014 utile pour les acheteurs, '
                     'risqu\u00e9 pour les vendeurs.<br>'
@@ -1325,7 +1325,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     chart_r3_pad1, chart_r3c1, chart_r3_pad2 = st.columns([1,2,1])
     with chart_r3c1: show_svg(svg5, full_width=True)
 
-    with st.expander("\U0001f4a1 Comment lire ce graphique"):
+    with st.expander("Comment lire ce graphique"):
         st.markdown('<div class="chart-exp"><b>Theta \u2014 Time Decay</b> \u2014 La courbe montre l\'\u00e9rosion du prix '
                     '\u00e0 mesure que le temps passe. La d\u00e9croissance s\'acc\u00e9l\u00e8re en approchant de l\'expiration '
                     '(courbe concave). La ligne verticale orange marque votre maturit\u00e9 actuelle.</div>', unsafe_allow_html=True)
