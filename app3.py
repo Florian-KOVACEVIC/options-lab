@@ -1262,7 +1262,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
 </div>
 """, unsafe_allow_html=True)
 
-        section_header("Exposition \u2014 lecture de vos risques")
+        section_header("Exposition \u2014 lecture des risques")
         interp_col1, interp_col2 = st.columns(2)
         with interp_col1:
             for gn in ["delta","gamma","theta"]: a,b,c_=interp(gn,G[gn]); signal_card(a,b,c_)
@@ -1364,7 +1364,7 @@ with tab2:
                          help="Volatilit\u00e9 implicite utilis\u00e9e pour pricer les puts") / 100
 
     st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
-    section_header("Choisir une strat\u00e9gie")
+    section_header("Choisir une strat\u00e9gie pr\u00e9d\u00e9finie")
 
     if "sel" not in st.session_state: st.session_state.sel="Long Straddle"
     snames=list(STRATEGIES.keys())
