@@ -1237,7 +1237,7 @@ with tab1:
           <span class="ph-badge {badge_class}">{badge_text}</span>
         </div>""", unsafe_allow_html=True)
 
-        with st.expander("\U0001f4d0 Formule de Black-Scholes"):
+        with st.expander("Formule de Black-Scholes"):
             st.markdown(r"""
 <div style="font-size:.78rem;line-height:2.0;color:#d4d4d8;font-family:'DM Mono',monospace">
 
@@ -1669,7 +1669,7 @@ with tab3:
             a,b,c_=gamma_theta_msg(PG,PT); signal_card(a,b,c_)
 
         section_header("Graphique P&L")
-        T_pct_3 = st.slider("Temps \u00e9coul\u00e9 (%)", 1, 100, 50, 1, key="t_pct_3",
+        T_pct_3 = st.slider("Temps \u00e9coul\u00e9 (%)", 1, 100, 100, 1, key="t_pct_3",
                              help="Positionnez le curseur pour voir le P&L avant l'expiration") / 100
         active_Ts_3 = [l["T"] for l in active_legs]
         T_avg_3 = sum(active_Ts_3)/len(active_Ts_3) if active_Ts_3 else 1.0
