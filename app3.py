@@ -766,7 +766,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
        vlines=[vl(S,"#3b82f6",f"S={S:.0f}"), vl(K,"#52525b")],
        hline_zero=True,
        show_dot={"x":S,"y":G["delta"],"color":"#22c55e","label":f"{G['delta']:.4f}"},
-       title="\u0394 Delta \u2014 Sensibilité au prix du sous-jacent", responsive=_rsp)
+       title="\u0394 Delta - Sensibilité au prix du sous-jacent", responsive=_rsp)
 
     # 3 Gamma
     svg3 = svg_chart([
@@ -775,7 +775,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
        vlines=[vl(S,"#3b82f6",f"S={S:.0f}"), vl(K,"#52525b")],
        hline_zero=True,
        show_dot={"x":S,"y":G["gamma"],"color":"#a78bfa","label":f"{G['gamma']:.5f}"},
-       title="\u0393 Gamma \u2014 Convexité (accélération du Delta)", responsive=_rsp)
+       title="\u0393 Gamma - Convexité (accélération du Delta)", responsive=_rsp)
 
     # 4 Prix vs Vol
     svg4 = svg_chart([
@@ -783,7 +783,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     ], W=W, H=H, xlabel="Volatilité implicite (%)", ylabel="Prix (\u20ac)",
        vlines=[vl(sigma*100,"#f59e0b",f"\u03c3={sigma*100:.1f}%")],
        show_dot={"x":sigma*100,"y":cur,"color":"#f59e0b","label":f"\u20ac{cur:.3f}"},
-       title="\u03bd Vega \u2014 Sensibilité à la volatilité implicite", responsive=_rsp)
+       title="\u03bd Vega - Sensibilité à la volatilité implicite", responsive=_rsp)
 
     # 5 Time Decay
     svg5 = svg_chart([
@@ -791,7 +791,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     ], W=W, H=H, xlabel="Maturité (ans)", ylabel="Prix (\u20ac)",
        vlines=[vl(T,"#f59e0b",fmt_mat(T))],
        show_dot={"x":T,"y":cur,"color":"#f59e0b","label":f"\u20ac{cur:.3f}"},
-       title="\u0398 Theta \u2014 \u00c9rosion temporelle (Time Decay)", responsive=_rsp)
+       title="\u0398 Theta - \u00c9rosion temporelle (Time Decay)", responsive=_rsp)
 
     return svg1,svg2,svg3,svg4,svg5
 
@@ -868,7 +868,7 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, T_pct=0.5, W=1100, H=380)
         {"x":list(SR),"y":list(pnl_pre),"color":"#ffffff","width":3,"fill_pos_neg":True},
     ], W=W, H=H, xlabel="Prix du sous-jacent (\u20ac)", ylabel="P&L (\u20ac)",
        hline_zero=True, vlines=vlines,
-       title=f"{name} \u2014 Profit / Perte",
+       title=f"{name} - Profit / Perte",
        PAD_L=60, PAD_R=24, PAD_T=30, PAD_B=46,
        responsive=True)
     return svg, legend_items, pnl, pnl_pre
@@ -954,8 +954,8 @@ def build_custom_greeks(legs, S_ref, W=1100, H=260):
                 responsive=True)
 
     svgs=[]
-    for data,col,title in [(PD,"#22c55e","\u0394 Delta \u2014 Sensibilité prix"),(PG,"#a78bfa","\u0393 Gamma \u2014 Convexité"),
-                            (PT,"#f59e0b","\u0398 Theta \u2014 Effet temps"),(PV,"#3b82f6","\u03bd Vega \u2014 Effet volatilité")]:
+    for data,col,title in [(PD,"#22c55e","\u0394 Delta - Sensibilité prix"),(PG,"#a78bfa","\u0393 Gamma - Convexité"),
+                            (PT,"#f59e0b","\u0398 Theta - Effet temps"),(PV,"#3b82f6","\u03bd Vega - Effet volatilité")]:
         s=svg_chart([{"x":list(SR),"y":list(data),"color":col,"width":2,
                       "fill":True,"fill_color":col}],
                     title=title,**kwargs)
@@ -966,11 +966,11 @@ def build_custom_greeks(legs, S_ref, W=1100, H=260):
 #  STRATEGIES
 # ─────────────────────────────────────────────────────────────
 STRATEGIES={
-    "Long Straddle":   {"desc":"Acheter call + put au m\u00eame strike. Profite d'un grand mouvement dans n'importe quel sens.",
+    "Long Straddle":   {"desc":"Acheter call + put au même strike. Profite d'un grand mouvement dans n'importe quel sens.",
      "legs":[("buy","call","K ATM"),("buy","put","K ATM")],"outlook":"Grand mouvement attendu",
      "max_gain":"Illimité","max_loss":"Prime totale","be":"K \u00b1 prime",
      "greeks":"Long Gamma \u00b7 Short Theta \u00b7 Long Vega \u00b7 Delta \u2248 0","color":"#22c55e"},
-    "Short Straddle":  {"desc":"Vendre call + put au m\u00eame strike. Encaisse la prime si le marché reste stable.",
+    "Short Straddle":  {"desc":"Vendre call + put au même strike. Encaisse la prime si le marché reste stable.",
      "legs":[("sell","call","K ATM"),("sell","put","K ATM")],"outlook":"Marché calme attendu",
      "max_gain":"Prime totale","max_loss":"Illimité","be":"K \u00b1 prime",
      "greeks":"Short Gamma \u00b7 Long Theta \u00b7 Short Vega \u00b7 Delta \u2248 0","color":"#ef4444"},
@@ -1042,11 +1042,11 @@ STRATEGIES={
      "legs":[("sell","put","K")],"outlook":"Haussier ou neutre",
      "max_gain":"Prime encaissé","max_loss":"K \u2212 prime","be":"K \u2212 prime",
      "greeks":"Delta + \u00b7 Gamma \u2212 \u00b7 Theta + \u00b7 Vega \u2212","color":"#f59e0b"},
-    "Synthetic Long Forward":  {"desc":"Acheter call + vendre put au m\u00eame strike. Reproduit un contrat forward long via la parité put-call (C \u2212 P = S \u2212 K\u00b7e\u207b\u02b3\u1d40). Aucune prime nette en théorie si K = forward.",
+    "Synthetic Long Forward":  {"desc":"Acheter call + vendre put au même strike. Reproduit un contrat forward long via la parité put-call (C \u2212 P = S \u2212 K\u00b7e\u207b\u02b3\u1d40). Aucune prime nette en théorie si K = forward.",
      "legs":[("buy","call","K ATM"),("sell","put","K ATM")],"outlook":"Haussier \u00b7 Réplication forward",
      "max_gain":"Illimité","max_loss":"K \u2212 prime nette","be":"K + prime nette",
      "greeks":"Delta \u2248 +1 \u00b7 Gamma \u2248 0 \u00b7 Theta \u2248 0 \u00b7 Vega \u2248 0","color":"#22c55e"},
-    "Synthetic Short Forward": {"desc":"Vendre call + acheter put au m\u00eame strike. Reproduit un forward short via la parité put-call. \u00c9quivalent économique d'une vente à découvert du sous-jacent.",
+    "Synthetic Short Forward": {"desc":"Vendre call + acheter put au même strike. Reproduit un forward short via la parité put-call. \u00c9quivalent économique d'une vente à découvert du sous-jacent.",
      "legs":[("sell","call","K ATM"),("buy","put","K ATM")],"outlook":"Baissier \u00b7 Réplication forward",
      "max_gain":"K \u2212 prime nette","max_loss":"Illimité","be":"K \u2212 prime nette",
      "greeks":"Delta \u2248 \u22121 \u00b7 Gamma \u2248 0 \u00b7 Theta \u2248 0 \u00b7 Vega \u2248 0","color":"#ef4444"},
@@ -1107,17 +1107,17 @@ st.markdown("""
 </div>""", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════
-#  SIDEBAR — Paramètres Pricer (partages avec tous les onglets)
+#  SIDEBAR — Paramètres Pricer
 # ═══════════════════════════════════════════════════════════
 with st.sidebar:
-    st.markdown('<div class="sb-title">\u25c8 Options Lab \u2014 Paramètres</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sb-title">\u25c8 Options Lab - Paramètres</div>', unsafe_allow_html=True)
 
     # ── Type d'option ───────────────────────────────────────
     st.markdown('<div class="sb-title">Type d\'option</div>', unsafe_allow_html=True)
     otype = st.radio("", ["call", "put"], horizontal=True, key="ot1",
                      label_visibility="collapsed")
     _badge_cls = "sb-call" if otype == "call" else "sb-put"
-    _badge_lbl = "\u25cf CALL \u2014 droit d'acheter" if otype == "call" else "\u25cf PUT \u2014 droit de vendre"
+    _badge_lbl = "\u25cf CALL - droit d'acheter" if otype == "call" else "\u25cf PUT - droit de vendre"
     st.markdown(f'<div class="sb-badge {_badge_cls}">{_badge_lbl}</div>', unsafe_allow_html=True)
 
     # ── Position (Achat / Vente) ───────────────────────────
@@ -1126,7 +1126,7 @@ with st.sidebar:
                         label_visibility="collapsed")
     pos_sign = 1 if position == "Achat (Long)" else -1
     _pos_cls = "sb-call" if pos_sign == 1 else "sb-put"
-    _pos_lbl = "\u25cf LONG \u2014 acheteur de l'option" if pos_sign == 1 else "\u25cf SHORT \u2014 vendeur de l'option"
+    _pos_lbl = "\u25cf LONG - acheteur de l'option" if pos_sign == 1 else "\u25cf SHORT - vendeur de l'option"
     st.markdown(f'<div class="sb-badge {_pos_cls}">{_pos_lbl}</div>', unsafe_allow_html=True)
 
     # ── Sous-jacent & Strike ────────────────────────────────
@@ -1149,7 +1149,7 @@ with st.sidebar:
     else:                                                             pc, pt = "motm", "OTM"
     st.markdown(f'<span class="mpill {pc}">{pt} \u00b7 {mr:.3f}</span>', unsafe_allow_html=True)
 
-    # ── Maturite ────────────────────────────────────────────
+    # ── Maturité ────────────────────────────────────────────
     st.markdown('<div class="sb-title">Maturité</div>', unsafe_allow_html=True)
     _mc1, _mc2, _mc3 = st.columns(3)
     with _mc1:
@@ -1166,13 +1166,13 @@ with st.sidebar:
                               label_visibility="collapsed", help="Jours")
     T = mat_from_ymd(_ty, _tm, _td)
 
-    # ── Taux, Dividende, Volatilite ─────────────────────────
+    # ── Taux, Dividende, Volatilité ─────────────────────────
     st.markdown('<div class="sb-title">Paramètres de marché</div>', unsafe_allow_html=True)
     field_label("Taux sans risque  r  (%)")
     r = st.slider("r", 0.0, 10.0,
                   float(st.session_state.get("shared_r", 2.5)), 0.1,
                   label_visibility="collapsed",
-                  help="Taux d'intér\u00eat annuel sans risque (taux BCE \u2248 2,5% mi-2026)", key="t1_r") / 100
+                  help="Taux d'intérêt annuel sans risque (taux BCE \u2248 2,5% mi-2026)", key="t1_r") / 100
     st.session_state["shared_r"] = r * 100
 
     field_label("Dividende  q  (%)")
@@ -1189,7 +1189,7 @@ with st.sidebar:
                       help="Volatilité implicite annualisé.", key="t1_sigma") / 100
     st.session_state["shared_sigma"] = sigma * 100
 
-    # ── Volatilite implicite ────────────────────────────────
+    # ── Volatilité implicite ────────────────────────────────
     st.markdown("---")
     st.markdown('<div class="sb-title">Volatilité implicite</div>', unsafe_allow_html=True)
     field_label("Prix de marché observé (\u20ac)")
@@ -1221,7 +1221,7 @@ with tab1:
     pos_label = "LONG" if pos_sign == 1 else "SHORT"
     badge_text = f"{pos_label} {'CALL' if otype=='call' else 'PUT'}"
 
-    # ── Prix hero + Greeks cote a cote ──────────────────────
+    # ── Prix hero + Greeks côte à côte ──────────────────────
     hero_col, greeks_col = st.columns([5, 7], gap="large")
     with hero_col:
         st.markdown(f"""
@@ -1262,7 +1262,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
 </div>
 """, unsafe_allow_html=True)
 
-        section_header("Exposition \u2014 lecture des risques")
+        section_header("Exposition - lecture des risques")
         interp_col1, interp_col2 = st.columns(2)
         with interp_col1:
             for gn in ["delta","gamma","theta"]: a,b,c_=interp(gn,G[gn]); signal_card(a,b,c_)
@@ -1271,7 +1271,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
             a,b,c_=gamma_theta_msg(G["gamma"],G["theta"]); signal_card(a,b,c_)
 
     with greeks_col:
-        section_header("Les Grecques \u2014 Sensibilités de l'option")
+        section_header("Les Grecques - Sensibilités de l'option")
         gdata=[("\u0394","Delta",G["delta"],".4f","#22c55e","Sensibilité au spot (\u20ac/\u20ac)"),
                ("\u0393","Gamma",G["gamma"],".5f","#a78bfa","Convexité du Delta"),
                ("\u0398","Theta",G["theta"],"+.4f","#f59e0b","Effet du temps (\u20ac/jour)"),
@@ -1285,11 +1285,11 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
         with st.expander("Tableau détaillé des grecques"):
             df_g=pd.DataFrame([
                 {"Grec":"\u0394 Delta","Valeur":f"{G['delta']:+.6f}","Unité":"\u20ac/\u20ac","Sens":"+ si haussier"},
-                {"Grec":"\u0393 Gamma","Valeur":f"{G['gamma']:.6f}","Unité":"\u2014","Sens":"+ si convexité favorable"},
+                {"Grec":"\u0393 Gamma","Valeur":f"{G['gamma']:.6f}","Unité":"-","Sens":"+ si convexité favorable"},
                 {"Grec":"\u0398 Theta","Valeur":f"{G['theta']:+.6f}","Unité":"\u20ac/j","Sens":"+ si le temps aide"},
                 {"Grec":"\u03bd Vega","Valeur":f"{G['vega']:.6f}","Unité":"\u20ac/%","Sens":"+ si vol. implicite \u2191"},
                 {"Grec":"\u03c1 Rho","Valeur":f"{G['rho']:+.6f}","Unité":"\u20ac/%","Sens":"+ si taux \u2191"},
-                {"Grec":"\u039b Vanna","Valeur":f"{G['vanna']:+.6f}","Unité":"\u2014","Sens":"Cross delta/vol"},
+                {"Grec":"\u039b Vanna","Valeur":f"{G['vanna']:+.6f}","Unité":"-","Sens":"Cross delta/vol"},
             ])
             st.dataframe(df_g.set_index("Grec"),use_container_width=True)
 
@@ -1303,10 +1303,10 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     with chart_r1c2: show_svg(svg2, full_width=True)
 
     with st.expander(" Comment lire ces graphiques"):
-        st.markdown('<div class="chart-exp"><b>Prix de l\'option (gauche)</b> \u2014 La courbe orange montre comment le prix de option '
+        st.markdown('<div class="chart-exp"><b>Prix de l\'option (gauche)</b> - La courbe orange montre comment le prix de option '
                     'évolue selon le spot. La ligne grise pointillé est la valeur intrinsèque (plancher). '
                     'L\'écart entre les deux est la valeur temps.<br>'
-                    '<b>Delta (droite)</b> \u2014 Montre la pente de la courbe de prix. Un delta de 0.5 signifie que '
+                    '<b>Delta (droite)</b> - Montre la pente de la courbe de prix. Un delta de 0.5 signifie que '
                     'votre option gagne ~0.50\u20ac pour chaque +1\u20ac du sous-jacent.</div>', unsafe_allow_html=True)
 
     # Ligne 2
@@ -1315,10 +1315,10 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     with chart_r2c2: show_svg(svg4, full_width=True)
 
     with st.expander("Comment lire ces graphiques"):
-        st.markdown('<div class="chart-exp"><b>Gamma (gauche)</b> \u2014 Pic maximal au strike (ATM). '
-                    'Plus le gamma est élevé, plus votre delta accélère vite \u2014 utile pour les acheteurs, '
+        st.markdown('<div class="chart-exp"><b>Gamma (gauche)</b> - Pic maximal au strike (ATM). '
+                    'Plus le gamma est élevé, plus votre delta accélère vite - utile pour les acheteurs, '
                     'risqué pour les vendeurs.<br>'
-                    '<b>Vega (droite)</b> \u2014 Montre comment le prix réagit à la volatilité. '
+                    '<b>Vega (droite)</b> - Montre comment le prix réagit à la volatilité. '
                     'La ligne verticale orange marque votre volatilité actuelle.</div>', unsafe_allow_html=True)
 
     # Ligne 3 : centre
@@ -1326,12 +1326,12 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     with chart_r3c1: show_svg(svg5, full_width=True)
 
     with st.expander("Comment lire ce graphique"):
-        st.markdown('<div class="chart-exp"><b>Theta \u2014 Time Decay</b> \u2014 La courbe montre l\'érosion du prix '
+        st.markdown('<div class="chart-exp"><b>Theta - Time Decay</b> - La courbe montre l\'érosion du prix '
                     'à mesure que le temps passe. La décroissance s\'accélère en approchant de l\'expiration '
                     '(courbe concave). La ligne verticale orange marque votre maturité actuelle.</div>', unsafe_allow_html=True)
 
     # ── Analyse de scénarios ──
-    section_header("Analyse de scénarios \u2014 Stress Test")
+    section_header("Analyse de scénarios - Stress Test")
     st.markdown('<div style="font-size:.78rem;color:var(--t2);line-height:1.7;padding:6px 0 10px">'
                 'Matrice montrant le prix de votre option pour différentes '
                 'variations simultanés du spot et de la volatilité implicite. '
@@ -1398,10 +1398,10 @@ with tab2:
                     f'</div></div>', unsafe_allow_html=True)
     with detail_col3:
         tips = []
-        if "Long Gamma" in info["greeks"]:  tips.append("\u26a1 <b>Long Gamma</b> \u2014 profite des grands mouvements")
-        if "Short Gamma" in info["greeks"]: tips.append("\U0001f4b0 <b>Short Gamma</b> \u2014 encaisse le temps")
-        if "Long Vega" in info["greeks"]:   tips.append("\U0001f4c8 <b>Long Vega</b> \u2014 profite si la vol. monte")
-        if "Short Vega" in info["greeks"]:  tips.append("\U0001f4c9 <b>Short Vega</b> \u2014 profite si la vol. reste basse")
+        if "Long Gamma" in info["greeks"]:  tips.append("\u26a1 <b>Long Gamma</b> - profite des grands mouvements")
+        if "Short Gamma" in info["greeks"]: tips.append("\U0001f4b0 <b>Short Gamma</b> - encaisse le temps")
+        if "Long Vega" in info["greeks"]:   tips.append("\U0001f4c8 <b>Long Vega</b> - profite si la vol. monte")
+        if "Short Vega" in info["greeks"]:  tips.append("\U0001f4c9 <b>Short Vega</b> - profite si la vol. reste basse")
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Greeks</div>'
                     f'<div style="font-size:.72rem;color:#d4d4d8;margin-bottom:8px">{info["greeks"]}</div>'
                     f'<div style="font-size:.70rem;color:#d4d4d8;line-height:1.9">{"<br>".join(tips)}</div></div>',
@@ -1415,7 +1415,7 @@ with tab2:
                          help="Positionnez le curseur pour voir le P&L à différents moments avant l'expiration") / 100
     T_avg_2 = (Tc2 + Tp2) / 2
     T_rem_2 = T_avg_2 * (1 - T_pct_2)
-    st.markdown(f'<div class="pre-exp-label">{T_pct_2*100:.0f}% du temps écoulé \u2014 {fmt_mat(T_rem_2)} restant avant expiration</div>',
+    st.markdown(f'<div class="pre-exp-label">{T_pct_2*100:.0f}% du temps écoulé - {fmt_mat(T_rem_2)} restant avant expiration</div>',
                 unsafe_allow_html=True)
     _payoff_svg, _payoff_legend, _pnl_exp_t2, _pnl_pre_t2 = build_payoff(strat,S2,K2,Tc2,Tp2,r2,sig_c2,sig_p2,q2,T_pct_2)
     show_svg(_payoff_svg, full_width=True)
@@ -1446,7 +1446,7 @@ with tab2:
     with _pp_col:
         st.markdown(prob_bar_html(_pp_t2), unsafe_allow_html=True)
 
-    section_header("Grecques indicatifs \u2014 leg ATM")
+    section_header("Grecques indicatifs - leg ATM")
     G2c=bs_greeks(S2,K2,Tc2,r2,sig_c2,q2,"call"); G2p=bs_greeks(S2,K2,Tp2,r2,sig_p2,q2,"put")
     adj=-1 if strat in ["Short Straddle","Short Strangle","Short Butterfly"] else 1
     Gm={k:(G2c[k]+G2p[k])*adj/2 for k in G2c}
@@ -1465,7 +1465,7 @@ with tab2:
         a,b,c_=gamma_theta_msg(Gm["gamma"],Gm["theta"]); signal_card(a,b,c_)
 
     st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-    with st.expander("Tableau comparatif \u2014 toutes les stratégies"):
+    with st.expander("Tableau comparatif - toutes les stratégies"):
         rows=[]
         for nm,inf in STRATEGIES.items():
             a=-1 if nm in ["Short Straddle","Short Strangle","Short Butterfly"] else 1
@@ -1485,10 +1485,10 @@ with tab3:
                 unsafe_allow_html=True)
 
     # Template selector
-    tpl_names = ["\u2014 Personnalisé \u2014"] + list(BUILDER_TEMPLATES.keys())
+    tpl_names = ["- Personnalisé -"] + list(BUILDER_TEMPLATES.keys())
     tpl_sel = st.selectbox("\U0001f4cb Charger un template", tpl_names, key="tpl_sel",
                            help="Sélectionnez une stratégie prédéfinie pour pré-remplir les jambes")
-    if tpl_sel != "\u2014 Personnalisé \u2014":
+    if tpl_sel != "- Personnalisé -":
         tpl = BUILDER_TEMPLATES[tpl_sel]
         st.markdown(f'<div class="tpl-info">Ce template va configurer <b>{tpl["n"]} jambes</b> '
                     f'basés sur le strike K = {st.session_state.get("shared_K",100.0):.1f} \u20ac</div>',
@@ -1520,7 +1520,7 @@ with tab3:
 
     _tpl_default = st.session_state.pop("_tpl_name", "")
     sname=st.text_input("Nom de la stratégie",value=_tpl_default,placeholder="Ma stratégie",
-                        help="Donnez un nom à votre stratégie \u2014 affiché sur le graphique")
+                        help="Donnez un nom à votre stratégie - affiché sur le graphique")
     if not sname: sname="Ma stratégie"
     n_legs=st.slider("Nombre de jambes",1,6,2,1,key="n_legs_slider",help="Chaque jambe est une option indépendante")
     st.markdown("---")
@@ -1629,7 +1629,7 @@ with tab3:
                 S=S_l,K=K_l,T=T_l,r=r_l,sigma=sig_l,q=q_l,qty=qty,
                 label=f'{"Achat" if direction==1 else "Vente"} {instrument.upper()} K={K_l:.0f} \u00d7{qty}'))
         else:
-            st.markdown(f'<div class="lc lo"><span class="ln" style="color:var(--t3)">{ln} \u2014 désactivé</span></div>',
+            st.markdown(f'<div class="lc lo"><span class="ln" style="color:var(--t3)">{ln} - désactivé</span></div>',
                         unsafe_allow_html=True)
 
     st.markdown("---")
@@ -1674,7 +1674,7 @@ with tab3:
         active_Ts_3 = [l["T"] for l in active_legs]
         T_avg_3 = sum(active_Ts_3)/len(active_Ts_3) if active_Ts_3 else 1.0
         T_rem_3 = T_avg_3 * (1 - T_pct_3)
-        st.markdown(f'<div class="pre-exp-label">{T_pct_3*100:.0f}% du temps écoulé \u2014 {fmt_mat(T_rem_3)} restant</div>',
+        st.markdown(f'<div class="pre-exp-label">{T_pct_3*100:.0f}% du temps écoulé - {fmt_mat(T_rem_3)} restant</div>',
                      unsafe_allow_html=True)
 
         svg_c, total_pnl, _, legend_items, total_pre = build_custom_payoff(active_legs, S_ref, sname, T_pct_3)
@@ -1795,7 +1795,7 @@ with tab4:
     st.markdown(f'<div class="gls-grid">{cards}</div>', unsafe_allow_html=True)
 
     # ── Section : Les Grecques ──
-    st.markdown('<div class="gls-divider">Les Grecques \u2014 Sensibilités</div>', unsafe_allow_html=True)
+    st.markdown('<div class="gls-divider">Les Grecques - Sensibilités</div>', unsafe_allow_html=True)
     cards2 = ""
     cards2 += gls_card("\u0394", "Delta", "Sensibilité au prix",
         "Variation du prix de l'option pour <b>1\u20ac de mouvement</b> du sous-jacent. "
@@ -1811,7 +1811,7 @@ with tab4:
         "#a78bfa", "167,139,250")
     cards2 += gls_card("\u0398", "Theta", "Effet du temps",
         "Perte de valeur quotidienne due au passage du temps (<b>time decay</b>). "
-        "Toujours négatif pour les acheteurs d'options \u2014 chaque jour qui passe érode la valeur temps. "
+        "Toujours négatif pour les acheteurs d'options - chaque jour qui passe érode la valeur temps. "
         "L'érosion s'accélère à l'approche de l'expiration (proportionnelle à 1/\u221aT). "
         "Contrepartie naturelle du Gamma : long gamma = short theta.",
         "#f59e0b", "245,158,11")
