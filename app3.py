@@ -1271,7 +1271,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
             a,b,c_=gamma_theta_msg(G["gamma"],G["theta"]); signal_card(a,b,c_)
 
     with greeks_col:
-        section_header("Les Grecs \u2014 Sensibilit\u00e9s de l'option")
+        section_header("Les Grecques \u2014 Sensibilit\u00e9s de l'option")
         gdata=[("\u0394","Delta",G["delta"],".4f","#22c55e","Sensibilit\u00e9 au spot (\u20ac/\u20ac)"),
                ("\u0393","Gamma",G["gamma"],".5f","#a78bfa","Convexit\u00e9 du Delta"),
                ("\u0398","Theta",G["theta"],"+.4f","#f59e0b","Effet du temps (\u20ac/jour)"),
@@ -1282,7 +1282,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
         st.markdown(f'<div class="greeks-grid">{cards_html}</div>', unsafe_allow_html=True)
 
         st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-        with st.expander("Tableau d\u00e9taill\u00e9 des grecs"):
+        with st.expander("Tableau d\u00e9taill\u00e9 des grecques"):
             df_g=pd.DataFrame([
                 {"Grec":"\u0394 Delta","Valeur":f"{G['delta']:+.6f}","Unit\u00e9":"\u20ac/\u20ac","Sens":"+ si haussier"},
                 {"Grec":"\u0393 Gamma","Valeur":f"{G['gamma']:.6f}","Unit\u00e9":"\u2014","Sens":"+ si convexit\u00e9 favorable"},
