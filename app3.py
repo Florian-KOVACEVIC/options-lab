@@ -1107,7 +1107,7 @@ st.markdown("""
 </div>""", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════
-#  SIDEBAR — Parametres Pricer (partages avec tous les onglets)
+#  SIDEBAR — Paramètres Pricer (partages avec tous les onglets)
 # ═══════════════════════════════════════════════════════════
 with st.sidebar:
     st.markdown('<div class="sb-title">\u25c8 Options Lab \u2014 Param\u00e8tres</div>', unsafe_allow_html=True)
@@ -1250,15 +1250,14 @@ $$P = K \, e^{-rT} \, N(-d_2) \;-\; S \, e^{-qT} \, N(-d_1)$$
 **avec :**
 $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d_1 - \sigma\sqrt{T}$$
 
-| Parametre | Description |
+| Paramètre | Description |
 |-----------|-------------|
 | S | Prix du sous-jacent (spot) |
 | K | Prix d'exercice (strike) |
-| T | Temps jusqu'a l'expiration (en annees) |
+| T | Temps jusqu'à l'expiration (en années) |
 | r | Taux sans risque annuel |
-| \u03c3 | Volatilite implicite annualisee |
 | q | Rendement du dividende continu |
-| N(\u00b7) | Fonction de repartition de la loi normale |
+| N() | Fonction de répartition de la loi normale |
 
 </div>
 """, unsafe_allow_html=True)
