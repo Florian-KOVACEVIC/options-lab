@@ -1486,7 +1486,7 @@ with tab3:
 
     # Template selector
     tpl_names = ["- Personnalisé -"] + list(BUILDER_TEMPLATES.keys())
-    tpl_sel = st.selectbox("Charger un template", tpl_names, key="tpl_sel",
+    tpl_sel = st.selectbox("\u25CF Charger un template", tpl_names, key="tpl_sel",
                            help="Sélectionnez une stratégie prédéfinie pour pré-remplir les jambes")
     if tpl_sel != "- Personnalisé -":
         tpl = BUILDER_TEMPLATES[tpl_sel]
@@ -1519,7 +1519,7 @@ with tab3:
             st.rerun()
 
     _tpl_default = st.session_state.pop("_tpl_name", "")
-    sname=st.text_input("Nom de la stratégie",value=_tpl_default,placeholder="Ma stratégie",
+    sname=st.text_input("\u25CF Nom de la stratégie",value=_tpl_default,placeholder="Ma stratégie",
                         help="Donnez un nom à votre stratégie - affiché sur le graphique")
     if not sname: sname="Ma stratégie"
     n_legs=st.slider("Nombre de jambes",1,6,2,1,key="n_legs_slider",help="Chaque jambe est une option indépendante")
