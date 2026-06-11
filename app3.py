@@ -1334,7 +1334,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     section_header("Analyse de scénarios - Stress Test")
     st.markdown('<div style="font-size:.78rem;color:var(--t2);line-height:1.7;padding:6px 0 10px">'
                 'Matrice montrant le prix de votre option pour différentes '
-                'variations simultanés du spot et de la volatilité implicite. '
+                'variations simultanées du spot et de la volatilité implicite. '
                 'La case centrale (ref) correspond à vos paramètres actuels.</div>', unsafe_allow_html=True)
     st.markdown(scenario_grid_html(S, K, T, r, sigma, q_div, otype, pos_sign), unsafe_allow_html=True)
 
