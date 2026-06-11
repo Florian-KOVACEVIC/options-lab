@@ -583,36 +583,36 @@ def signal_card(sc,dc,content):
 # ─────────────────────────────────────────────────────────────
 def interp(name, val):
     if name=="delta":
-        if abs(val)<0.05: return "sb","db",f"<b>Delta neutre ({val:+.3f})</b> — La position ne reagit presque pas aux mouvements du marche."
-        elif val>=0.5:    return "sg","dg",f"<b>Delta haussier fort ({val:+.3f})</b> — Vous gagnez quand le prix monte. Delta ≈ probabilite d'expirer dans la monnaie."
-        elif val>0:       return "sg","dg",f"<b>Delta haussier ({val:+.3f})</b> — Legere exposition a la hausse."
+        if abs(val)<0.05: return "sb","db",f"<b>Delta neutre ({val:+.3f})</b> — La position ne réagit presque pas aux mouvements du marché."
+        elif val>=0.5:    return "sg","dg",f"<b>Delta haussier fort ({val:+.3f})</b> — Vous gagnez quand le prix monte. Delta ≈ probabilité d'expirer dans la monnaie."
+        elif val>0:       return "sg","dg",f"<b>Delta haussier ({val:+.3f})</b> — Légère exposition a la hausse."
         elif val<=-0.5:   return "sr","dr",f"<b>Delta baissier fort ({val:+.3f})</b> — Vous gagnez quand le prix baisse."
-        else:             return "sr","dr",f"<b>Delta baissier ({val:+.3f})</b> — Legere exposition a la baisse."
+        else:             return "sr","dr",f"<b>Delta baissier ({val:+.3f})</b> — Légère exposition à la baisse."
     elif name=="gamma":
-        if abs(val)<0.001: return "sb","db",f"<b>Gamma faible ({val:.5f})</b> — Votre delta change peu. Position stable et previsible."
-        elif val>0:        return "sg","dg",f"<b>Gamma positif ({val:.5f})</b> — Les gros mouvements jouent en votre faveur. Contrepartie : vous perdez de la valeur chaque jour (Theta negatif)."
-        else:              return "sr","dr",f"<b>Gamma negatif ({val:.5f})</b> — Les gros mouvements vous sont defavorables. Contrepartie : vous encaissez de la valeur chaque jour (Theta positif)."
+        if abs(val)<0.001: return "sb","db",f"<b>Gamma faible ({val:.5f})</b> — Votre delta change peu. Position stable et prévisible."
+        elif val>0:        return "sg","dg",f"<b>Gamma positif ({val:.5f})</b> — Les gros mouvements jouent en votre faveur. Contrepartie : vous perdez de la valeur chaque jour (Thêta negatif)."
+        else:              return "sr","dr",f"<b>Gamma negatif ({val:.5f})</b> — Les gros mouvements vous sont defavorables. Contrepartie : vous encaissez de la valeur chaque jour (Thêta positif)."
     elif name=="theta":
         if abs(val)<0.0005: return "sb","db",f"<b>Theta neutre ({val:+.4f} €/j)</b> — Le temps ne vous impacte pas significativement."
-        elif val<0:         return "sr","dr",f"<b>Theta negatif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous coute {abs(val):.4f} €. Le temps est votre ennemi."
-        else:               return "sg","dg",f"<b>Theta positif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous rapporte {val:.4f} €. Le temps est votre allie."
+        elif val<0:         return "sr","dr",f"<b>Theta negatif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous coûte {abs(val):.4f} €. Le temps est votre ennemi."
+        else:               return "sg","dg",f"<b>Theta positif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous rapporte {val:.4f} €. Le temps est votre allié."
     elif name=="vega":
-        if abs(val)<0.01: return "sb","db",f"<b>Vega faible ({val:.4f} €/%)</b> — La volatilite du marche vous affecte peu."
-        elif val>0:        return "sg","dg",f"<b>Vega positif ({val:.4f} €/%)</b> — Si la volatilite implicite monte de 1%, vous gagnez {val:.4f} €. Vous profitez de l'incertitude du marche."
-        else:              return "sr","dr",f"<b>Vega negatif ({val:.4f} €/%)</b> — Si la volatilite implicite monte de 1%, vous perdez {abs(val):.4f} €. Vous profitez de la stabilite du marche."
+        if abs(val)<0.01: return "sb","db",f"<b>Vega faible ({val:.4f} €/%)</b> — La volatilité du marche vous affecte peu."
+        elif val>0:        return "sg","dg",f"<b>Vega positif ({val:.4f} €/%)</b> — Si la volatilité implicite monte de 1%, vous gagnez {val:.4f} €. Vous profitez de l'incertitude du marché."
+        else:              return "sr","dr",f"<b>Vega negatif ({val:.4f} €/%)</b> — Si la volatilité implicite monte de 1%, vous perdez {abs(val):.4f} €. Vous profitez de la stabilité du marché."
     elif name=="rho":
-        if abs(val)<0.003: return "sb","db",f"<b>Rho neutre ({val:+.4f} €/%)</b> — Les variations de taux d'interet ne vous affectent pas."
+        if abs(val)<0.003: return "sb","db",f"<b>Rho neutre ({val:+.4f} €/%)</b> — Les variations de taux d'intérêt ne vous affectent pas."
         elif val>0:        return "sg","dg",f"<b>Rho positif ({val:+.4f} €/%)</b> — Une hausse des taux vous est favorable (typique des calls)."
-        else:              return "sr","dr",f"<b>Rho negatif ({val:+.4f} €/%)</b> — Une hausse des taux vous est defavorable (typique des puts)."
+        else:              return "sr","dr",f"<b>Rho negatif ({val:+.4f} €/%)</b> — Une hausse des taux vous est défavorable (typique des puts)."
     return "sb","db",str(val)
 
 def gamma_theta_msg(g,t):
-    if g>0.003 and t<-0.001: return "so","do","<b>Long Gamma / Short Theta</b> — Vous achetez la convexite et payez le temps. Vous profitez des gros mouvements et perdez sur un marche calme."
-    elif g<-0.003 and t>0.001: return "sg","dg","<b>Short Gamma / Long Theta</b> — Vous vendez la convexite et encaissez le temps. Vous profitez d'un marche calme et perdez sur les gros mouvements."
+    if g>0.003 and t<-0.001: return "so","do","<b>Long Gamma / Short Theta</b> — Vous achetez la convexité et payez le temps. Vous profitez des gros mouvements et perdez sur un marché calme."
+    elif g<-0.003 and t>0.001: return "sg","dg","<b>Short Gamma / Long Theta</b> — Vous vendez la convexité et encaissez le temps. Vous profitez d'un marché calme et perdez sur les gros mouvements."
     return "sb","db",f"<b>Gamma/Theta equilibres</b> — Gamma={g:.5f} · Theta={t:+.5f} €/j"
 
 # ─────────────────────────────────────────────────────────────
-#  HELPER FUNCTIONS — Strategy legs, pre-expiration, probability
+#  HELPER FUNCTIONS — Strategy leg, pré-expiration, probabilité
 # ─────────────────────────────────────────────────────────────
 def get_strategy_legs(name, K, offset):
     """Return list of (direction_qty, instrument, strike) for pre-expiration repricing."""
@@ -1486,7 +1486,7 @@ with tab3:
 
     # Template selector
     tpl_names = ["- Personnalisé -"] + list(BUILDER_TEMPLATES.keys())
-    tpl_sel = st.selectbox("\U0001f4cb Charger un template", tpl_names, key="tpl_sel",
+    tpl_sel = st.selectbox("Charger un template", tpl_names, key="tpl_sel",
                            help="Sélectionnez une stratégie prédéfinie pour pré-remplir les jambes")
     if tpl_sel != "- Personnalisé -":
         tpl = BUILDER_TEMPLATES[tpl_sel]
@@ -1665,7 +1665,7 @@ with tab3:
         with builder_interp1:
             for gn,gv in [("delta",PD),("gamma",PG)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
         with builder_interp2:
-            for gn,gv in [("theta",PT),("vega",PV)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
+            for gn,gv in [("thêta",PT),("vega",PV)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
             a,b,c_=gamma_theta_msg(PG,PT); signal_card(a,b,c_)
 
         section_header("Graphique P&L")
