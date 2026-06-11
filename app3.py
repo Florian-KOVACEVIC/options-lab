@@ -585,13 +585,13 @@ def interp(name, val):
     if name=="delta":
         if abs(val)<0.05: return "sb","db",f"<b>Delta neutre ({val:+.3f})</b> — La position ne réagit presque pas aux mouvements du marché."
         elif val>=0.5:    return "sg","dg",f"<b>Delta haussier fort ({val:+.3f})</b> — Vous gagnez quand le prix monte. Delta ≈ probabilité d'expirer dans la monnaie."
-        elif val>0:       return "sg","dg",f"<b>Delta haussier ({val:+.3f})</b> — Légère exposition a la hausse."
+        elif val>0:       return "sg","dg",f"<b>Delta haussier ({val:+.3f})</b> — Légère exposition à la hausse."
         elif val<=-0.5:   return "sr","dr",f"<b>Delta baissier fort ({val:+.3f})</b> — Vous gagnez quand le prix baisse."
         else:             return "sr","dr",f"<b>Delta baissier ({val:+.3f})</b> — Légère exposition à la baisse."
     elif name=="gamma":
         if abs(val)<0.001: return "sb","db",f"<b>Gamma faible ({val:.5f})</b> — Votre delta change peu. Position stable et prévisible."
         elif val>0:        return "sg","dg",f"<b>Gamma positif ({val:.5f})</b> — Les gros mouvements jouent en votre faveur. Contrepartie : vous perdez de la valeur chaque jour (Thêta negatif)."
-        else:              return "sr","dr",f"<b>Gamma negatif ({val:.5f})</b> — Les gros mouvements vous sont defavorables. Contrepartie : vous encaissez de la valeur chaque jour (Thêta positif)."
+        else:              return "sr","dr",f"<b>Gamma negatif ({val:.5f})</b> — Les gros mouvements vous sont défavorables. Contrepartie : vous encaissez de la valeur chaque jour (Thêta positif)."
     elif name=="theta":
         if abs(val)<0.0005: return "sb","db",f"<b>Theta neutre ({val:+.4f} €/j)</b> — Le temps ne vous impacte pas significativement."
         elif val<0:         return "sr","dr",f"<b>Theta negatif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous coûte {abs(val):.4f} €. Le temps est votre ennemi."
