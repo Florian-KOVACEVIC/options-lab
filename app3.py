@@ -609,7 +609,7 @@ def interp(name, val):
 def gamma_theta_msg(g,t):
     if g>0.003 and t<-0.001: return "so","do","<b>Long Gamma / Short Theta</b> — Vous achetez la convexité et payez le temps. Vous profitez des gros mouvements et perdez sur un marché calme."
     elif g<-0.003 and t>0.001: return "sg","dg","<b>Short Gamma / Long Theta</b> — Vous vendez la convexité et encaissez le temps. Vous profitez d'un marché calme et perdez sur les gros mouvements."
-    return "sb","db",f"<b>Gamma/Theta equilibres</b> — Gamma={g:.5f} · Theta={t:+.5f} €/j"
+    return "sb","db",f"<b>Gamma/Theta équilibrés</b> — Gamma={g:.5f} · Theta={t:+.5f} €/j"
 
 # ─────────────────────────────────────────────────────────────
 #  HELPER FUNCTIONS — Strategy leg, pré-expiration, probabilité
