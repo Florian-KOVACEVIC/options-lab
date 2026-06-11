@@ -591,19 +591,19 @@ def interp(name, val):
     elif name=="gamma":
         if abs(val)<0.001: return "sb","db",f"<b>Gamma faible ({val:.5f})</b> — Votre delta change peu. Position stable et prévisible."
         elif val>0:        return "sg","dg",f"<b>Gamma positif ({val:.5f})</b> — Les gros mouvements jouent en votre faveur. Contrepartie : vous perdez de la valeur chaque jour (Thêta négatif)."
-        else:              return "sr","dr",f"<b>Gamma negatif ({val:.5f})</b> — Les gros mouvements vous sont défavorables. Contrepartie : vous encaissez de la valeur chaque jour (Thêta positif)."
+        else:              return "sr","dr",f"<b>Gamma négatif ({val:.5f})</b> — Les gros mouvements vous sont défavorables. Contrepartie : vous encaissez de la valeur chaque jour (Thêta positif)."
     elif name=="theta":
         if abs(val)<0.0005: return "sb","db",f"<b>Theta neutre ({val:+.4f} €/j)</b> — Le temps ne vous impacte pas significativement."
-        elif val<0:         return "sr","dr",f"<b>Theta negatif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous coûte {abs(val):.4f} €. Le temps est votre ennemi."
+        elif val<0:         return "sr","dr",f"<b>Theta négatif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous coûte {abs(val):.4f} €. Le temps est votre ennemi."
         else:               return "sg","dg",f"<b>Theta positif ({val:+.4f} €/j)</b> — Chaque jour qui passe vous rapporte {val:.4f} €. Le temps est votre allié."
     elif name=="vega":
         if abs(val)<0.01: return "sb","db",f"<b>Vega faible ({val:.4f} €/%)</b> — La volatilité du marche vous affecte peu."
         elif val>0:        return "sg","dg",f"<b>Vega positif ({val:.4f} €/%)</b> — Si la volatilité implicite monte de 1%, vous gagnez {val:.4f} €. Vous profitez de l'incertitude du marché."
-        else:              return "sr","dr",f"<b>Vega negatif ({val:.4f} €/%)</b> — Si la volatilité implicite monte de 1%, vous perdez {abs(val):.4f} €. Vous profitez de la stabilité du marché."
+        else:              return "sr","dr",f"<b>Vega négatif ({val:.4f} €/%)</b> — Si la volatilité implicite monte de 1%, vous perdez {abs(val):.4f} €. Vous profitez de la stabilité du marché."
     elif name=="rho":
         if abs(val)<0.003: return "sb","db",f"<b>Rho neutre ({val:+.4f} €/%)</b> — Les variations de taux d'intérêt ne vous affectent pas."
         elif val>0:        return "sg","dg",f"<b>Rho positif ({val:+.4f} €/%)</b> — Une hausse des taux vous est favorable (typique des calls)."
-        else:              return "sr","dr",f"<b>Rho negatif ({val:+.4f} €/%)</b> — Une hausse des taux vous est défavorable (typique des puts)."
+        else:              return "sr","dr",f"<b>Rho négatif ({val:+.4f} €/%)</b> — Une hausse des taux vous est défavorable (typique des puts)."
     return "sb","db",str(val)
 
 def gamma_theta_msg(g,t):
