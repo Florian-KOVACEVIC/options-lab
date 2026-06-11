@@ -590,7 +590,7 @@ def interp(name, val):
         else:             return "sr","dr",f"<b>Delta baissier ({val:+.3f})</b> — Légère exposition à la baisse."
     elif name=="gamma":
         if abs(val)<0.001: return "sb","db",f"<b>Gamma faible ({val:.5f})</b> — Votre delta change peu. Position stable et prévisible."
-        elif val>0:        return "sg","dg",f"<b>Gamma positif ({val:.5f})</b> — Les gros mouvements jouent en votre faveur. Contrepartie : vous perdez de la valeur chaque jour (Thêta negatif)."
+        elif val>0:        return "sg","dg",f"<b>Gamma positif ({val:.5f})</b> — Les gros mouvements jouent en votre faveur. Contrepartie : vous perdez de la valeur chaque jour (Thêta négatif)."
         else:              return "sr","dr",f"<b>Gamma negatif ({val:.5f})</b> — Les gros mouvements vous sont défavorables. Contrepartie : vous encaissez de la valeur chaque jour (Thêta positif)."
     elif name=="theta":
         if abs(val)<0.0005: return "sb","db",f"<b>Theta neutre ({val:+.4f} €/j)</b> — Le temps ne vous impacte pas significativement."
@@ -1665,7 +1665,7 @@ with tab3:
         with builder_interp1:
             for gn,gv in [("delta",PD),("gamma",PG)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
         with builder_interp2:
-            for gn,gv in [("thêta",PT),("vega",PV)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
+            for gn,gv in [("theta",PT),("vega",PV)]: a,b,c_=interp(gn,gv); signal_card(a,b,c_)
             a,b,c_=gamma_theta_msg(PG,PT); signal_card(a,b,c_)
 
         section_header("Graphique P&L")
