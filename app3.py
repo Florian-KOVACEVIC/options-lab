@@ -8,7 +8,7 @@ Compatible Windows/Mac/Linux sans installation supplémentaire
 """
 import streamlit as st
 import numpy as np
-import pandas as pd 
+import pandas as pd
 from scipy.stats import norm
 from scipy.optimize import brentq
 import warnings, html
