@@ -860,7 +860,7 @@ with st.sidebar:
     otype = st.radio("", ["Call", "Put"], horizontal=True, key="ot1",
                      label_visibility="collapsed")
     _badge_cls = "sb-Call" if otype == "Call" else "sb-Put"
-    _badge_lbl = "\u25cf CALL - droit d'acheter" if otype == "Call" else "\u25cf PUT - droit de vendre"
+    _badge_lbl = "\u25cf CALL - droit d'acheter" if otype == "call" else "\u25cf PUT - droit de vendre"
     st.markdown(f'<div class="sb-badge {_badge_cls}">{_badge_lbl}</div>', unsafe_allow_html=True)
 
     # ── Position (Achat / Vente) ───────────────────────────
@@ -964,7 +964,7 @@ with tab1:
     pos_label = "LONG" if pos_sign == 1 else "SHORT"
     badge_text = f"{pos_label} {'CALL' if otype=='call' else 'PUT'}"
 
-    # ── Prix hero + Greeks côte à côte ──────────────────────
+    # ── Prix hero + Grecques côte à côte ──────────────────────
     hero_col, greeks_col = st.columns([5, 7], gap="large")
     with hero_col:
         st.markdown(f"""
@@ -1027,12 +1027,12 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
         st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
         with st.expander("Tableau détaillé des grecques"):
             df_g=pd.DataFrame([
-                {"Grec":"\u0394 Delta","Valeur":f"{G['delta']:+.6f}","Unité":"\u20ac/\u20ac","Sens":"+ si haussier"},
-                {"Grec":"\u0393 Gamma","Valeur":f"{G['gamma']:.6f}","Unité":"-","Sens":"+ si convexité favorable"},
-                {"Grec":"\u0398 Theta","Valeur":f"{G['theta']:+.6f}","Unité":"\u20ac/j","Sens":"+ si le temps aide"},
-                {"Grec":"\u03bd Vega","Valeur":f"{G['vega']:.6f}","Unité":"\u20ac/%","Sens":"+ si vol. implicite \u2191"},
-                {"Grec":"\u03c1 Rho","Valeur":f"{G['rho']:+.6f}","Unité":"\u20ac/%","Sens":"+ si taux \u2191"},
-                {"Grec":"\u039b Vanna","Valeur":f"{G['vanna']:+.6f}","Unité":"-","Sens":"Cross delta/vol"},
+                {"Grec":"\u0394 Delta","Valeur":f"{G['delta']:+.4f}","Unité":"\u20ac/\u20ac","Sens":"+ si haussier"},
+                {"Grec":"\u0393 Gamma","Valeur":f"{G['gamma']:.4f}","Unité":"-","Sens":"+ si convexité favorable"},
+                {"Grec":"\u0398 Theta","Valeur":f"{G['theta']:+.4f}","Unité":"\u20ac/j","Sens":"+ si le temps aide"},
+                {"Grec":"\u03bd Vega","Valeur":f"{G['vega']:.4f}","Unité":"\u20ac/%","Sens":"+ si vol. implicite \u2191"},
+                {"Grec":"\u03c1 Rho","Valeur":f"{G['rho']:+.4f}","Unité":"\u20ac/%","Sens":"+ si taux \u2191"},
+                {"Grec":"\u039b Vanna","Valeur":f"{G['vanna']:+.4f}","Unité":"-","Sens":"Cross delta/vol"},
             ])
             st.dataframe(df_g.set_index("Grec"),use_container_width=True)
 
