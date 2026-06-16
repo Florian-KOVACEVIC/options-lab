@@ -531,7 +531,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     # 5 Time Decay
     svg5 = svg_chart([
         {"x":list(TR),"y":list(p_T),"color":"#3b82f6","width":2.2,"fill":True,"fill_color":"#3b82f6","label":"Prix"},
-    ], W=W, H=H, xlabel="Maturité (ans)", ylabel="Prix (\u20ac)",
+    ], W=W, H=H, xlabel="Maturité (en année)", ylabel="Prix (\u20ac)",
        vlines=[vl(T,"#f59e0b",fmt_mat(T))],
        show_dot={"x":T,"y":cur,"color":"#f59e0b","label":f"\u20ac{cur:.3f}"},
        title="\u0398 Theta - \u00c9rosion temporelle (Time Decay)", responsive=_rsp)
