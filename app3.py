@@ -22,22 +22,22 @@ st.set_page_config(page_title="Options Lab", page_icon="◈",
 # ─────────────────────────────────────────────────────────────
 def bs_price(S, K, T, r, sigma, q=0.0, otype="call"):
     if T <= 1e-9 or sigma <= 1e-9:
-        if otype == "Call": return max(S*np.exp(-q*T) - K*np.exp(-r*T), 0)
+        if otype == "call": return max(S*np.exp(-q*T) - K*np.exp(-r*T), 0)
         return max(K*np.exp(-r*T) - S*np.exp(-q*T), 0)
     d1 = (np.log(S/K) + (r-q+0.5*sigma**2)*T) / (sigma*np.sqrt(T))
     d2 = d1 - sigma*np.sqrt(T)
-    if otype == "Call": return S*np.exp(-q*T)*norm.cdf(d1) - K*np.exp(-r*T)*norm.cdf(d2)
+    if otype == "call": return S*np.exp(-q*T)*norm.cdf(d1) - K*np.exp(-r*T)*norm.cdf(d2)
     return K*np.exp(-r*T)*norm.cdf(-d2) - S*np.exp(-q*T)*norm.cdf(-d1)
 
 def bs_price_vec(S_arr, K, T, r, sigma, q=0.0, otype="call"):
     """Vectorized BS price for arrays."""
     S_arr = np.asarray(S_arr, dtype=float)
     if T <= 1e-9 or sigma <= 1e-9:
-        if otype == "Call": return np.maximum(S_arr*np.exp(-q*T) - K*np.exp(-r*T), 0)
+        if otype == "call": return np.maximum(S_arr*np.exp(-q*T) - K*np.exp(-r*T), 0)
         return np.maximum(K*np.exp(-r*T) - S_arr*np.exp(-q*T), 0)
     d1 = (np.log(S_arr/K) + (r-q+0.5*sigma**2)*T) / (sigma*np.sqrt(T))
     d2 = d1 - sigma*np.sqrt(T)
-    if otype == "Call": return S_arr*np.exp(-q*T)*norm.cdf(d1) - K*np.exp(-r*T)*norm.cdf(d2)
+    if otype == "call": return S_arr*np.exp(-q*T)*norm.cdf(d1) - K*np.exp(-r*T)*norm.cdf(d2)
     return K*np.exp(-r*T)*norm.cdf(-d2) - S_arr*np.exp(-q*T)*norm.cdf(-d1)
 
 def bs_greeks(S, K, T, r, sigma, q=0.0, otype="call"):
@@ -859,8 +859,8 @@ with st.sidebar:
     st.markdown('<div class="sb-title">Type d\'option</div>', unsafe_allow_html=True)
     otype = st.radio("", ["call", "put"], horizontal=True, key="ot1",
                      label_visibility="collapsed")
-    _badge_cls = "sb-Call" if otype == "Call" else "sb-Put"
-    _badge_lbl = "\u25cf CALL - droit d'acheter" if otype == "Call" else "\u25cf PUT - droit de vendre"
+    _badge_cls = "sb-Call" if otype == "call" else "sb-Put"
+    _badge_lbl = "\u25cf CALL - droit d'acheter" if otype == "call" else "\u25cf PUT - droit de vendre"
     st.markdown(f'<div class="sb-badge {_badge_cls}">{_badge_lbl}</div>', unsafe_allow_html=True)
 
     # ── Position (Achat / Vente) ───────────────────────────
@@ -888,7 +888,7 @@ with st.sidebar:
 
     mr = S / K if K > 0 else 1
     if S == K:                                                        pc, pt = "matm", "ATM"
-    elif (otype == "Call" and S > K) or (otype == "Put" and S < K):  pc, pt = "mitm", "ITM"
+    elif (otype == "call" and S > K) or (otype == "Put" and S < K):  pc, pt = "mitm", "ITM"
     else:                                                             pc, pt = "motm", "OTM"
     st.markdown(f'<span class="mpill {pc}">{pt} \u00b7 {mr:.3f}</span>', unsafe_allow_html=True)
 
