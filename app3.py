@@ -857,7 +857,7 @@ with st.sidebar:
 
     # ── Type d'option ───────────────────────────────────────
     st.markdown('<div class="sb-title">Type d\'option</div>', unsafe_allow_html=True)
-    otype = st.radio("", ["Call", "Put"], horizontal=True, key="ot1",
+    otype = st.radio("", ["Call",   "Put"], horizontal=True, key="ot1",
                      label_visibility="collapsed")
     _badge_cls = "sb-call" if otype == "call" else "sb-put"
     _badge_lbl = "\u25cf CALL - droit d'acheter" if otype == "call" else "\u25cf PUT - droit de vendre"
