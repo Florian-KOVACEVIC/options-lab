@@ -859,7 +859,7 @@ with st.sidebar:
     st.markdown('<div class="sb-title">Type d\'option</div>', unsafe_allow_html=True)
     otype = st.radio("", ["Call", "Put"], horizontal=True, key="ot1",
                      label_visibility="collapsed")
-    _badge_cls = "sb-call" if otype == "Call" else "sb-put"
+    _badge_cls = "sb-Call" if otype == "Call" else "sb-Put"
     _badge_lbl = "\u25cf CALL - droit d'acheter" if otype == "Call" else "\u25cf PUT - droit de vendre"
     st.markdown(f'<div class="sb-badge {_badge_cls}">{_badge_lbl}</div>', unsafe_allow_html=True)
 
@@ -868,7 +868,7 @@ with st.sidebar:
     position = st.radio("", ["Achat (Long)", "Vente (Short)"], horizontal=True, key="pos1",
                         label_visibility="collapsed")
     pos_sign = 1 if position == "Achat (Long)" else -1
-    _pos_cls = "sb-call" if pos_sign == 1 else "sb-put"
+    _pos_cls = "sb-Call" if pos_sign == 1 else "sb-Put"
     _pos_lbl = "\u25cf LONG - acheteur de l'option" if pos_sign == 1 else "\u25cf SHORT - vendeur de l'option"
     st.markdown(f'<div class="sb-badge {_pos_cls}">{_pos_lbl}</div>', unsafe_allow_html=True)
 
@@ -1805,8 +1805,8 @@ section[data-testid="stSidebar"] hr{border-color:var(--b1);margin:10px 0;}
   padding:10px 0 6px;border-bottom:1px solid var(--b1);margin-bottom:8px;}
 .sb-badge{display:inline-flex;align-items:center;gap:6px;font-size:.73rem;font-weight:600;
   padding:4px 10px;border-radius:6px;margin-bottom:10px;}
-.sb-call{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
-.sb-put{background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2);}
+.sb-Call{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.sb-Put{background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2);}
 /* Scenario grid */
 .sc-grid{width:100%;border-collapse:separate;border-spacing:0;font-family:'DM Mono',monospace;font-size:.73rem;}
 .sc-grid th{background:var(--s2);color:var(--t3);font-size:.68rem;font-weight:700;text-transform:uppercase;
