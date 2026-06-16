@@ -1141,10 +1141,10 @@ with tab2:
                     f'</div></div>', unsafe_allow_html=True)
     with detail_col3:
         tips = []
-        if "Long Gamma" in info["greeks"]:  tips.append(" <b>Long Gamma</b> - profite des grands mouvements")
-        if "Short Gamma" in info["greeks"]: tips.append("\U0001f4b0 <b>Short Gamma</b> - encaisse le temps")
-        if "Long Vega" in info["greeks"]:   tips.append(" <b>Long Vega</b> - profite si la vol. monte")
-        if "Short Vega" in info["greeks"]:  tips.append("\U0001f4c9 <b>Short Vega</b> - profite si la vol. reste basse")
+        if "Long Gamma" in info["greeks"]:  tips.append(" <b>Long Gamma</b> - Profite des grands mouvements")
+        if "Short Gamma" in info["greeks"]: tips.append(" <b>Short Gamma</b> - Encaisse le temps")
+        if "Long Vega" in info["greeks"]:   tips.append(" <b>Long Vega</b> - Profite si la vol. monte")
+        if "Short Vega" in info["greeks"]:  tips.append(" <b>Short Vega</b> - Profite si la vol. reste basse")
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Greeks</div>'
                     f'<div style="font-size:.72rem;color:#d4d4d8;margin-bottom:8px">{info["greeks"]}</div>'
                     f'<div style="font-size:.70rem;color:#d4d4d8;line-height:1.9">{"<br>".join(tips)}</div></div>',
@@ -1263,7 +1263,7 @@ with tab3:
 
     _tpl_default = st.session_state.pop("_tpl_name", "")
     sname=st.text_input("\u25CF Nom de la stratégie",value=_tpl_default,placeholder="Ma stratégie",
-                        help="Donnez un nom à votre stratégie - affiché sur le graphique")
+                        help="Donnez un nom à votre stratégie - Affiché sur le graphique")
     if not sname: sname="Ma stratégie"
     n_legs=st.slider("Nombre de jambes",1,6,2,1,key="n_legs_slider",help="Chaque jambe est une option indépendante")
     st.markdown("---")
