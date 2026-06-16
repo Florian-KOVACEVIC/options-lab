@@ -1137,11 +1137,11 @@ with tab2:
                     f'font-size:.73rem;line-height:1.8;color:#d4d4d8;align-items:baseline">'
                     f'<span>\U0001f4c8 <b>Gain max</b></span><span>{info["max_gain"]}</span>'
                     f'<span>\U0001f4c9 <b>Perte max</b></span><span>{info["max_loss"]}</span>'
-                    f'<span> <b>Seuil</b></span><span>{info["be"]}</span>'
+                    f'<span>\u2696\ufe0f <b>Seuil</b></span><span>{info["be"]}</span>'
                     f'</div></div>', unsafe_allow_html=True)
     with detail_col3:
         tips = []
-        if "Long Gamma" in info["greeks"]:  tips.append("\u26a1 <b>Long Gamma</b> - profite des grands mouvements")
+        if "Long Gamma" in info["greeks"]:  tips.append(" <b>Long Gamma</b> - profite des grands mouvements")
         if "Short Gamma" in info["greeks"]: tips.append("\U0001f4b0 <b>Short Gamma</b> - encaisse le temps")
         if "Long Vega" in info["greeks"]:   tips.append(" <b>Long Vega</b> - profite si la vol. monte")
         if "Short Vega" in info["greeks"]:  tips.append("\U0001f4c9 <b>Short Vega</b> - profite si la vol. reste basse")
