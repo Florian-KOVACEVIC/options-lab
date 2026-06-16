@@ -1137,13 +1137,13 @@ with tab2:
                     f'font-size:.73rem;line-height:1.8;color:#d4d4d8;align-items:baseline">'
                     f'<span>\U0001f4c8 <b>Gain max</b></span><span>{info["max_gain"]}</span>'
                     f'<span>\U0001f4c9 <b>Perte max</b></span><span>{info["max_loss"]}</span>'
-                    f'<span>\u2696\ufe0f <b>Seuil</b></span><span>{info["be"]}</span>'
+                    f'<span> <b>Seuil</b></span><span>{info["be"]}</span>'
                     f'</div></div>', unsafe_allow_html=True)
     with detail_col3:
         tips = []
         if "Long Gamma" in info["greeks"]:  tips.append("\u26a1 <b>Long Gamma</b> - profite des grands mouvements")
         if "Short Gamma" in info["greeks"]: tips.append("\U0001f4b0 <b>Short Gamma</b> - encaisse le temps")
-        if "Long Vega" in info["greeks"]:   tips.append("\U0001f4c8 <b>Long Vega</b> - profite si la vol. monte")
+        if "Long Vega" in info["greeks"]:   tips.append(" <b>Long Vega</b> - profite si la vol. monte")
         if "Short Vega" in info["greeks"]:  tips.append("\U0001f4c9 <b>Short Vega</b> - profite si la vol. reste basse")
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Greeks</div>'
                     f'<div style="font-size:.72rem;color:#d4d4d8;margin-bottom:8px">{info["greeks"]}</div>'
@@ -1208,7 +1208,7 @@ with tab2:
         a,b,c_=gamma_theta_msg(Gm["gamma"],Gm["theta"]); signal_card(a,b,c_)
 
     st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-    with st.expander("Tableau comparatif - toutes les stratégies"):
+    with st.expander("Tableau comparatif - Toutes les stratégies"):
         rows=[]
         for nm,inf in STRATEGIES.items():
             a=-1 if nm in ["Short Straddle","Short Strangle","Short Butterfly"] else 1
