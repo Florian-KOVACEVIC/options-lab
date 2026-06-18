@@ -5,7 +5,7 @@ Auteur     : FloKov
 Usage      : streamlit run app3.py
 Graphiques : SVG pur généré dynamiquement (zéro matplotlib, zéro plotly) 
 Compatible Windows/Mac/Linux sans installation supplémentaire
-"""
+""" 
 import streamlit as st
 import numpy as np
 import pandas as pd
