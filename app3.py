@@ -1875,5 +1875,3 @@ section[data-testid="stSidebar"] hr{border-color:var(--b1);margin:10px 0;}
   background:linear-gradient(90deg,#60a5fa,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 </style>
 """, unsafe_allow_html=True)
-app3.py
-Affichage de app3.py en cours...
