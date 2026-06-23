@@ -3,13 +3,12 @@ Options Lab — Black-Scholes Pricer
 ----------------------------------
 Auteur     : FloKov
 Usage      : streamlit run app3.py
-Graphiques : SVG pur généré dynamiquement avec option plein écran Streamlit
+Graphiques : SVG pur généré dynamiquement (zéro matplotlib, zéro plotly)
 Compatible Windows/Mac/Linux sans installation supplémentaire 
 """
 import streamlit as st
 import numpy as np
 import pandas as pd
-import base64
 from scipy.stats import norm
 from scipy.optimize import brentq
 import warnings, html
@@ -77,7 +76,7 @@ def fmt_mat(T):
     return " ".join(p) or "<1j"
 
 # ─────────────────────────────────────────────────────────────
-#  SVG CHART ENGINE
+#  SVG CHART ENGINE — no matplotlib needed
 # ─────────────────────────────────────────────────────────────
 BG_SVG  = "#09090b"
 S1_SVG  = "#111113"
@@ -86,19 +85,20 @@ TC_SVG  = "#d4d4d8"
 T2_SVG  = "#e4e4e7"
 
 def svg_chart(
-    series_list,
+    series_list,           # [{"x":[], "y":[], "color":"#hex", "label":"", "width":2, "dash":False, "fill":False, "fill_pos_neg":False}]
     W=700, H=260,
     title="",
     xlabel="", ylabel="",
-    vlines=None,
+    vlines=None,           # [{"x": val, "color":"#hex", "label":"", "dash":True}]
     hline_zero=False,
-    show_dot=None,
+    show_dot=None,         # {"x":val,"y":val,"color":"#hex"}
     PAD_L=54, PAD_R=18, PAD_T=28, PAD_B=40,
     responsive=False,
 ):
     pw = W - PAD_L - PAD_R
     ph = H - PAD_T - PAD_B
 
+    # Gather all y values for global scale
     all_x = [v for s in series_list for v in s["x"]]
     all_y = [v for s in series_list for v in s["y"]]
     if not all_x: return ""
@@ -120,6 +120,7 @@ def svg_chart(
         svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
                f'style="background:{BG_SVG};border-radius:10px;display:block">']
 
+    # Grid lines y
     n_yticks = 5
     for i in range(n_yticks+1):
         yv = ymin + i*(ymax-ymin)/n_yticks
@@ -130,6 +131,7 @@ def svg_chart(
         svg.append(f'<text x="{PAD_L-4}" y="{yp+4:.1f}" text-anchor="end" '
                    f'font-family="DM Mono,monospace" font-size="10.5" fill="{TC_SVG}">{label_v}</text>')
 
+    # Grid lines x
     n_xticks = 5
     for i in range(n_xticks+1):
         xv = xmin + i*(xmax-xmin)/n_xticks
@@ -140,11 +142,13 @@ def svg_chart(
         svg.append(f'<text x="{xp:.1f}" y="{PAD_T+ph+14}" text-anchor="middle" '
                    f'font-family="DM Mono,monospace" font-size="10.5" fill="{TC_SVG}">{lv}</text>')
 
+    # Zero line
     if hline_zero and ymin<0<ymax:
         yz = ty(0)
         svg.append(f'<line x1="{PAD_L}" y1="{yz:.1f}" x2="{PAD_L+pw}" y2="{yz:.1f}" '
                    f'stroke="{GR_SVG}" stroke-width="1.5"/>')
 
+    # Vertical lines
     if vlines:
         for vl in vlines:
             xp = tx(vl["x"])
@@ -156,6 +160,7 @@ def svg_chart(
                 svg.append(f'<text x="{xp+3:.1f}" y="{lbl_y:.1f}" font-family="DM Mono,monospace" '
                            f'font-size="10" fill="{vl["color"]}" opacity=".9">{vl["label"]}</text>')
 
+    # Series
     for s in series_list:
         xs,ys = s["x"],s["y"]
         if len(xs)<2: continue
@@ -167,6 +172,7 @@ def svg_chart(
         poly = " ".join(f"{px:.1f},{py:.1f}" for px,py in zip(pxs,pys))
 
         if s.get("fill_pos_neg"):
+            # Split fill: green above 0, red below
             yz = ty(0)
             poly_pos = f"{pxs[0]:.1f},{yz}"
             poly_neg = f"{pxs[0]:.1f},{yz}"
@@ -187,6 +193,7 @@ def svg_chart(
         svg.append(f'<polyline points="{poly}" fill="none" stroke="{col}" '
                    f'stroke-width="{lw}" {dash} stroke-linejoin="round" stroke-linecap="round"/>')
 
+    # Dot
     if show_dot:
         xp,yp = tx(show_dot["x"]), ty(show_dot["y"])
         col   = show_dot.get("color","#f59e0b")
@@ -196,6 +203,7 @@ def svg_chart(
             svg.append(f'<text x="{xp+8:.1f}" y="{yp+4:.1f}" font-family="DM Mono,monospace" '
                        f'font-size="10.5" fill="{col}">{label}</text>')
 
+    # Legend — multi-line wrap
     lx, ly = PAD_L+4, PAD_T+6
     max_lx = W - PAD_R - 10
     for s in series_list:
@@ -209,6 +217,7 @@ def svg_chart(
                    f'font-size="10" fill="{T2_SVG}">{html.escape(s["label"])}</text>')
         lx += item_w
 
+    # ── Hover bands (crosshair + tooltip) ───────────────────
     n_bands = 30
     if len(all_x) > 1 and pw > 10:
         band_w = pw / n_bands
@@ -251,9 +260,11 @@ def svg_chart(
                            f'{html.escape(label)}: {html.escape(val)}</text>')
             svg.append('</g>')
 
+    # Axes borders
     svg.append(f'<line x1="{PAD_L}" y1="{PAD_T}" x2="{PAD_L}" y2="{PAD_T+ph}" stroke="{GR_SVG}" stroke-width="1"/>')
     svg.append(f'<line x1="{PAD_L}" y1="{PAD_T+ph}" x2="{PAD_L+pw}" y2="{PAD_T+ph}" stroke="{GR_SVG}" stroke-width="1"/>')
 
+    # Labels
     if xlabel:
         svg.append(f'<text x="{PAD_L+pw/2:.0f}" y="{H-4}" text-anchor="middle" '
                    f'font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#fafafa">{xlabel}</text>')
@@ -268,10 +279,10 @@ def svg_chart(
     return "\n".join(svg)
 
 def show_svg(svg_str, height=None, full_width=False):
-    """Utilise st.image avec base64 pour permettre le mode plein écran natif de Streamlit."""
-    b64 = base64.b64encode(svg_str.encode('utf-8')).decode('utf-8')
-    html_b64 = f"data:image/svg+xml;base64,{b64}"
-    st.image(html_b64, use_container_width=full_width)
+    fw = "width:100%;" if full_width else ""
+    st.markdown(f'<div style="border-radius:10px;overflow:hidden;margin:4px 0;{fw}">'
+                f'<div style="{fw}{"" if not full_width else "max-width:100%;overflow-x:auto;"}">{svg_str}</div></div>',
+                unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────────
 #  UI HELPERS
@@ -347,6 +358,7 @@ def gamma_theta_msg(g,t):
 #  HELPER FUNCTIONS — Strategy leg, pré-expiration, probabilité
 # ─────────────────────────────────────────────────────────────
 def get_strategy_legs(name, K, offset):
+    """Return list of (direction_qty, instrument, strike) for pre-expiration repricing."""
     Ko_c, Ko_p = K + offset, K - offset
     Kl, Kh = K - offset, K + offset
     Kic_l, Kic_h = K - 2*offset, K + 2*offset
@@ -376,6 +388,7 @@ def get_strategy_legs(name, K, offset):
     return M.get(name, [])
 
 def compute_pre_exp_pnl(legs, SR, S, Tc, Tp, r, sc, sp, q, T_pct):
+    """Compute P&L at T_pct fraction of time elapsed."""
     T_rem_c = max(Tc * (1 - T_pct), 1e-9)
     T_rem_p = max(Tp * (1 - T_pct), 1e-9)
     cost = 0.0
@@ -391,6 +404,7 @@ def compute_pre_exp_pnl(legs, SR, S, Tc, Tp, r, sc, sp, q, T_pct):
     return total - cost
 
 def probability_of_profit(pnl, SR, S, T, r, sigma, q=0.0):
+    """P(profit) using log-normal distribution on spot grid."""
     if T <= 1e-9 or sigma <= 1e-9 or len(SR) < 10: return 0.5
     mu = (r - q - 0.5*sigma**2) * T
     sig_t = sigma * np.sqrt(T)
@@ -429,6 +443,7 @@ def scenario_grid_html(S, K, T, r, sigma, q, otype, pos_sign):
     return h
 
 def risk_reward_html(max_gain, max_loss):
+    """Beautiful risk/reward card."""
     if abs(max_loss) < 1e-6: ratio_str = "\u221e"
     else: ratio_str = f"{abs(max_gain/max_loss):.2f}"
     total = abs(max_gain) + abs(max_loss)
@@ -441,6 +456,7 @@ def risk_reward_html(max_gain, max_loss):
             f'<span style="color:#ef4444">\u2212\u20ac{abs(max_loss):.2f}</span></div></div>')
 
 def prob_bar_html(p_profit, label="Probabilité de profit"):
+    """Probability bar visualization."""
     pct = p_profit * 100
     col = "#22c55e" if pct >= 55 else ("#f59e0b" if pct >= 45 else "#ef4444")
     sentiment = "Favorable" if pct >= 55 else ("Neutre" if pct >= 45 else "Défavorable")
@@ -475,7 +491,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
     def vl(xv, col, lbl="", dash=True):
         return {"x":xv,"color":col,"label":lbl,"dash":dash}
 
-    _rsp = True
+    _rsp = True  # responsive SVGs
 
     # 1 Prix
     svg1 = svg_chart([
@@ -486,7 +502,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
        show_dot={"x":S,"y":cur,"color":"#f59e0b","label":f"\u20ac{cur:.3f}"},
        title="Prix de l'option selon le spot", responsive=_rsp)
 
-    # 2 Delta (Vert)
+    # 2 Delta
     svg2 = svg_chart([
         {"x":list(SR),"y":list(deltas),"color":"#22c55e","width":2.2,"fill":True,"fill_color":"#22c55e","label":"\u0394 Delta"},
     ], W=W, H=H, xlabel="Spot (\u20ac)", ylabel="Delta",
@@ -495,7 +511,7 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
        show_dot={"x":S,"y":G["delta"],"color":"#22c55e","label":f"{G['delta']:.4f}"},
        title="\u0394 Delta - Sensibilité au prix du sous-jacent", responsive=_rsp)
 
-    # 3 Gamma (Violet)
+    # 3 Gamma
     svg3 = svg_chart([
         {"x":list(SR),"y":list(gammas),"color":"#a78bfa","width":2.2,"fill":True,"fill_color":"#a78bfa","label":"\u0393 Gamma"},
     ], W=W, H=H, xlabel="Spot (\u20ac)", ylabel="Gamma",
@@ -504,17 +520,17 @@ def build_dashboard(S, K, T, r, sigma, q, otype, pos_sign=1):
        show_dot={"x":S,"y":G["gamma"],"color":"#a78bfa","label":f"{G['gamma']:.5f}"},
        title="\u0393 Gamma - Convexité (accélération du Delta)", responsive=_rsp)
 
-    # 4 Prix vs Vol - Vega (Bleu)
+    # 4 Prix vs Vol
     svg4 = svg_chart([
-        {"x":list(sigR*100),"y":list(p_sig),"color":"#3b82f6","width":2.2,"fill":True,"fill_color":"#3b82f6","label":"Prix"},
+        {"x":list(sigR*100),"y":list(p_sig),"color":"#ef4444","width":2.2,"fill":True,"fill_color":"#ef4444","label":"Prix"},
     ], W=W, H=H, xlabel="Volatilité implicite (%)", ylabel="Prix (\u20ac)",
-       vlines=[vl(sigma*100,"#3b82f6",f"\u03c3={sigma*100:.1f}%")],
-       show_dot={"x":sigma*100,"y":cur,"color":"#3b82f6","label":f"\u20ac{cur:.3f}"},
+       vlines=[vl(sigma*100,"#f59e0b",f"\u03c3={sigma*100:.1f}%")],
+       show_dot={"x":sigma*100,"y":cur,"color":"#f59e0b","label":f"\u20ac{cur:.3f}"},
        title="\u03bd Vega - Sensibilité à la volatilité implicite", responsive=_rsp)
 
-    # 5 Time Decay - Theta (Orange)
+    # 5 Time Decay
     svg5 = svg_chart([
-        {"x":list(TR),"y":list(p_T),"color":"#f59e0b","width":2.2,"fill":True,"fill_color":"#f59e0b","label":"Prix"},
+        {"x":list(TR),"y":list(p_T),"color":"#3b82f6","width":2.2,"fill":True,"fill_color":"#3b82f6","label":"Prix"},
     ], W=W, H=H, xlabel="Maturité (en année)", ylabel="Prix (\u20ac)",
        vlines=[vl(T,"#f59e0b",fmt_mat(T))],
        show_dot={"x":T,"y":cur,"color":"#f59e0b","label":f"\u20ac{cur:.3f}"},
@@ -566,6 +582,7 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, T_pct=0.5, W=1100, H=380)
     pnl = pnls.get(name, np.zeros_like(SR))
     col = STRATEGIES[name]["color"]
 
+    # Pre-expiration P&L
     offset = S * 0.07
     legs = get_strategy_legs(name, K, offset)
     pnl_pre = compute_pre_exp_pnl(legs, SR, S, Tc, Tp, r, sc, sp, q, T_pct)
@@ -575,6 +592,7 @@ def build_payoff(name, S, K, Tc, Tp, r, sc, sp, q=0.0, T_pct=0.5, W=1100, H=380)
 
     vlines = [{"x":S,"color":"#3b82f6","label":f"S={S:.0f}","dash":True},
                {"x":K,"color":"#52525b","label":f"K={K:.0f}","dash":True}]
+    # break-evens as vlines
     idxs = np.where(np.diff(np.sign(pnl)))[0]
     for idx in idxs:
         be = (SR[idx]+SR[idx+1])/2
@@ -622,6 +640,7 @@ def build_custom_payoff(legs, S_ref, name, T_pct=0.5, W=1100, H=420):
                        "width":1.5,"dash":True})
         legend_items.append({"label":short_label,"color":color,"dash":True})
 
+    # Pre-expiration P&L
     total_pre = np.zeros_like(SR)
     for i, leg in enumerate(legs):
         if not leg["active"]: continue
@@ -631,6 +650,7 @@ def build_custom_payoff(legs, S_ref, name, T_pct=0.5, W=1100, H=420):
         vals = bs_price_vec(SR, leg["K"], T_rem, leg["r"], leg["sigma"], leg.get("q",0), leg["inst"])
         total_pre += leg["dir"]*leg["qty"]*vals - cost_leg
 
+    # Compute average T for label
     active_Ts = [l["T"] for l in legs if l.get("active")]
     T_avg = sum(active_Ts)/len(active_Ts) if active_Ts else 1.0
     T_rem_lbl = T_avg * (1 - T_pct)
@@ -677,7 +697,6 @@ def build_custom_greeks(legs, S_ref, W=1100, H=260):
                 responsive=True)
 
     svgs=[]
-    # Universal Color Alignment: Delta=#22c55e, Gamma=#a78bfa, Theta=#f59e0b, Vega=#3b82f6
     for data,col,title in [(PD,"#22c55e","\u0394 Delta - Sensibilité prix"),(PG,"#a78bfa","\u0393 Gamma - Convexité"),
                             (PT,"#f59e0b","\u0398 Theta - Effet temps"),(PV,"#3b82f6","\u03bd Vega - Effet volatilité")]:
         s=svg_chart([{"x":list(SR),"y":list(data),"color":col,"width":2,
@@ -838,9 +857,8 @@ with st.sidebar:
 
     # ── Type d'option ───────────────────────────────────────
     st.markdown('<div class="sb-title">Type d\'option</div>', unsafe_allow_html=True)
-    otype_display = st.radio("", ["Call", "Put"], horizontal=True, key="ot1",
+    otype = st.radio("", ["call", "put"], horizontal=True, key="ot1",
                      label_visibility="collapsed")
-    otype = otype_display.lower()
     _badge_cls = "sb-call" if otype == "call" else "sb-put"
     _badge_lbl = "\u25cf CALL - Droit d'acheter" if otype == "call" else "\u25cf PUT - Droit de vendre"
     st.markdown(f'<div class="sb-badge {_badge_cls}">{_badge_lbl}</div>', unsafe_allow_html=True)
@@ -870,7 +888,7 @@ with st.sidebar:
 
     mr = S / K if K > 0 else 1
     if S == K:                                                        pc, pt = "matm", "ATM"
-    elif (otype == "call" and S > K) or (otype == "put" and S < K):  pc, pt = "mitm", "ITM"
+    elif (otype == "call" and S > K) or (otype == "Put" and S < K):  pc, pt = "mitm", "ITM"
     else:                                                             pc, pt = "motm", "OTM"
     st.markdown(f'<span class="mpill {pc}">{pt} \u00b7 {mr:.3f}</span>', unsafe_allow_html=True)
 
@@ -937,6 +955,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Pricer & Grecques", "Stratégies", " Stratég
 with tab1:
     price_raw = bs_price(S,K,T,r,sigma,q_div,otype)
     G_raw = bs_greeks(S,K,T,r,sigma,q_div,otype)
+    # Appliquer le signe de la position (Long = +1, Short = -1)
     price = price_raw * pos_sign
     G = {k: v * pos_sign for k, v in G_raw.items()}
     d1v=(np.log(S/K)+(r-q_div+0.5*sigma**2)*T)/(sigma*np.sqrt(T)) if T>1e-9 and sigma>1e-9 else 0
@@ -1021,6 +1040,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
     section_header("Visualisations")
     svg1,svg2,svg3,svg4,svg5 = build_dashboard(S,K,T,r,sigma,q_div,otype,pos_sign)
 
+    # Ligne 1
     chart_r1c1, chart_r1c2 = st.columns(2)
     with chart_r1c1: show_svg(svg1, full_width=True)
     with chart_r1c2: show_svg(svg2, full_width=True)
@@ -1032,6 +1052,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
                     '<b>Delta (droite)</b> - Montre la pente de la courbe de prix. Un delta de 0.5 signifie que '
                     'votre option gagne ~0.50\u20ac pour chaque +1\u20ac du sous-jacent.</div>', unsafe_allow_html=True)
 
+    # Ligne 2
     chart_r2c1, chart_r2c2 = st.columns(2)
     with chart_r2c1: show_svg(svg3, full_width=True)
     with chart_r2c2: show_svg(svg4, full_width=True)
@@ -1043,6 +1064,7 @@ $$d_1 = \frac{\ln(S/K) + (r - q + \sigma^2/2)\,T}{\sigma\sqrt{T}} \qquad d_2 = d
                     '<b>Vega (droite)</b> - Montre comment le prix réagit à la volatilité. '
                     'La ligne verticale orange marque votre volatilité actuelle.</div>', unsafe_allow_html=True)
 
+    # Ligne 3 : centre
     chart_r3_pad1, chart_r3c1, chart_r3_pad2 = st.columns([1,2,1])
     with chart_r3c1: show_svg(svg5, full_width=True)
 
@@ -1113,9 +1135,9 @@ with tab2:
         st.markdown(f'<div class="card" style="height:100%"><div class="ct">Payoff</div>'
                     f'<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 10px;'
                     f'font-size:.73rem;line-height:1.8;color:#d4d4d8;align-items:baseline">'
-                    f'<span>📈 <b>Gain max</b></span><span>{info["max_gain"]}</span>'
-                    f'<span>📉 <b>Perte max</b></span><span>{info["max_loss"]}</span>'
-                    f'<span>⚖️ <b>Seuil</b></span><span>{info["be"]}</span>'
+                    f'<span>\U0001f4c8 <b>Gain max</b></span><span>{info["max_gain"]}</span>'
+                    f'<span>\U0001f4c9 <b>Perte max</b></span><span>{info["max_loss"]}</span>'
+                    f'<span>\u2696\ufe0f <b>Seuil</b></span><span>{info["be"]}</span>'
                     f'</div></div>', unsafe_allow_html=True)
     with detail_col3:
         tips = []
@@ -1140,7 +1162,7 @@ with tab2:
                 unsafe_allow_html=True)
     _payoff_svg, _payoff_legend, _pnl_exp_t2, _pnl_pre_t2 = build_payoff(strat,S2,K2,Tc2,Tp2,r2,sig_c2,sig_p2,q2,T_pct_2)
     show_svg(_payoff_svg, full_width=True)
-    
+    # External legend
     _leg_html_t2 = ''.join(
         f'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px">'
         f'<span style="width:18px;height:3px;border-radius:2px;background:{it["color"]};'
@@ -1153,6 +1175,7 @@ with tab2:
         f'justify-content:center;gap:2px 6px">{_leg_html_t2}</div>',
         unsafe_allow_html=True)
 
+    # P&L stats
     _SR_t2 = np.linspace(S2*0.5, S2*1.5, 400)
     _mx_t2 = float(np.max(_pnl_exp_t2))
     _mn_t2 = float(np.min(_pnl_exp_t2))
@@ -1204,29 +1227,10 @@ with tab3:
                 'Chaque jambe a ses propres paramètres. Le graphique final agrège tous les P&L à maturité.</div>',
                 unsafe_allow_html=True)
 
-    if "prev_tpl" not in st.session_state: 
-        st.session_state.prev_tpl = "- Personnalisé -"
-
-    def on_tpl_change():
-        curr = st.session_state.tpl_sel
-        prev = st.session_state.prev_tpl
-        if prev == "- Personnalisé -" and curr != "- Personnalisé -":
-            backup = {"n_legs_slider": st.session_state.get("n_legs_slider", 2)}
-            for i in range(6):
-                for key in ["la", "ldir_state", "li", "ls", "lk", "lq", "lr", "lq_div", "lsig", "ly", "lm", "ld"]:
-                    k = f"{key}_{i}"
-                    if k in st.session_state: backup[k] = st.session_state[k]
-            st.session_state.custom_backup = backup
-        elif curr == "- Personnalisé -" and prev != "- Personnalisé -":
-            backup = st.session_state.get("custom_backup", {})
-            if backup:
-                for k, v in backup.items(): st.session_state[k] = v
-        st.session_state.prev_tpl = curr
-
+    # Template selector
     tpl_names = ["- Personnalisé -"] + list(BUILDER_TEMPLATES.keys())
-    tpl_sel = st.selectbox("● Charger un template", tpl_names, key="tpl_sel", on_change=on_tpl_change,
+    tpl_sel = st.selectbox("\u25CF Charger un template", tpl_names, key="tpl_sel",
                            help="Sélectionnez une stratégie prédéfinie pour pré-remplir les jambes")
-    
     if tpl_sel != "- Personnalisé -":
         tpl = BUILDER_TEMPLATES[tpl_sel]
         st.markdown(f'<div class="tpl-info">Ce template va configurer <b>{tpl["n"]} jambes</b> '
@@ -1261,7 +1265,7 @@ with tab3:
     sname=st.text_input("\u25CF Nom de la stratégie",value=_tpl_default,placeholder="Ma stratégie",
                         help="Donnez un nom à votre stratégie - Affiché sur le graphique")
     if not sname: sname="Ma stratégie"
-    n_legs=st.slider("Nombre de jambes",1,6,st.session_state.get("n_legs_slider", 2),1,key="n_legs_slider",help="Chaque jambe est une option indépendante")
+    n_legs=st.slider("Nombre de jambes",1,6,2,1,key="n_legs_slider",help="Chaque jambe est une option indépendante")
     st.markdown("---")
 
     DFLTS=[
@@ -1278,16 +1282,19 @@ with tab3:
     for i in range(n_legs):
         d=DFLTS[i]; lc2=PALETTE[i]; ln=LNAMES[i]
 
+        # ── Separator between legs ──
         if i > 0:
             st.markdown(f'<div style="height:1px;margin:20px 0;'
                         f'background:linear-gradient(90deg,transparent,{lc2}33,transparent)"></div>',
                         unsafe_allow_html=True)
 
+        # ── Activation checkbox ──
         st.markdown(f'<div style="font-size:1.05rem;font-weight:800;color:{lc2};margin:4px 0 6px;letter-spacing:-.3px">{ln}</div>',
                     unsafe_allow_html=True)
         active=st.checkbox("Activer",value=d["active"],key=f"la_{i}")
 
         if active:
+            # ── Direction toggle ──
             direction=d["dir"]
             _dir_cols = st.columns([1,1,4])
             with _dir_cols[0]:
@@ -1304,6 +1311,7 @@ with tab3:
             dir_label = "ACHAT" if direction==1 else "VENTE"
             cls="lb" if direction==1 else "ls"
 
+            # Card header
             st.markdown(
                 f'<div class="lc {cls}" style="border-color:{lc2}">'
                 f'<div class="lc-head lc-head-{dir_cls}">'
@@ -1311,6 +1319,7 @@ with tab3:
                 f'<span class="lc-dir-badge lc-dir-{dir_cls}">{dir_label}</span>'
                 f'</div>', unsafe_allow_html=True)
 
+            # Row 1: Instrument, Spot, Strike, Qty, Taux, Dividende
             lc1_,lc2_,lc3_,lc4_,lc5_,lc6_=st.columns(6)
             with lc1_:
                 instrument=st.selectbox("Instrument",["call","put"],
@@ -1331,6 +1340,7 @@ with tab3:
                 q_l=st.number_input("Dividende q (%)",value=0.0,step=0.1,min_value=0.0,max_value=20.0,
                     key=f"lq_div_{i}",help="Rendement du dividende annuel continu") / 100
 
+            # Row 2: Vol, Maturite (A/M/J)
             lc7_,lc8_,lc9_,lc10_=st.columns(4)
             with lc7_:
                 sig_l=st.slider(f"Vol. \u03c3 (%)",1.0,150.0,d["sigma"]*100,0.5,key=f"lsig_{i}",
@@ -1342,9 +1352,11 @@ with tab3:
             with lc10_:
                 dj_l=st.number_input("Maturité (Jours)",0,30,d["d"],1,key=f"ld_{i}",help="Jours")
 
+            # Computed values
             T_l=mat_from_ymd(y_l,m_l,dj_l)
             prem=bs_price(S_l,K_l,T_l,r_l,sig_l,q_l,instrument)
 
+            # Prime box with gradient
             st.markdown(
                 f'<div style="margin:4px 0 0;padding:12px 18px;border-radius:0 0 9px 9px;'
                 f'background:linear-gradient(135deg,rgba(59,130,246,.08) 0%,rgba(124,58,237,.08) 100%);'
@@ -1410,7 +1422,7 @@ with tab3:
 
         svg_c, total_pnl, _, legend_items, total_pre = build_custom_payoff(active_legs, S_ref, sname, T_pct_3)
         show_svg(svg_c, full_width=True)
-        
+        # Legende externe centree sous le graphique
         legend_html = ''.join(
             f'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px 10px">'
             f'<span style="width:18px;height:3px;border-radius:2px;background:{it["color"]};'
@@ -1423,6 +1435,7 @@ with tab3:
             f'justify-content:center;gap:2px 6px">{legend_html}</div>',
             unsafe_allow_html=True)
 
+        # Risk/Reward + Probability
         mx_v=np.max(total_pnl); mn_v=np.min(total_pnl)
         _sig_avg_3 = np.mean([l["sigma"] for l in active_legs]) if active_legs else 0.2
         _SR_t3 = np.linspace(S_ref*0.5, S_ref*1.5, 400)
@@ -1437,12 +1450,11 @@ with tab3:
 
         section_header("Profils de Greeks vs Prix")
         greek_svgs=build_custom_greeks(active_legs,S_ref)
-        
-        c1_g, c2_g, c3_g, c4_g = st.columns(4)
-        with c1_g: show_svg(greek_svgs[0], full_width=True)
-        with c2_g: show_svg(greek_svgs[1], full_width=True)
-        with c3_g: show_svg(greek_svgs[2], full_width=True)
-        with c4_g: show_svg(greek_svgs[3], full_width=True)
+        st.markdown(
+            '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'
+            + ''.join(f'<div style="border-radius:10px;overflow:hidden">{svg}</div>' for svg in greek_svgs)
+            + '</div>',
+            unsafe_allow_html=True)
 
         be_n=len(np.where(np.diff(np.sign(total_pnl)))[0])
         st.markdown(f"""
@@ -1863,3 +1875,5 @@ section[data-testid="stSidebar"] hr{border-color:var(--b1);margin:10px 0;}
   background:linear-gradient(90deg,#60a5fa,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 </style>
 """, unsafe_allow_html=True)
+app3.py
+Affichage de app3.py en cours...
